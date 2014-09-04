@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="edu.psu.rcy501.publicspeakingassistant.MainActivity" >
+    tools:context="edu.psu.rcy5017.publicspeakingassistant.MainActivity" >
 
     <TextView
         android:layout_width="wrap_content"

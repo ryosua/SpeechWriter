@@ -1,5 +1,6 @@
-package edu.psu.rcy501.publicspeakingassistant;
+package edu.psu.rcy5017.publicspeakingassistant;
 
+import edu.psu.rcy501.publicspeakingassistant.R;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
