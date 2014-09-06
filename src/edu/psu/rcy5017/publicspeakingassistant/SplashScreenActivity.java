@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Window;
 
 public class SplashScreenActivity extends Activity {
 	
@@ -14,6 +15,10 @@ public class SplashScreenActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Remove title bar.
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        
         setContentView(R.layout.activity_splash);
         
         Log.d(TAG, "Splash acticity started");
