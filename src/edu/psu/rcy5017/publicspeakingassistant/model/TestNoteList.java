@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import android.util.Log;
 
-public class TestNoteList extends NoteList {
+public class TestNoteList extends NoteCardList {
 	
 	private static final String TAG = "TestNoteList";
 
@@ -26,8 +26,15 @@ public class TestNoteList extends NoteList {
 		testNoteCard3.addNote("Summary of point 1");
 		testNoteCard3.addNote("Summary of point 2");
 		testNoteCard3.addNote("Summary of point 3");
+		
+		list.add(testNoteCard1);
+		list.add(testNoteCard2);
+		list.add(testNoteCard3);
 	}
 	
+	/**
+	 * Logs the test note list for debugging.
+	 */
 	public void logNotes() {
 		ArrayList<NoteCard> list = getList();
 		
@@ -40,6 +47,7 @@ public class TestNoteList extends NoteList {
 			for (String note: notes ) {
 				noteListAsText += "  ";
 				noteListAsText += note;
+				noteListAsText += "\n";
 			}
 		}
 		
