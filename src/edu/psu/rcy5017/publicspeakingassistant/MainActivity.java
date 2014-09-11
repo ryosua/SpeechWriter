@@ -1,22 +1,72 @@
 package edu.psu.rcy5017.publicspeakingassistant;
 
 import edu.psu.rcy501.publicspeakingassistant.R;
-import android.support.v7.app.ActionBarActivity;
+import edu.psu.rcy5017.publicspeakingassistant.adapter.TabsPagerAdapter;
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends FragmentActivity implements
+ActionBar.TabListener {
 	
 	private static final String TAG = "MainActivity";
+	
+	 private ViewPager viewPager;
+	 private TabsPagerAdapter mAdapter;
+	 private ActionBar actionBar;
+	 // Tab titles
+	 private String[] tabs = { "Note 1", "Note2", "Note3" };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    	super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d(TAG, "Main acticity started");
+ 
+        // Initilization
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        actionBar = getActionBar();
+        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+ 
+        viewPager.setAdapter(mAdapter);
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);        
+ 
+        // Adding Tabs
+        for (String tab_name : tabs) {
+            actionBar.addTab(actionBar.newTab().setText(tab_name)
+                    .setTabListener(this));
+        }
+        
+        /**
+         * on swiping the viewpager make respective tab selected
+         * */
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                // on changing the page
+                // make respected tab selected
+                actionBar.setSelectedNavigationItem(position);
+            }
+         
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+            	// Do nothing.
+            }
+         
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
+            	// Do nothing.
+            }
+        });
+        
+        Log.d(TAG, "Main activity started");
     }
 
 
@@ -38,4 +88,20 @@ public class MainActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+	@Override
+	public void onTabReselected(Tab tab, FragmentTransaction ft) {
+		// Do nothing.
+	}
+
+	 @Override
+    public void onTabSelected(Tab tab, FragmentTransaction ft) {
+        // show respected fragment view
+        viewPager.setCurrentItem(tab.getPosition());
+    }
+
+	@Override
+	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+		// Do nothing.
+	}
 }

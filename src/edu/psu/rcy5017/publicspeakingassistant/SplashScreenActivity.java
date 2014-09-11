@@ -21,7 +21,7 @@ public class SplashScreenActivity extends Activity {
         
         setContentView(R.layout.activity_splash);
         
-        Log.d(TAG, "Splash acticity started");
+        Log.d(TAG, "Splash activity started");
         
         final int SPLASH_TIME_OUT = 3000;
  
