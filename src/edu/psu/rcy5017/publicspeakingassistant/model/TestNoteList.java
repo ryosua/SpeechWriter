@@ -42,6 +42,8 @@ public class TestNoteList extends NoteCardList {
 
 		for (NoteCard card: list) {
 			noteListAsText += card.getTitle();
+			noteListAsText += "\n";
+			
 			ArrayList<String> notes = card.getNotes();
 			
 			for (String note: notes ) {
