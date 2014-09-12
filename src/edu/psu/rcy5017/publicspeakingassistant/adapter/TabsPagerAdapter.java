@@ -1,20 +1,25 @@
 package edu.psu.rcy5017.publicspeakingassistant.adapter;
 
 import edu.psu.rcy5017.publicspeakingassistant.NoteCardFragement;
+import edu.psu.rcy5017.publicspeakingassistant.model.NoteCardList;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
  
 public class TabsPagerAdapter extends FragmentPagerAdapter {
+	
+	private final NoteCardList noteList;
  
-    public TabsPagerAdapter(FragmentManager fm) {
+    public TabsPagerAdapter(FragmentManager fm, NoteCardList noteList) {
         super(fm);
+        
+        this.noteList = noteList;
     }
  
     @Override
     public Fragment getItem(int index) {
     	
-    	return new NoteCardFragement();
+    	return new NoteCardFragement(noteList.getList().get(index));
     	
     	//Example
     	/*

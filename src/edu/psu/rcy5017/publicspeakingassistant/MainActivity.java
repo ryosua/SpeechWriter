@@ -20,22 +20,11 @@ ActionBar.TabListener {
 	private static final String TAG = "MainActivity";
 	
 	private ViewPager viewPager;
-	private TabsPagerAdapter mAdapter;
-	private ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
- 
-        // Initialization
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        actionBar = getActionBar();
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
- 
-        viewPager.setAdapter(mAdapter);
-        actionBar.setHomeButtonEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);        
         
         // Create a list of test notecards.
         final TestNoteList notecards = new TestNoteList();
@@ -43,7 +32,15 @@ ActionBar.TabListener {
         
         //DEBUG
         notecards.logNotes();
-        
+ 
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        final ActionBar actionBar = getActionBar();
+        final TabsPagerAdapter tabAdapter = new TabsPagerAdapter(getSupportFragmentManager(), notecards);
+ 
+        viewPager.setAdapter(tabAdapter);
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);        
+         
         // Create a tab for each note card.
         for (NoteCard noteCard : notecards.getList()) {
             actionBar.addTab(actionBar.newTab().setText(noteCard.getTitle())
