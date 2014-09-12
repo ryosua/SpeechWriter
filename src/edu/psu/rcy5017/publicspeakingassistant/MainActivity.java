@@ -2,6 +2,8 @@ package edu.psu.rcy5017.publicspeakingassistant;
 
 import edu.psu.rcy501.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.adapter.TabsPagerAdapter;
+import edu.psu.rcy5017.publicspeakingassistant.model.NoteCard;
+import edu.psu.rcy5017.publicspeakingassistant.model.TestNoteList;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
@@ -15,21 +17,18 @@ import android.view.MenuItem;
 
 public class MainActivity extends FragmentActivity implements
 ActionBar.TabListener {
-	
 	private static final String TAG = "MainActivity";
 	
-	 private ViewPager viewPager;
-	 private TabsPagerAdapter mAdapter;
-	 private ActionBar actionBar;
-	 // Tab titles
-	 private String[] tabs = { "Note 1", "Note2", "Note3" };
+	private ViewPager viewPager;
+	private TabsPagerAdapter mAdapter;
+	private ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
  
-        // Initilization
+        // Initialization
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getActionBar();
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
@@ -37,16 +36,22 @@ ActionBar.TabListener {
         viewPager.setAdapter(mAdapter);
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);        
- 
-        // Adding Tabs
-        for (String tab_name : tabs) {
-            actionBar.addTab(actionBar.newTab().setText(tab_name)
+        
+        // Create a list of test notecards.
+        final TestNoteList notecards = new TestNoteList();
+        notecards.populateList();
+        
+        //DEBUG
+        notecards.logNotes();
+        
+        // Create a tab for each note card.
+        for (NoteCard noteCard : notecards.getList()) {
+            actionBar.addTab(actionBar.newTab().setText(noteCard.getTitle())
                     .setTabListener(this));
         }
         
-        /**
-         * on swiping the viewpager make respective tab selected
-         * */
+        
+        // On swiping the viewpager make respective tab selected.
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
