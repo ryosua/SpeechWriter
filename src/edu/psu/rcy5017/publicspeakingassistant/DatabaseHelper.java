@@ -4,7 +4,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * A helper class
+ * A helper class that is responsible for creating and updating the app database, and for creating all the tables.
  * @author ryosua
  *
  */
