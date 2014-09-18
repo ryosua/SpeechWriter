@@ -1,6 +1,5 @@
 package edu.psu.rcy5017.publicspeakingassistant;
 import java.util.List;
-import java.util.Random;
 
 import edu.psu.rcy501.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.model.NoteCardListDBTest;
