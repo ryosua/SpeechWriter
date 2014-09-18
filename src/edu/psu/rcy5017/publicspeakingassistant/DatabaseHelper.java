@@ -10,20 +10,23 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public final class DatabaseHelper extends SQLiteOpenHelper {
 	
-	private final static int DATABASE_VERSION = 2;
-	private final static String DATABASE_NAME = "PublicSpeakingAssistantDatabase";
+	public static final int DATABASE_VERSION = 2;
+	public static final String DATABASE_NAME = "PublicSpeakingAssistantDatabase";
+	public static final String COLUMN_ID = "_id";
+	
+	// Note Card List Table
+	public static final String NOTE_CARD_LIST_NAME = "NoteCardList";
+	public static final String SPEECH_TITLE = "SpeechTitle"; // TODO: temp
 	
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
      
     private void createNoteCardListTable(SQLiteDatabase db) {
-    	final String NOTE_CARD_LIST_NAME = "NoteCardList";
-    	
     	final String NOTE_CARD_LIST_CREATE =
     	            "CREATE TABLE " + NOTE_CARD_LIST_NAME + " (" +
-    	            KEY_WORD + " TEXT, " +
-    	            KEY_DEFINITION + " TEXT);";
+    	            COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+    	            SPEECH_TITLE + " TEXT NOT NULL);"; //TODO: temporary, the title of the speech should be in Speech table.
     	
     	db.execSQL(NOTE_CARD_LIST_CREATE);
     }
