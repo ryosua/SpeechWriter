@@ -16,18 +16,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
-    
-    private void createSpeech(SQLiteDatabase db) {
-    	//final String NOTE_CARD_LIST_NAME = "NoteCardList";
-    	
-    	final String NOTE_CARD_LIST_CREATE =
-    	            "CREATE TABLE " + NOTE_CARD_LIST_NAME + " (" +
-    	            KEY_WORD + " TEXT, " +
-    	            KEY_DEFINITION + " TEXT);";
-    	
-    	db.execSQL(NOTE_CARD_LIST_CREATE);
-    }
-    
+     
     private void createNoteCardListTable(SQLiteDatabase db) {
     	final String NOTE_CARD_LIST_NAME = "NoteCardList";
     	
@@ -38,35 +27,13 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
     	
     	db.execSQL(NOTE_CARD_LIST_CREATE);
     }
-    
-    private void createNoteCard(SQLiteDatabase db) {
-    	final String NOTE_CARD_NAME = "NoteCard";
-    	
-    	final String NOTE_CARD_CREATE =
-    	            "CREATE TABLE " + NOTE_CARD_NAME + " (" +
-    	            KEY_WORD + " TEXT, " +
-    	            KEY_DEFINITION + " TEXT);";
-    	
-    	db.execSQL(NOTE_CARD_CREATE);
-    }
-     
-    private void createSpeechRecording(SQLiteDatabase db) {
-    	//final String NOTE_CARD_LIST_NAME = "NoteCardList";
-    	
-    	final String NOTE_CARD_LIST_CREATE =
-    	            "CREATE TABLE " + NOTE_CARD_LIST_NAME + " (" +
-    	            KEY_WORD + " TEXT, " +
-    	            KEY_DEFINITION + " TEXT);";
-    	
-    	db.execSQL(NOTE_CARD_LIST_CREATE);
-    }
-    
+      
     @Override
     public void onCreate(SQLiteDatabase db) {
-    	createSpeech(db);
+    	//createSpeech(db);
     	createNoteCardListTable(db);
-    	createNoteCard(db);
-    	createSpeechRecording(db);
+    	//createNoteCard(db);
+    	//createSpeechRecording(db);
     }
 
 	@Override
