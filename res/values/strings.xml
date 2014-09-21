@@ -4,5 +4,7 @@
     <string name="app_name">Public Speaking Assistant</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="new_speech_button_text">New Speech</string>
+    <string name="placeholder">placeholder</string>
 
 </resources>

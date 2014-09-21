@@ -13,7 +13,7 @@
             android:id="@+id/add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add New"
+            android:text="@string/new_speech_button_text"
             android:onClick="onClick"/>
         
     </LinearLayout>
@@ -22,6 +22,6 @@
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="placehoder" />
+        android:text="@string/placeholder" />
 
 </LinearLayout>
