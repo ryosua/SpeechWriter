@@ -1,8 +1,8 @@
-package edu.psu.rcy5017.publicspeakingassistant;
+package edu.psu.rcy5017.publicspeakingassistant.activity;
 import java.util.List;
 
 import edu.psu.rcy501.publicspeakingassistant.R;
-import edu.psu.rcy5017.publicspeakingassistant.activity.RenameSpeechActivity;
+import edu.psu.rcy5017.publicspeakingassistant.SpeechListDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.model.NoteCardListDBTest;
 
 import android.app.ListActivity;

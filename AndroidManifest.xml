@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="edu.psu.rcy5017.publicspeakingassistant.SplashScreenActivity"
+            android:name="edu.psu.rcy5017.publicspeakingassistant.activity.SplashScreenActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,8 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="edu.psu.rcy5017.publicspeakingassistant.MainActivity"></activity>
-        <activity android:name="edu.psu.rcy5017.publicspeakingassistant.SpeechListActivity"></activity>
+        <activity android:name="edu.psu.rcy5017.publicspeakingassistant.activity.MainActivity"></activity>
+        <activity android:name="edu.psu.rcy5017.publicspeakingassistant.activity.SpeechListActivity"></activity>
         <activity android:name="edu.psu.rcy5017.publicspeakingassistant.activity.RenameSpeechActivity"></activity>
     </application>
 

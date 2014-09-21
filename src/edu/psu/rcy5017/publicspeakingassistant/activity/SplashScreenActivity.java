@@ -1,4 +1,4 @@
-package edu.psu.rcy5017.publicspeakingassistant;
+package edu.psu.rcy5017.publicspeakingassistant.activity;
 
 import edu.psu.rcy501.publicspeakingassistant.R;
 import android.app.Activity;
