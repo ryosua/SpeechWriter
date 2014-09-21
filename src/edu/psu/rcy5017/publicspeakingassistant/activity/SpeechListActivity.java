@@ -144,6 +144,10 @@ public class SpeechListActivity extends ListActivity {
         finish();
     }
     
+    /**
+     * Opens an activity to edit the speech title.
+     * @param speech the speech to rename
+     */
     private void renameSpeech(NoteCardListDBTest speech) {
     	Intent intent = new Intent(this, RenameSpeechActivity.class);
     	intent.putExtra("key", speech.getId());
