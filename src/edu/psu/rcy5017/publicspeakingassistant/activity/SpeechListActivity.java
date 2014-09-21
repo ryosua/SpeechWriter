@@ -88,21 +88,22 @@ public class SpeechListActivity extends ListActivity {
                 .getMenuInfo();
         
         ArrayAdapter<NoteCardListDBTest> adapter = (ArrayAdapter<NoteCardListDBTest>) getListAdapter();
-        NoteCardListDBTest speech = null;
-     
+        NoteCardListDBTest speech = (NoteCardListDBTest) getListAdapter().getItem(info.position);
+        
         switch (item.getItemId()) {
         	case R.id.start_speech:
-		    	speech = (NoteCardListDBTest) getListAdapter().getItem(info.position);
 		    	startSpeech(speech);
 		    	return true;
 		    	
+        	case R.id.edit_speech:
+		    	editSpeech(speech);
+		    	return true;
+		    	
         	case R.id.rename_speech:
-		    	speech = (NoteCardListDBTest) getListAdapter().getItem(info.position);
 		    	renameSpeech(speech);
 		        return true;
         
 	        case R.id.delete_speech:
-	        	speech = (NoteCardListDBTest) getListAdapter().getItem(info.position);
 	            datasource.deleteNoteCardListDBTest(speech);
 	            adapter.remove(speech);
 	            adapter.notifyDataSetChanged();
@@ -130,6 +131,11 @@ public class SpeechListActivity extends ListActivity {
     */
     private void startSpeech(NoteCardListDBTest speech) {
     	Intent intent = new Intent(this, MainActivity.class);   
+        startActivity(intent);
+    }
+    
+    private void editSpeech(NoteCardListDBTest speech) {
+    	Intent intent = new Intent(this, EditSpeechActivity.class);   
         startActivity(intent);
     }
     
