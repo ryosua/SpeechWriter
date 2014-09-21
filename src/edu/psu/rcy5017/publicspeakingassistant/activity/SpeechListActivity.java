@@ -91,28 +91,22 @@ public class SpeechListActivity extends ListActivity {
         NoteCardListDBTest speech = null;
      
         switch (item.getItemId()) {
-        case R.id.delete_speech:
-        	speech = (NoteCardListDBTest) getListAdapter().getItem(info.position);
-            datasource.deleteNoteCardListDBTest(speech);
-            adapter.remove(speech);
-            adapter.notifyDataSetChanged();
-          
-            return true;
+        	case R.id.start_speech:
+		    	speech = (NoteCardListDBTest) getListAdapter().getItem(info.position);
+		    	startSpeech(speech);
+		    	return true;
+		    	
+        	case R.id.rename_speech:
+		    	speech = (NoteCardListDBTest) getListAdapter().getItem(info.position);
+		    	renameSpeech(speech);
+		        return true;
         
-        case R.id.start_speech:
-	    	speech = (NoteCardListDBTest) getListAdapter().getItem(info.position);
-	    	
-	    	startSpeech(speech);
-	      
-	        return true;
-	        
-        case R.id.rename_speech:
-	    	speech = (NoteCardListDBTest) getListAdapter().getItem(info.position);
-	    	
-	    	renameSpeech(speech);
-	      
-	        return true;
-	       
+	        case R.id.delete_speech:
+	        	speech = (NoteCardListDBTest) getListAdapter().getItem(info.position);
+	            datasource.deleteNoteCardListDBTest(speech);
+	            adapter.remove(speech);
+	            adapter.notifyDataSetChanged();
+	            return true;
         }
      
       	return false;
@@ -135,13 +129,8 @@ public class SpeechListActivity extends ListActivity {
     * @param speech the speech to start
     */
     private void startSpeech(NoteCardListDBTest speech) {
-    	Intent intent = new Intent(this, MainActivity.class);
-        //tmpIntent.putExtra(SHOWITEMINTENT_EXTRA_FETCHROWID, position);
-        //startActivityForResult(tmpIntent, ACTIVITY_SHOWITEM);
-        
+    	Intent intent = new Intent(this, MainActivity.class);   
         startActivity(intent);
-        // close this activity
-        finish();
     }
     
     /**
