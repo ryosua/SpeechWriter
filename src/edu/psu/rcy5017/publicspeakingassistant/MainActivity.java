@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
 public class MainActivity extends FragmentActivity implements
 ActionBar.TabListener {
 	private static final String TAG = "MainActivity";
