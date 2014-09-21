@@ -26,41 +26,38 @@ public class SpeechListActivity extends ListActivity {
 	private static final int RENAME_SPEECH_REQUEST_CODE = 1001;
 	
     private SpeechListDataSource datasource;
-    
+        
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_speech_list);
-
+        
         datasource = new SpeechListDataSource(this);
         datasource.open();
 
-        List<NoteCardListDBTest> values = datasource.getAllNoteCardListDBTests();
-
-        // use the SimpleCursorAdapter to show the
-        // elements in a ListView
-        ArrayAdapter<NoteCardListDBTest> adapter = new ArrayAdapter<NoteCardListDBTest>(this,
-                android.R.layout.simple_list_item_1, values);
-        setListAdapter(adapter);
+        final List<NoteCardListDBTest> values = datasource.getAllNoteCardListDBTests();
         
+    	// use the SimpleCursorAdapter to show the
+        // elements in a ListView
+        final ArrayAdapter<NoteCardListDBTest> adapter = 
+        		new ArrayAdapter<NoteCardListDBTest>(this, android.R.layout.simple_list_item_1, values);
+        setListAdapter(adapter);
+       
         // Register the ListView  for Context menu  
         registerForContextMenu(getListView());
-        
     }
 
     // Will be called via the onClick attribute
     // of the buttons in main.xml
     public void onClick(View view) {
         @SuppressWarnings("unchecked")
-        ArrayAdapter<NoteCardListDBTest> adapter = (ArrayAdapter<NoteCardListDBTest>) getListAdapter();
-        NoteCardListDBTest speech = null;
+        final ArrayAdapter<NoteCardListDBTest> adapter = (ArrayAdapter<NoteCardListDBTest>) getListAdapter();
+        final NoteCardListDBTest speech = datasource.createNoteCardListDBTest("New Speech" + adapter.getCount());
         
         switch (view.getId()) {
         
         case R.id.add:
-            // save the new speech to the database
-        	
-            speech = datasource.createNoteCardListDBTest("New Speech" + adapter.getCount());
+            // Save the new speech to the database.
             adapter.add(speech);
             
             break;    
@@ -70,7 +67,7 @@ public class SpeechListActivity extends ListActivity {
        
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-    	NoteCardListDBTest speech = (NoteCardListDBTest) getListAdapter().getItem(position);
+    	final NoteCardListDBTest speech = (NoteCardListDBTest) getListAdapter().getItem(position);
     	startSpeech(speech);
     }
     
@@ -78,17 +75,17 @@ public class SpeechListActivity extends ListActivity {
     public void onCreateContextMenu(ContextMenu menu, View v,
             ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getMenuInflater();
+        final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.speech_option_menu, menu);
     }
     
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+        final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
                 .getMenuInfo();
         
-        ArrayAdapter<NoteCardListDBTest> adapter = (ArrayAdapter<NoteCardListDBTest>) getListAdapter();
-        NoteCardListDBTest speech = (NoteCardListDBTest) getListAdapter().getItem(info.position);
+        final ArrayAdapter<NoteCardListDBTest> adapter = (ArrayAdapter<NoteCardListDBTest>) getListAdapter();
+        final NoteCardListDBTest speech = (NoteCardListDBTest) getListAdapter().getItem(info.position);
         
         switch (item.getItemId()) {
         	case R.id.start_speech:
@@ -100,7 +97,7 @@ public class SpeechListActivity extends ListActivity {
 		    	return true;
 		    	
         	case R.id.rename_speech:
-		    	renameSpeech(speech);
+		    	renameSpeech(speech, info.position);
 		        return true;
         
 	        case R.id.delete_speech:
@@ -125,17 +122,42 @@ public class SpeechListActivity extends ListActivity {
         super.onPause();
     }
     
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	if (requestCode == RENAME_SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
+    		final NoteCardListDBTest speech = new NoteCardListDBTest();
+    		speech.setId(data.getLongExtra("id", RenameSpeechActivity.DEFAULT_LONG_VALUE));
+    		speech.setTitle(data.getStringExtra("title"));
+    		final int position = data.getIntExtra("position", RenameSpeechActivity.DEFAULT_INT_VALUE);
+    		
+    		// DEBUG
+    		Log.d(TAG, "id: " + speech.getId());
+    		Log.d(TAG, "position: " + position);
+    		Log.d(TAG, "new title: " + speech.getTitle());
+    		
+    		final ArrayAdapter<NoteCardListDBTest> adapter = (ArrayAdapter<NoteCardListDBTest>) getListAdapter();
+    		
+    		// Get the speech item to update.
+    		final NoteCardListDBTest speechToUpdate = 
+    				adapter.getItem(position);
+    		
+    		// Update database record using adapter.
+    		speechToUpdate.setTitle(speech.getTitle());
+    		adapter.notifyDataSetChanged();
+		}
+    }
+    
    /**
     * Opens the speech in the main activity view.
     * @param speech the speech to start
     */
     private void startSpeech(NoteCardListDBTest speech) {
-    	Intent intent = new Intent(this, MainActivity.class);   
+    	final Intent intent = new Intent(this, MainActivity.class);   
         startActivity(intent);
     }
     
     private void editSpeech(NoteCardListDBTest speech) {
-    	Intent intent = new Intent(this, EditSpeechActivity.class);   
+    	final Intent intent = new Intent(this, EditSpeechActivity.class);   
         startActivity(intent);
     }
     
@@ -143,9 +165,10 @@ public class SpeechListActivity extends ListActivity {
      * Opens an activity to edit the speech title.
      * @param speech the speech to rename
      */
-    private void renameSpeech(NoteCardListDBTest speech) {
-    	Intent intent = new Intent(this, RenameSpeechActivity.class);
-    	intent.putExtra("key", speech.getId());
+    private void renameSpeech(NoteCardListDBTest speech, int position) {
+    	final Intent intent = new Intent(this, RenameSpeechActivity.class);
+    	intent.putExtra("position", position );
+    	intent.putExtra("id", speech.getId());
     	intent.putExtra("title", speech.getTitle());
     	startActivityForResult(intent, RENAME_SPEECH_REQUEST_CODE);
     }
