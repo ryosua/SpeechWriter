@@ -7,14 +7,12 @@ import android.util.Log;
 
 public class RenameSpeechActivity extends Activity {
 	
-	private static final String TAG = "RenameSpeechActivity";
-	
-	 @Override
-	    protected void onCreate(Bundle savedInstanceState) {
-	    	super.onCreate(savedInstanceState);
-	        setContentView(R.layout.activity_rename_speech);
-	        
-	        Log.d(TAG, "Rename Speech view created.");
-	 }
+    private static final String TAG = "RenameSpeechActivity";
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_rename_speech);
+    }
+	 
 }
