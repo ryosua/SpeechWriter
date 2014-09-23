@@ -4,7 +4,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * A helper class that is responsible for creating and updating the app database, and for creating all the tables.
+ * A helper class that is responsible for creating and updating the app database, 
+ * and for creating all the tables in the database.
  * @author ryosua
  *
  */
@@ -15,28 +16,28 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_ID = "_id";
 	
 	// Note Card List Table
-	public static final String NOTE_CARD_LIST_NAME = "NoteCardList";
-	public static final String SPEECH_TITLE = "SpeechTitle"; // TODO: temp
+	public static final String SPEECH_TABLE_NAME = "Speech";
+	public static final String SPEECH_TITLE = "SpeechTitle";
 	
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
      
-    private void createNoteCardListTable(SQLiteDatabase db) {
-    	final String NOTE_CARD_LIST_CREATE =
-    	            "CREATE TABLE " + NOTE_CARD_LIST_NAME + " (" +
+    private void createSpeechTable(SQLiteDatabase db) {
+    	final String speechCreateStatement =
+    	            "CREATE TABLE " + SPEECH_TABLE_NAME + " (" +
     	            COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-    	            SPEECH_TITLE + " TEXT NOT NULL);"; //TODO: temporary, the title of the speech should be in Speech table.
+    	            SPEECH_TITLE + " TEXT NOT NULL);";
     	
-    	db.execSQL(NOTE_CARD_LIST_CREATE);
+    	db.execSQL(speechCreateStatement);
     }
       
     @Override
     public void onCreate(SQLiteDatabase db) {
-    	//createSpeech(db);
-    	createNoteCardListTable(db);
-    	//createNoteCard(db);
+    	createSpeechTable(db);
+    	//createNoteCardTable(db);
     	//createSpeechRecording(db);
+    	//createBulletPointTable(db);
     }
 
 	@Override

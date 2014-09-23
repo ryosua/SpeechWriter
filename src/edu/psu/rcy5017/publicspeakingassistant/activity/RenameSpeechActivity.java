@@ -1,7 +1,7 @@
 package edu.psu.rcy5017.publicspeakingassistant.activity;
 
 import edu.psu.rcy501.publicspeakingassistant.R;
-import edu.psu.rcy5017.publicspeakingassistant.model.NoteCardListDBTest;
+import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +17,7 @@ public class RenameSpeechActivity extends Activity {
     public static final long DEFAULT_LONG_VALUE = 0;
     
     private int position;
-    private NoteCardListDBTest speech;
+    private Speech speech;
     private EditText textField;
     
     @Override
@@ -30,7 +30,7 @@ public class RenameSpeechActivity extends Activity {
         
         // Create a speech object from data passed from list activity.
         final Intent intent = this.getIntent();
-        speech = new NoteCardListDBTest();
+        speech = new Speech();
         speech.setId(intent.getLongExtra("id", DEFAULT_LONG_VALUE));
         speech.setTitle(intent.getStringExtra("title"));
         position = intent.getIntExtra("position", DEFAULT_INT_VALUE);
@@ -54,7 +54,7 @@ public class RenameSpeechActivity extends Activity {
     	saveAndFinish(textField, speech, position);
     }
     
-    private void saveAndFinish(EditText textField, NoteCardListDBTest speech, int position) {
+    private void saveAndFinish(EditText textField, Speech speech, int position) {
     	final String speechTitle = textField.getText().toString();
     	
     	final Intent intent = new Intent();

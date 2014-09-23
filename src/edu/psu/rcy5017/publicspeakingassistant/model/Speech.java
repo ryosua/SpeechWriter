@@ -1,11 +1,11 @@
 package edu.psu.rcy5017.publicspeakingassistant.model;
 
 /**
- * A mock note card list model class to test the database.
+ * A model class representing a speech.
  * @author Ryan Yosua
  *
  */
-public class NoteCardListDBTest {
+public class Speech {
     
     private long id;
     private String title;

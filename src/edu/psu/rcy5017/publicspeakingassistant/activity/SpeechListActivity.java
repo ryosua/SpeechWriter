@@ -3,7 +3,7 @@ import java.util.List;
 
 import edu.psu.rcy501.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.SpeechDataSource;
-import edu.psu.rcy5017.publicspeakingassistant.model.NoteCardListDBTest;
+import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -35,12 +35,12 @@ public class SpeechListActivity extends ListActivity {
         datasource = new SpeechDataSource(this);
         datasource.open();
 
-        final List<NoteCardListDBTest> values = datasource.getAllNoteCardListDBTests();
+        final List<Speech> values = datasource.getAllSpeeches();
         
     	// use the SimpleCursorAdapter to show the
         // elements in a ListView
-        final ArrayAdapter<NoteCardListDBTest> adapter = 
-        		new ArrayAdapter<NoteCardListDBTest>(this, android.R.layout.simple_list_item_1, values);
+        final ArrayAdapter<Speech> adapter = 
+        		new ArrayAdapter<Speech>(this, android.R.layout.simple_list_item_1, values);
         setListAdapter(adapter);
        
         // Register the ListView  for Context menu  
@@ -51,8 +51,8 @@ public class SpeechListActivity extends ListActivity {
     // of the buttons in main.xml
     public void onClick(View view) {
         @SuppressWarnings("unchecked")
-        final ArrayAdapter<NoteCardListDBTest> adapter = (ArrayAdapter<NoteCardListDBTest>) getListAdapter();
-        final NoteCardListDBTest speech = datasource.createNoteCardListDBTest("New Speech" + adapter.getCount());
+        final ArrayAdapter<Speech> adapter = (ArrayAdapter<Speech>) getListAdapter();
+        final Speech speech = datasource.createSpeech("New Speech" + adapter.getCount());
         
         switch (view.getId()) {
         
@@ -67,7 +67,7 @@ public class SpeechListActivity extends ListActivity {
        
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-    	final NoteCardListDBTest speech = (NoteCardListDBTest) getListAdapter().getItem(position);
+    	final Speech speech = (Speech) getListAdapter().getItem(position);
     	startSpeech(speech);
     }
     
@@ -84,8 +84,8 @@ public class SpeechListActivity extends ListActivity {
         final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
                 .getMenuInfo();
         
-        final ArrayAdapter<NoteCardListDBTest> adapter = (ArrayAdapter<NoteCardListDBTest>) getListAdapter();
-        final NoteCardListDBTest speech = (NoteCardListDBTest) getListAdapter().getItem(info.position);
+        final ArrayAdapter<Speech> adapter = (ArrayAdapter<Speech>) getListAdapter();
+        final Speech speech = (Speech) getListAdapter().getItem(info.position);
         
         switch (item.getItemId()) {
         	case R.id.start_speech:
@@ -101,7 +101,7 @@ public class SpeechListActivity extends ListActivity {
 		        return true;
         
 	        case R.id.delete_speech:
-	            datasource.deleteNoteCardListDBTest(speech);
+	            datasource.deleteSpeech(speech);
 	            adapter.remove(speech);
 	            adapter.notifyDataSetChanged();
 	            return true;
@@ -125,7 +125,7 @@ public class SpeechListActivity extends ListActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	if (requestCode == RENAME_SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
-    		final NoteCardListDBTest speech = new NoteCardListDBTest();
+    		final Speech speech = new Speech();
     		speech.setId(data.getLongExtra("id", RenameSpeechActivity.DEFAULT_LONG_VALUE));
     		speech.setTitle(data.getStringExtra("title"));
     		final int position = data.getIntExtra("position", RenameSpeechActivity.DEFAULT_INT_VALUE);
@@ -135,10 +135,10 @@ public class SpeechListActivity extends ListActivity {
     		Log.d(TAG, "position: " + position);
     		Log.d(TAG, "new title: " + speech.getTitle());
     		
-    		final ArrayAdapter<NoteCardListDBTest> adapter = (ArrayAdapter<NoteCardListDBTest>) getListAdapter();
+    		final ArrayAdapter<Speech> adapter = (ArrayAdapter<Speech>) getListAdapter();
     		
     		// Get the speech item to update.
-    		final NoteCardListDBTest speechToUpdate = 
+    		final Speech speechToUpdate = 
     				adapter.getItem(position);
     		
     		// Update database record using adapter.
@@ -151,12 +151,12 @@ public class SpeechListActivity extends ListActivity {
     * Opens the speech in the main activity view.
     * @param speech the speech to start
     */
-    private void startSpeech(NoteCardListDBTest speech) {
+    private void startSpeech(Speech speech) {
     	final Intent intent = new Intent(this, MainActivity.class);   
         startActivity(intent);
     }
     
-    private void editSpeech(NoteCardListDBTest speech) {
+    private void editSpeech(Speech speech) {
     	final Intent intent = new Intent(this, EditSpeechActivity.class);   
         startActivity(intent);
     }
@@ -165,7 +165,7 @@ public class SpeechListActivity extends ListActivity {
      * Opens an activity to edit the speech title.
      * @param speech the speech to rename
      */
-    private void renameSpeech(NoteCardListDBTest speech, int position) {
+    private void renameSpeech(Speech speech, int position) {
     	final Intent intent = new Intent(this, RenameSpeechActivity.class);
     	intent.putExtra("position", position );
     	intent.putExtra("id", speech.getId());

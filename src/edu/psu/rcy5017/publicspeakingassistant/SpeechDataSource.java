@@ -3,7 +3,7 @@ package edu.psu.rcy5017.publicspeakingassistant;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.psu.rcy5017.publicspeakingassistant.model.NoteCardListDBTest;
+import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -31,62 +31,52 @@ public class SpeechDataSource {
         dbHelper.close();
     }
 
-    public NoteCardListDBTest createNoteCardListDBTest(String noteCardList) {
+    public Speech createSpeech(String title) {
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.SPEECH_TITLE, noteCardList);
-        long insertId = database.insert(DatabaseHelper.NOTE_CARD_LIST_NAME, null,
+        values.put(DatabaseHelper.SPEECH_TITLE, title);
+        long insertId = database.insert(DatabaseHelper.SPEECH_TABLE_NAME, null,
                 values);
-        Cursor cursor = database.query(DatabaseHelper.NOTE_CARD_LIST_NAME,
+        Cursor cursor = database.query(DatabaseHelper.SPEECH_TABLE_NAME,
                 allColumns, DatabaseHelper.COLUMN_ID + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
-        NoteCardListDBTest newNoteCardListDBTest = cursorToNoteCardListDBTest(cursor);
+        Speech newSpeech = cursorSpeech(cursor);
         cursor.close();
-        return newNoteCardListDBTest;
+        return newSpeech;
     }
 
-    public void deleteNoteCardListDBTest(NoteCardListDBTest noteCardList) {
-        long id = noteCardList.getId();
-        System.out.println("NoteCardListDBTest deleted with id: " + id);
-        database.delete(DatabaseHelper.NOTE_CARD_LIST_NAME, DatabaseHelper.COLUMN_ID
+    public void deleteSpeech(Speech speech) {
+        long id = speech.getId();
+        System.out.println("Speech deleted with id: " + id);
+        database.delete(DatabaseHelper.SPEECH_TABLE_NAME, DatabaseHelper.COLUMN_ID
                 + " = " + id, null);
     }
     
-    public NoteCardListDBTest renameNoteCardListDBTest(String noteCardList) {
-        ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.SPEECH_TITLE, noteCardList);
-        long insertId = database.insert(DatabaseHelper.NOTE_CARD_LIST_NAME, null,
-                values);
-        Cursor cursor = database.query(DatabaseHelper.NOTE_CARD_LIST_NAME,
-                allColumns, DatabaseHelper.COLUMN_ID + " = " + insertId, null,
-                null, null, null);
-        cursor.moveToFirst();
-        NoteCardListDBTest newNoteCardListDBTest = cursorToNoteCardListDBTest(cursor);
-        cursor.close();
-        return newNoteCardListDBTest;
+    public void renameSpeech(String title) {
+     
     }
 
-    public List<NoteCardListDBTest> getAllNoteCardListDBTests() {
-        List<NoteCardListDBTest> noteCardLists = new ArrayList<NoteCardListDBTest>();
+    public List<Speech> getAllSpeeches() {
+        List<Speech> speeches = new ArrayList<Speech>();
 
-        Cursor cursor = database.query(DatabaseHelper.NOTE_CARD_LIST_NAME,
+        Cursor cursor = database.query(DatabaseHelper.SPEECH_TABLE_NAME,
                 allColumns, null, null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            NoteCardListDBTest noteCardList = cursorToNoteCardListDBTest(cursor);
-            noteCardLists.add(noteCardList);
+            Speech speech = cursorSpeech(cursor);
+            speeches.add(speech);
             cursor.moveToNext();
         }
         // make sure to close the cursor
         cursor.close();
-        return noteCardLists;
+        return speeches;
     }
 
-    private NoteCardListDBTest cursorToNoteCardListDBTest(Cursor cursor) {
-        NoteCardListDBTest noteCardList = new NoteCardListDBTest();
-        noteCardList.setId(cursor.getLong(0));
-        noteCardList.setTitle(cursor.getString(1));
-        return noteCardList;
+    private Speech cursorSpeech(Cursor cursor) {
+        Speech speech = new Speech();
+        speech.setId(cursor.getLong(0));
+        speech.setTitle(cursor.getString(1));
+        return speech;
     }
 } 
