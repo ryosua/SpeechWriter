@@ -11,7 +11,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-public class SpeechListDataSource {
+public class SpeechDataSource {
 
     // Database fields
     private SQLiteDatabase database;
@@ -19,7 +19,7 @@ public class SpeechListDataSource {
     private String[] allColumns = { DatabaseHelper.COLUMN_ID,
             DatabaseHelper.SPEECH_TITLE };
 
-    public SpeechListDataSource(Context context) {
+    public SpeechDataSource(Context context) {
         dbHelper = new DatabaseHelper(context);
     }
 
@@ -50,6 +50,20 @@ public class SpeechListDataSource {
         System.out.println("NoteCardListDBTest deleted with id: " + id);
         database.delete(DatabaseHelper.NOTE_CARD_LIST_NAME, DatabaseHelper.COLUMN_ID
                 + " = " + id, null);
+    }
+    
+    public NoteCardListDBTest renameNoteCardListDBTest(String noteCardList) {
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.SPEECH_TITLE, noteCardList);
+        long insertId = database.insert(DatabaseHelper.NOTE_CARD_LIST_NAME, null,
+                values);
+        Cursor cursor = database.query(DatabaseHelper.NOTE_CARD_LIST_NAME,
+                allColumns, DatabaseHelper.COLUMN_ID + " = " + insertId, null,
+                null, null, null);
+        cursor.moveToFirst();
+        NoteCardListDBTest newNoteCardListDBTest = cursorToNoteCardListDBTest(cursor);
+        cursor.close();
+        return newNoteCardListDBTest;
     }
 
     public List<NoteCardListDBTest> getAllNoteCardListDBTests() {

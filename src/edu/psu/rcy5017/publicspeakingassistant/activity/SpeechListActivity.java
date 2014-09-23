@@ -2,7 +2,7 @@ package edu.psu.rcy5017.publicspeakingassistant.activity;
 import java.util.List;
 
 import edu.psu.rcy501.publicspeakingassistant.R;
-import edu.psu.rcy5017.publicspeakingassistant.SpeechListDataSource;
+import edu.psu.rcy5017.publicspeakingassistant.SpeechDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.model.NoteCardListDBTest;
 
 import android.app.ListActivity;
@@ -25,14 +25,14 @@ public class SpeechListActivity extends ListActivity {
 	// Request codes
 	private static final int RENAME_SPEECH_REQUEST_CODE = 1001;
 	
-    private SpeechListDataSource datasource;
+    private SpeechDataSource datasource;
         
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_speech_list);
         
-        datasource = new SpeechListDataSource(this);
+        datasource = new SpeechDataSource(this);
         datasource.open();
 
         final List<NoteCardListDBTest> values = datasource.getAllNoteCardListDBTests();
