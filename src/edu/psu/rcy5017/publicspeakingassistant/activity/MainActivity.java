@@ -2,8 +2,8 @@ package edu.psu.rcy5017.publicspeakingassistant.activity;
 
 import edu.psu.rcy501.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.adapter.TabsPagerAdapter;
-import edu.psu.rcy5017.publicspeakingassistant.model.NoteCard;
-import edu.psu.rcy5017.publicspeakingassistant.model.TestNoteList;
+import edu.psu.rcy5017.publicspeakingassistant.testmodel.NoteCard;
+import edu.psu.rcy5017.publicspeakingassistant.testmodel.TestNoteList;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;

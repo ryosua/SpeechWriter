@@ -1,4 +1,4 @@
-package edu.psu.rcy5017.publicspeakingassistant.model;
+package edu.psu.rcy5017.publicspeakingassistant.testmodel;
 
 import java.util.ArrayList;
 

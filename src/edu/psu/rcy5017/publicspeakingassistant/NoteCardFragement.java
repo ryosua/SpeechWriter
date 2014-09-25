@@ -3,7 +3,7 @@ package edu.psu.rcy5017.publicspeakingassistant;
 import java.util.ArrayList;
 
 import edu.psu.rcy501.publicspeakingassistant.R;
-import edu.psu.rcy5017.publicspeakingassistant.model.NoteCard;
+import edu.psu.rcy5017.publicspeakingassistant.testmodel.NoteCard;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;

@@ -1,7 +1,7 @@
 package edu.psu.rcy5017.publicspeakingassistant.adapter;
 
 import edu.psu.rcy5017.publicspeakingassistant.NoteCardFragement;
-import edu.psu.rcy5017.publicspeakingassistant.model.NoteCardList;
+import edu.psu.rcy5017.publicspeakingassistant.testmodel.NoteCardList;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
