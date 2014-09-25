@@ -3,6 +3,7 @@ package edu.psu.rcy5017.publicspeakingassistant;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.psu.rcy5017.publicspeakingassistant.activity.RenameSpeechActivity;
 import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
 
 import android.content.ContentValues;
@@ -83,9 +84,10 @@ public class SpeechDataSource {
     }
 
     private Speech cursorToSpeech(Cursor cursor) {
-        Speech speech = new Speech();
-        speech.setId(cursor.getLong(0));
-        speech.setTitle(cursor.getString(1));
+    	final long newSpeechId = cursor.getLong(0);
+		final String newSpeechTitle = cursor.getString(1);
+		final Speech speech = new Speech(newSpeechId, newSpeechTitle);
+        
         return speech;
     }
 } 

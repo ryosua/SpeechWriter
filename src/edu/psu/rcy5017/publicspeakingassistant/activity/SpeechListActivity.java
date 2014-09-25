@@ -127,9 +127,9 @@ public class SpeechListActivity extends ListActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	if (requestCode == RENAME_SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
-    		final Speech speech = new Speech();
-    		speech.setId(data.getLongExtra("id", RenameSpeechActivity.DEFAULT_LONG_VALUE));
-    		speech.setTitle(data.getStringExtra("title"));
+    		final long newSpeechId = data.getLongExtra("id", RenameSpeechActivity.DEFAULT_LONG_VALUE);
+    		final String newSpeechTitle = data.getStringExtra("title");
+    		final Speech speech = new Speech(newSpeechId, newSpeechTitle);
     		final int position = data.getIntExtra("position", RenameSpeechActivity.DEFAULT_INT_VALUE);
     		
     		// DEBUG

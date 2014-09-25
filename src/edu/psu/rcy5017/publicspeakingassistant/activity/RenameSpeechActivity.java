@@ -40,9 +40,9 @@ public class RenameSpeechActivity extends Activity {
         
         // Create a speech object from data passed from list activity.
         final Intent intent = this.getIntent();
-        speech = new Speech();
-        speech.setId(intent.getLongExtra("id", DEFAULT_LONG_VALUE));
-        speech.setTitle(intent.getStringExtra("title"));
+        final long newSpeechId = intent.getLongExtra("id", RenameSpeechActivity.DEFAULT_LONG_VALUE);
+		final String newSpeechTitle = intent.getStringExtra("title");
+		speech = new Speech(newSpeechId, newSpeechTitle);
         position = intent.getIntExtra("position", DEFAULT_INT_VALUE);
         
         // Populate the text field with the speech data.

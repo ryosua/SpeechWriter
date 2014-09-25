@@ -1,25 +1,27 @@
 package edu.psu.rcy5017.publicspeakingassistant.model;
 
 /**
- * A model class representing a speech.
+ * A model class representing a note card.
  * @author Ryan Yosua
  *
  */
-public class Speech {
-    
-    private final long id;
+public class NoteCard {
+	
+	private final long id;
+    private final long speechID;
     
     private String title;
     
-    public Speech(long id, String title) {
+    public NoteCard(long id, String title, long speechID) {
 		this.id = id;
 		this.title = title;
+		this.speechID = speechID;
 	}
 
 	public long getId() {
         return id;
     }
-
+  
     public String getTitle() {
         return title;
     }
@@ -28,10 +30,14 @@ public class Speech {
         this.title = title;
     }
 
-    // Will be used by the ArrayAdapter in the ListView
+    public long getSpeechID() {
+		return speechID;
+	}
+
+	// Will be used by the ArrayAdapter in the ListView
     @Override
     public String toString() {
         return title;
     }
     
-} 
+}
