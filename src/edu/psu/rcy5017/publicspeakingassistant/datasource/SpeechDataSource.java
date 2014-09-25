@@ -1,16 +1,15 @@
-package edu.psu.rcy5017.publicspeakingassistant;
+package edu.psu.rcy5017.publicspeakingassistant.datasource;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import edu.psu.rcy5017.publicspeakingassistant.activity.RenameSpeechActivity;
-import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import edu.psu.rcy5017.publicspeakingassistant.DatabaseHelper;
+import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
 
 public class SpeechDataSource {
 
