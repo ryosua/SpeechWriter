@@ -40,7 +40,7 @@ public class SpeechDataSource {
                 allColumns, DatabaseHelper.COLUMN_ID + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
-        Speech newSpeech = cursorSpeech(cursor);
+        Speech newSpeech = cursorToSpeech(cursor);
         cursor.close();
         return newSpeech;
     }
@@ -52,8 +52,17 @@ public class SpeechDataSource {
                 + " = " + id, null);
     }
     
-    public void renameSpeech(String title) {
-     
+    /**
+     * Renames a speech in the database.
+     * @param speech the speech to rename
+     * @param newTitle the new title
+     * @return the number of rows affected
+     */
+    public int renameSpeech(Speech speech, String newTitle) {
+    	final ContentValues args = new ContentValues();
+        args.put(DatabaseHelper.SPEECH_TITLE, newTitle);
+        return database.update(
+        		DatabaseHelper.SPEECH_TABLE_NAME, args, DatabaseHelper.COLUMN_ID + "=" + speech.getId(), null);
     }
 
     public List<Speech> getAllSpeeches() {
@@ -64,7 +73,7 @@ public class SpeechDataSource {
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            Speech speech = cursorSpeech(cursor);
+            Speech speech = cursorToSpeech(cursor);
             speeches.add(speech);
             cursor.moveToNext();
         }
@@ -73,7 +82,7 @@ public class SpeechDataSource {
         return speeches;
     }
 
-    private Speech cursorSpeech(Cursor cursor) {
+    private Speech cursorToSpeech(Cursor cursor) {
         Speech speech = new Speech();
         speech.setId(cursor.getLong(0));
         speech.setTitle(cursor.getString(1));

@@ -52,13 +52,15 @@ public class SpeechListActivity extends ListActivity {
     public void onClick(View view) {
         @SuppressWarnings("unchecked")
         final ArrayAdapter<Speech> adapter = (ArrayAdapter<Speech>) getListAdapter();
-        final Speech speech = datasource.createSpeech("New Speech" + adapter.getCount());
+        final Speech speech = datasource.createSpeech("New Speech");
         
         switch (view.getId()) {
         
         case R.id.add:
             // Save the new speech to the database.
             adapter.add(speech);
+            // Force user to overwrite the default name.
+            renameSpeech(speech, adapter.getCount() - 1);
             
             break;    
         }
@@ -141,7 +143,7 @@ public class SpeechListActivity extends ListActivity {
     		final Speech speechToUpdate = 
     				adapter.getItem(position);
     		
-    		// Update database record using adapter.
+    		// Update the title.
     		speechToUpdate.setTitle(speech.getTitle());
     		adapter.notifyDataSetChanged();
 		}
