@@ -5,14 +5,14 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
-public class EditSpeechActivity extends Activity {
+public class NoteCardListActivity extends Activity {
 	
 	private static final String TAG = "EditSpeechActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_speech);
+        setContentView(R.layout.activity_notecard_list);
     }
 
 }

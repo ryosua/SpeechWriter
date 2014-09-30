@@ -159,7 +159,7 @@ public class SpeechListActivity extends ListActivity {
     }
     
     private void editSpeech(Speech speech) {
-    	final Intent intent = new Intent(this, EditSpeechActivity.class);   
+    	final Intent intent = new Intent(this, NoteCardListActivity.class);   
         startActivity(intent);
     }
     
