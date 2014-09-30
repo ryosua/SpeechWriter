@@ -6,20 +6,28 @@ import java.util.List;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import edu.psu.rcy5017.publicspeakingassistant.DatabaseHelper;
 import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
 
 public class SpeechDataSource extends DataSource {
+	
+	private static final String TAG = "SpeechDataSource";
 
     private String[] allColumns = { DatabaseHelper.COLUMN_ID,
             DatabaseHelper.SPEECH_TITLE };
-
+    
     public SpeechDataSource(Context context) {
         super(context);
     }
 
+    /**
+     * Creates a new speech in the database.
+     * @param title the title of the speech
+     * @return the speech created
+     */
     public Speech createSpeech(String title) {
-        ContentValues values = new ContentValues();
+        final ContentValues values = new ContentValues();
         values.put(DatabaseHelper.SPEECH_TITLE, title);
         long insertId = getDatabase().insert(DatabaseHelper.SPEECH_TABLE_NAME, null,
                 values);
@@ -31,10 +39,14 @@ public class SpeechDataSource extends DataSource {
         cursor.close();
         return newSpeech;
     }
-
+    
+    /**
+     * Deletes the speech in the database.
+     * @param speech the speech to delete
+     */
     public void deleteSpeech(Speech speech) {
         long id = speech.getId();
-        System.out.println("Speech deleted with id: " + id);
+        Log.d(TAG, "Speech deleted with id: " + id);
         getDatabase().delete(DatabaseHelper.SPEECH_TABLE_NAME, DatabaseHelper.COLUMN_ID
                 + " = " + id, null);
     }
@@ -51,7 +63,11 @@ public class SpeechDataSource extends DataSource {
         return getDatabase().update(
         		DatabaseHelper.SPEECH_TABLE_NAME, args, DatabaseHelper.COLUMN_ID + "=" + speech.getId(), null);
     }
-
+    
+    /**
+     * Gets a list of speeches.
+     * @return the speech list
+     */
     public List<Speech> getAllSpeeches() {
         List<Speech> speeches = new ArrayList<Speech>();
 
@@ -68,7 +84,12 @@ public class SpeechDataSource extends DataSource {
         cursor.close();
         return speeches;
     }
-
+    
+    /**
+     * Converts a cursor to a speech.
+     * @param cursor the cursor to convert
+     * @return the speech
+     */
     private Speech cursorToSpeech(Cursor cursor) {
     	final long newSpeechId = cursor.getLong(0);
 		final String newSpeechTitle = cursor.getString(1);
