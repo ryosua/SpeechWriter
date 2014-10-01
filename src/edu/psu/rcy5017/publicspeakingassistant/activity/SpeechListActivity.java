@@ -148,6 +148,10 @@ public class SpeechListActivity extends ListActivity {
     		// Update the title.
     		speechToUpdate.setTitle(speech.getTitle());
     		adapter.notifyDataSetChanged();
+    		
+    		// Save the changes to the database.
+    		datasource.open();
+    		datasource.renameSpeech(speech, speech.getTitle());
 		}
     }
     

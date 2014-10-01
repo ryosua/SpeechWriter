@@ -25,17 +25,12 @@ public class RenameSpeechActivity extends Activity {
     private Speech speech;
     private EditText textField;
     
-    private SpeechDataSource datasource;
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rename_speech);
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        
-        datasource = new SpeechDataSource(this);
-        datasource.open();
-        
+    
         textField = (EditText) findViewById(R.id.edit_text_speech_title);
         
         // Create a speech object from data passed from list activity.
@@ -83,10 +78,6 @@ public class RenameSpeechActivity extends Activity {
     	intent.putExtra("position", position);
     	intent.putExtra("id", speech.getId());
     	intent.putExtra("title", speechTitle);
-    	
-    	// Save the changes to the database.
-    	datasource.renameSpeech(speech, speechTitle);
-    	datasource.close();
     	    	
     	setResult(RESULT_OK, intent);
     	finish();
