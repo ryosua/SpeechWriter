@@ -24,6 +24,7 @@ public class SpeechListActivity extends ListActivity {
 	
 	// Request codes
 	private static final int RENAME_SPEECH_REQUEST_CODE = 1001;
+	private static final int EDIT_SPEECH_REQUEST_CODE = 1001;
 	
     private SpeechDataSource datasource;
         
@@ -37,8 +38,7 @@ public class SpeechListActivity extends ListActivity {
 
         final List<Speech> values = datasource.getAllSpeeches();
         
-    	// use the SimpleCursorAdapter to show the
-        // elements in a ListView
+        // Use the SimpleCursorAdapter to show the elements in a ListView.
         final ArrayAdapter<Speech> adapter = 
         		new ArrayAdapter<Speech>(this, android.R.layout.simple_list_item_1, values);
         setListAdapter(adapter);
@@ -47,16 +47,18 @@ public class SpeechListActivity extends ListActivity {
         registerForContextMenu(getListView());
     }
 
-    // Will be called via the onClick attribute
-    // of the buttons in main.xml
+    /**
+     * Called via the onClick attribute of the buttons in main.xml.
+     * @param view the calling view
+     */
     public void onClick(View view) {
         @SuppressWarnings("unchecked")
         final ArrayAdapter<Speech> adapter = (ArrayAdapter<Speech>) getListAdapter();
-        final Speech speech = datasource.createSpeech("New Speech");
-        
+    
         switch (view.getId()) {
         
-        case R.id.add:
+        case R.id.add_speech:
+        	final Speech speech = datasource.createSpeech("New Speech");
             // Save the new speech to the database.
             adapter.add(speech);
             // Force user to overwrite the default name.
@@ -159,8 +161,9 @@ public class SpeechListActivity extends ListActivity {
     }
     
     private void editSpeech(Speech speech) {
-    	final Intent intent = new Intent(this, NoteCardListActivity.class);   
-        startActivity(intent);
+    	final Intent intent = new Intent(this, NoteCardListActivity.class);
+    	intent.putExtra("id", speech.getId());
+    	startActivityForResult(intent, EDIT_SPEECH_REQUEST_CODE);
     }
     
     /**

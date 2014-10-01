@@ -4,5 +4,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
+    <LinearLayout
+        android:id="@+id/group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/add_note_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/new_notecard_button_text"
+            android:onClick="onClick"/>
+        
+    </LinearLayout>
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/placeholder" />
+    
 
 </LinearLayout>

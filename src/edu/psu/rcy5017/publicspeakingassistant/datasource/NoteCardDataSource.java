@@ -16,7 +16,7 @@ public class NoteCardDataSource extends DataSource {
 	private static final String TAG = "NoteCard";
 	
 	private String[] allColumns = { DatabaseHelper.COLUMN_ID,
-            DatabaseHelper.NOTECARD_TABLE_NAME, DatabaseHelper.SPEECH_ID };
+            DatabaseHelper.NOTECARD_TITLE, DatabaseHelper.SPEECH_ID };
 
 	public NoteCardDataSource(Context context) {
 		super(context);
@@ -28,13 +28,13 @@ public class NoteCardDataSource extends DataSource {
 	 * @param speech the speech that the note card belongs to
 	 * @return the note card created
 	 */
-	public NoteCard createNotecard(String title, Speech speech) {
+	public NoteCard createNoteCard(String title, long speechID) {
 		final ContentValues values = new ContentValues();
-		values.put(DatabaseHelper.NOTECARD_TABLE_NAME, title);
-		values.put(DatabaseHelper.SPEECH_ID, speech.getId());
-		long insertId = getDatabase().insert(DatabaseHelper.NOTE_TABLE_NAME, null,
+		values.put(DatabaseHelper.NOTECARD_TITLE, title);
+		values.put(DatabaseHelper.SPEECH_ID, speechID);
+		long insertId = getDatabase().insert(DatabaseHelper.NOTECARD_TABLE_NAME, null,
 		        values);
-		Cursor cursor = getDatabase().query(DatabaseHelper.NOTE_TABLE_NAME,
+		Cursor cursor = getDatabase().query(DatabaseHelper.NOTECARD_TABLE_NAME,
 		        allColumns, DatabaseHelper.COLUMN_ID + " = " + insertId, null,
 		        null, null, null);
 		cursor.moveToFirst();
@@ -50,7 +50,7 @@ public class NoteCardDataSource extends DataSource {
     public void deleteNoteCard(NoteCard noteCard) {
     	long id = noteCard.getId();
         Log.d(TAG, "Note card deleted with id: " + id);
-        getDatabase().delete(DatabaseHelper.NOTE_TABLE_NAME, DatabaseHelper.COLUMN_ID
+        getDatabase().delete(DatabaseHelper.NOTECARD_TABLE_NAME, DatabaseHelper.COLUMN_ID
                 + " = " + id, null);
     }
     
@@ -62,9 +62,9 @@ public class NoteCardDataSource extends DataSource {
      */
     public int renameNotecard(NoteCard noteCard, String newTitle) {
     	final ContentValues args = new ContentValues();
-        args.put(DatabaseHelper.NOTECARD_TABLE_NAME, newTitle);
+        args.put(DatabaseHelper.NOTECARD_TITLE, newTitle);
         return getDatabase().update(
-        		DatabaseHelper.NOTE_TABLE_NAME, args, DatabaseHelper.COLUMN_ID + "=" + noteCard.getId(), null);
+        		DatabaseHelper.NOTECARD_TABLE_NAME, args, DatabaseHelper.COLUMN_ID + "=" + noteCard.getId(), null);
     }
     
     /**
@@ -88,13 +88,36 @@ public class NoteCardDataSource extends DataSource {
         return noteCards;
     }
     
+    public List<NoteCard> getAllNoteCards(long speechID) {
+    	List<NoteCard> noteCards = new ArrayList<NoteCard>();
+    	
+    	final String selection = DatabaseHelper.SPEECH_ID + "=" + speechID;
+        Cursor cursor = getDatabase().query(DatabaseHelper.NOTECARD_TABLE_NAME,
+                allColumns, selection, null, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            NoteCard noteCard = cursorToNoteCard(cursor);
+            noteCards.add(noteCard);
+            cursor.moveToNext();
+        }
+        // make sure to close the cursor
+        cursor.close();
+        return noteCards;
+    }
+    
     /**
      * Converts a cursor to a note card.
      * @param cursor the cursor to convert
      * @return the note card
      */
     private NoteCard cursorToNoteCard(Cursor cursor) {
-		return null;
+    	final long newNoteCardId = cursor.getLong(0);
+		final String newNoteCardTitle = cursor.getString(1);
+		final long newNoteCardSpeechId = cursor.getLong(2);
+		final NoteCard noteCard = new NoteCard(newNoteCardId, newNoteCardTitle, newNoteCardSpeechId);
+        
+        return noteCard;
     }
 
 }
