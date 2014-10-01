@@ -23,7 +23,7 @@ public class SplashScreenActivity extends Activity {
         
         Log.d(TAG, "Splash activity started");
         
-        final int SPLASH_TIME_OUT = 3000;
+        final int SPLASH_TIME_OUT = 1500;
  
         new Handler().postDelayed(new Runnable() {
  
