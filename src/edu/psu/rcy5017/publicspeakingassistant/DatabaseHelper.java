@@ -75,7 +75,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	            		COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 	            		NOTECARD_TITLE + " TEXT NOT NULL," +
 	            		SPEECH_ID + " INTEGER NOT NULL," +
-	            		"FOREIGN KEY("+ SPEECH_ID +") REFERENCES " + SPEECH_TABLE_NAME + "("+ COLUMN_ID +")" + 
+	            		"FOREIGN KEY("+ SPEECH_ID +") REFERENCES " + SPEECH_TABLE_NAME + "("+ COLUMN_ID +") ON DELETE CASCADE" + 
 	            ");";
     		
     	Log.d(TAG, createStatement);
