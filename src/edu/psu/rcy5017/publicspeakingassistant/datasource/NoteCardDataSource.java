@@ -5,7 +5,6 @@ import java.util.List;
 
 import edu.psu.rcy5017.publicspeakingassistant.DatabaseHelper;
 import edu.psu.rcy5017.publicspeakingassistant.model.NoteCard;
-import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
