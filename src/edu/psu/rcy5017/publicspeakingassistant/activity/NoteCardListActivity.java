@@ -3,6 +3,8 @@ package edu.psu.rcy5017.publicspeakingassistant.activity;
 import java.util.List;
 
 import edu.psu.rcy501.publicspeakingassistant.R;
+import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
+import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.NoteCardDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.model.NoteCard;
 import android.app.ListActivity;
@@ -22,9 +24,6 @@ public class NoteCardListActivity extends ListActivity {
 	
 	private static final String TAG = "NoteCardListActivity";
 	
-	// Request codes
-	private static final int RENAME_NOTECARD_REQUEST_CODE = 1002;
-	
     private NoteCardDataSource datasource;
 
     @Override
@@ -37,7 +36,7 @@ public class NoteCardListActivity extends ListActivity {
         
         // Get the speechID passed from list activity.
         final Intent intent = this.getIntent();
-        final long speechID = intent.getLongExtra("id", EditTextActivity.DEFAULT_LONG_VALUE);
+        final long speechID = intent.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
         
         final List<NoteCard> values = datasource.getAllNoteCards(speechID);
         
@@ -65,7 +64,7 @@ public class NoteCardListActivity extends ListActivity {
         
         case R.id.add_note_card:
         	
-        	final long speechID = intent.getLongExtra("id", EditTextActivity.DEFAULT_LONG_VALUE);
+        	final long speechID = intent.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
         	final NoteCard noteCard = datasource.createNoteCard("New Note Card", speechID);
             // Save the new notecard to the database.
             adapter.add(noteCard);

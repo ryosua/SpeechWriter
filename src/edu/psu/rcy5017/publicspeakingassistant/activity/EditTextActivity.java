@@ -1,6 +1,7 @@
 package edu.psu.rcy5017.publicspeakingassistant.activity;
 
 import edu.psu.rcy501.publicspeakingassistant.R;
+import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,9 +23,6 @@ public class EditTextActivity extends Activity {
 	
     private static final String TAG = "EditTextActivity";
     
-    public static final int DEFAULT_INT_VALUE = -1;
-    public static final long DEFAULT_LONG_VALUE = 0;
-    
     private int position;
     private long id;
     private String retrievedText;
@@ -45,8 +43,8 @@ public class EditTextActivity extends Activity {
         final Intent intent = this.getIntent();
         
         // Get the variables passed as extras.
-        position = intent.getIntExtra("position", DEFAULT_INT_VALUE);
-        id = intent.getLongExtra("id", EditTextActivity.DEFAULT_LONG_VALUE);
+        position = intent.getIntExtra("position", DefaultValues.DEFAULT_INT_VALUE);
+        id = intent.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
         retrievedText = intent.getStringExtra("text");
         
         // Populate the text field with the speech data.
