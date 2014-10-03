@@ -25,7 +25,7 @@
         <activity android:name="edu.psu.rcy5017.publicspeakingassistant.activity.MainActivity"></activity>
         <activity android:name="edu.psu.rcy5017.publicspeakingassistant.activity.SpeechListActivity"></activity>
         <activity android:name="edu.psu.rcy5017.publicspeakingassistant.activity.NoteCardListActivity"></activity>
-        <activity android:name="edu.psu.rcy5017.publicspeakingassistant.activity.RenameSpeechActivity"></activity>
+        <activity android:name="edu.psu.rcy5017.publicspeakingassistant.activity.EditTextActivity"></activity>
     </application>
 
 </manifest>

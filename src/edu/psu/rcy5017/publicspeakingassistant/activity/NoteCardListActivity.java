@@ -37,7 +37,7 @@ public class NoteCardListActivity extends ListActivity {
         
         // Get the speechID passed from list activity.
         final Intent intent = this.getIntent();
-        final long speechID = intent.getLongExtra("id", RenameSpeechActivity.DEFAULT_LONG_VALUE);
+        final long speechID = intent.getLongExtra("id", EditTextActivity.DEFAULT_LONG_VALUE);
         
         final List<NoteCard> values = datasource.getAllNoteCards(speechID);
         
@@ -65,7 +65,7 @@ public class NoteCardListActivity extends ListActivity {
         
         case R.id.add_note_card:
         	
-        	final long speechID = intent.getLongExtra("id", RenameSpeechActivity.DEFAULT_LONG_VALUE);
+        	final long speechID = intent.getLongExtra("id", EditTextActivity.DEFAULT_LONG_VALUE);
         	final NoteCard noteCard = datasource.createNoteCard("New Note Card", speechID);
             // Save the new notecard to the database.
             adapter.add(noteCard);

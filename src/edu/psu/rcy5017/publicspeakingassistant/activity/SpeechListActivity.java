@@ -24,7 +24,7 @@ public class SpeechListActivity extends ListActivity {
 	
 	// Request codes
 	private static final int RENAME_SPEECH_REQUEST_CODE = 1001;
-	private static final int EDIT_SPEECH_REQUEST_CODE = 1001;
+	private static final int EDIT_SPEECH_REQUEST_CODE = 1002;
 	
     private SpeechDataSource datasource;
         
@@ -32,6 +32,8 @@ public class SpeechListActivity extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_speech_list);
+        
+        Log.d(TAG, "created");
         
         datasource = new SpeechDataSource(this);
         datasource.open();
@@ -129,10 +131,10 @@ public class SpeechListActivity extends ListActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	if (requestCode == RENAME_SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
-    		final long newSpeechId = data.getLongExtra("id", RenameSpeechActivity.DEFAULT_LONG_VALUE);
-    		final String newSpeechTitle = data.getStringExtra("title");
+    		final long newSpeechId = data.getLongExtra("id", EditTextActivity.DEFAULT_LONG_VALUE);
+    		final String newSpeechTitle = data.getStringExtra("text");
     		final Speech speech = new Speech(newSpeechId, newSpeechTitle);
-    		final int position = data.getIntExtra("position", RenameSpeechActivity.DEFAULT_INT_VALUE);
+    		final int position = data.getIntExtra("position", EditTextActivity.DEFAULT_INT_VALUE);
     		
     		// DEBUG
     		Log.d(TAG, "id: " + speech.getId());
@@ -175,10 +177,10 @@ public class SpeechListActivity extends ListActivity {
      * @param speech the speech to rename
      */
     private void renameSpeech(Speech speech, int position) {
-    	final Intent intent = new Intent(this, RenameSpeechActivity.class);
+    	final Intent intent = new Intent(this, EditTextActivity.class);
     	intent.putExtra("position", position );
     	intent.putExtra("id", speech.getId());
-    	intent.putExtra("title", speech.getTitle());
+    	intent.putExtra("text", speech.getTitle());
     	startActivityForResult(intent, RENAME_SPEECH_REQUEST_CODE);
     }
 
