@@ -134,11 +134,6 @@ public class SpeechListActivity extends ListActivity {
     		final Speech speech = new Speech(newSpeechId, newSpeechTitle);
     		final int position = data.getIntExtra("position", DefaultValues.DEFAULT_INT_VALUE);
     		
-    		// DEBUG
-    		Log.d(TAG, "id: " + speech.getId());
-    		Log.d(TAG, "position: " + position);
-    		Log.d(TAG, "new title: " + speech.getTitle());
-    		
     		final ArrayAdapter<Speech> adapter = (ArrayAdapter<Speech>) getListAdapter();
     		
     		// Get the speech item to update.
