@@ -70,7 +70,7 @@ public class NoteCardListActivity extends ListActivity {
             // Save the new notecard to the database.
             adapter.add(noteCard);
             // Force user to overwrite the default name.
-            //renameNoteCard(noteCard, adapter.getCount() - 1);
+            renameNoteCard(noteCard, adapter.getCount() - 1);
             
             break;    
         }
