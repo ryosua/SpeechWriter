@@ -25,6 +25,7 @@ public class NoteCardListActivity extends ListActivity {
 	private static final String TAG = "NoteCardListActivity";
 	
     private NoteCardDataSource datasource;
+    private long speechID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class NoteCardListActivity extends ListActivity {
         
         // Get the speechID passed from list activity.
         final Intent intent = this.getIntent();
-        final long speechID = intent.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
+        speechID = intent.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
         
         final List<NoteCard> values = datasource.getAllNoteCards(speechID);
         
@@ -79,7 +80,7 @@ public class NoteCardListActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
     	final NoteCard noteCard = (NoteCard) getListAdapter().getItem(position);
-    	//TODO: Edit Speech
+    	editNoteCard(noteCard);
     }
     
     @Override
@@ -117,12 +118,40 @@ public class NoteCardListActivity extends ListActivity {
      
       	return false;
     }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	if (requestCode == RequestCodes.RENAME_NOTECARD_REQUEST_CODE && resultCode == RESULT_OK) {
+    		final long newNoteCardId = data.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
+    		final String newNoteCardTitle = data.getStringExtra("text");
+    		final NoteCard noteCard = new NoteCard(newNoteCardId, newNoteCardTitle, speechID);
+    		final int position = data.getIntExtra("position", DefaultValues.DEFAULT_INT_VALUE);
+    		
+    		final ArrayAdapter<NoteCard> adapter = (ArrayAdapter<NoteCard>) getListAdapter();
+    		
+    		// Get the note card item to update.
+    		final NoteCard noteCardToUpdate = 
+    				adapter.getItem(position);
+    		
+    		// Update the title.
+    		noteCardToUpdate.setTitle(noteCard.getTitle());
+    		adapter.notifyDataSetChanged();
+    		
+    		// Save the changes to the database.
+    		datasource.open();
+    		datasource.renameNotecard(noteCard, noteCard.getTitle());
+		}
+    }
 
 	private void editNoteCard(NoteCard noteCard) {
 		Log.d(TAG, "TODO: Edit Note Card");
 	}
 
 	private void renameNoteCard(NoteCard noteCard, int position) {
-		Log.d(TAG, "TODO: Rename Note Card");
+		final Intent intent = new Intent(this, EditTextActivity.class);
+    	intent.putExtra("position", position );
+    	intent.putExtra("id", noteCard.getId());
+    	intent.putExtra("text", noteCard.getTitle());
+    	startActivityForResult(intent, RequestCodes.RENAME_NOTECARD_REQUEST_CODE);
 	}
 }
