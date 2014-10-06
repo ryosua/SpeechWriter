@@ -86,6 +86,7 @@ public class SpeechListActivity extends ListActivity {
         final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
                 .getMenuInfo();
         
+        @SuppressWarnings("unchecked")
         final ArrayAdapter<Speech> adapter = (ArrayAdapter<Speech>) getListAdapter();
         final Speech speech = (Speech) getListAdapter().getItem(info.position);
         
@@ -132,6 +133,7 @@ public class SpeechListActivity extends ListActivity {
     		final Speech speech = new Speech(newSpeechId, newSpeechTitle);
     		final int position = data.getIntExtra("position", DefaultValues.DEFAULT_INT_VALUE);
     		
+    		@SuppressWarnings("unchecked")
     		final ArrayAdapter<Speech> adapter = (ArrayAdapter<Speech>) getListAdapter();
     		
     		// Get the speech item to update.
