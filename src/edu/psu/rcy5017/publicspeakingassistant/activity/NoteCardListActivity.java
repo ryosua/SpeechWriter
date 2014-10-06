@@ -96,6 +96,7 @@ public class NoteCardListActivity extends ListActivity {
         final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
                 .getMenuInfo();
         
+        @SuppressWarnings("unchecked")
         final ArrayAdapter<NoteCard> adapter = (ArrayAdapter<NoteCard>) getListAdapter();
         final NoteCard noteCard = (NoteCard) getListAdapter().getItem(info.position);
         
@@ -127,6 +128,7 @@ public class NoteCardListActivity extends ListActivity {
     		final NoteCard noteCard = new NoteCard(newNoteCardId, newNoteCardTitle, speechID);
     		final int position = data.getIntExtra("position", DefaultValues.DEFAULT_INT_VALUE);
     		
+    		@SuppressWarnings("unchecked")
     		final ArrayAdapter<NoteCard> adapter = (ArrayAdapter<NoteCard>) getListAdapter();
     		
     		// Get the note card item to update.
