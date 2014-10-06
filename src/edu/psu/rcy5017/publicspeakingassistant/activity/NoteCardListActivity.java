@@ -144,7 +144,9 @@ public class NoteCardListActivity extends ListActivity {
     }
 
 	private void editNoteCard(NoteCard noteCard) {
-		Log.d(TAG, "TODO: Edit Note Card");
+		final Intent intent = new Intent(this, NoteListActivity.class);
+    	intent.putExtra("id", noteCard.getId());
+    	startActivityForResult(intent, RequestCodes.EDIT_NOTECARD_REQUEST_CODE);
 	}
 
 	private void renameNoteCard(NoteCard noteCard, int position) {
