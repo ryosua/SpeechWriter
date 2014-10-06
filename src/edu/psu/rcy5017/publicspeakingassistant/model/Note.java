@@ -8,13 +8,13 @@ package edu.psu.rcy5017.publicspeakingassistant.model;
 public class Note {
 
 	private final long id;
-    private final long speechID;
+    private final long noteCardID;
     
     private String text;
    
-    public Note(long id, long speechID, String text) {
+    public Note(long id, long noteCardID, String text) {
 		this.id = id;
-		this.speechID = speechID;
+		this.noteCardID = noteCardID;
 		this.text = text;
 	}
 
@@ -30,8 +30,8 @@ public class Note {
         this.text = text;
     }
 
-    public long getSpeechID() {
-		return speechID;
+    public long getNoteCardID() {
+		return noteCardID;
 	}
 
 	// Will be used by the ArrayAdapter in the ListView

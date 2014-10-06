@@ -55,7 +55,7 @@ public class NoteCardDataSource extends DataSource {
     
     /**
      * Renames the note card in the database.
-     * @param noteCard the note card to delete
+     * @param noteCard the note card to rename
      * @param newTitle the new title to rename this notecard
      * @return the number of rows affected
      */
@@ -67,7 +67,7 @@ public class NoteCardDataSource extends DataSource {
     }
     
     /**
-     * Gets a list of note cards.
+     * Gets a list of every note card from every speech.
      * @return the note card list
      */
     public List<NoteCard> getAllNotecards() {
@@ -87,6 +87,11 @@ public class NoteCardDataSource extends DataSource {
         return noteCards;
     }
     
+    /**
+     * Get a list of note cards associated with a speech.
+     * @param speechID the speech to get note cards from
+     * @return the note card list
+     */
     public List<NoteCard> getAllNoteCards(long speechID) {
     	List<NoteCard> noteCards = new ArrayList<NoteCard>();
     	

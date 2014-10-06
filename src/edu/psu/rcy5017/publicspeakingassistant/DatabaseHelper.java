@@ -17,8 +17,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	public static final int DATABASE_VERSION = 2;
 	public static final String DATABASE_NAME = "PublicSpeakingAssistantDatabase";
 	public static final String COLUMN_ID = "_id";
-	public static final String SPEECH_ID = "SpeechID";
-	
+
 	// Speech Table
 	public static final String SPEECH_TABLE_NAME = "Speech";
 	public static final String SPEECH_TITLE = "Title";
@@ -26,10 +25,12 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	// NoteCard Table
 	public static final String NOTECARD_TABLE_NAME = "Notecard";
 	public static final String NOTECARD_TITLE = "Title";
+	public static final String SPEECH_ID = "SpeechID";
 	
 	// Note Table
 	public static final String NOTE_TABLE_NAME = "Note";
 	public static final String NOTE_TEXT = "Text";
+	public static final String NOTECARD_ID = "NoteCardID";
 	
 	// SpeechRecording Table
 	public static final String SPEECH_RECORDING_TABLE_NAME = "SpeechRecording";
@@ -44,6 +45,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
     	createSpeechTable(db);
     	createNoteCardTable(db);
+    	createNoteTable(db);
     	//createSpeechRecording(db);
     	//createBulletPointTable(db);
     }
@@ -78,8 +80,19 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	            		"FOREIGN KEY("+ SPEECH_ID +") REFERENCES " + SPEECH_TABLE_NAME + "("+ COLUMN_ID +") ON DELETE CASCADE" + 
 	            ");";
     		
-    	Log.d(TAG, createStatement);
-	
     	db.execSQL(createStatement);
     }
+    
+    private void createNoteTable(SQLiteDatabase db) {
+    	final String createStatement =
+	            "CREATE TABLE " + NOTE_TABLE_NAME + " (" +
+	            		COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+	            		NOTE_TEXT + " TEXT NOT NULL," +
+	            		NOTECARD_ID + " INTEGER NOT NULL," +
+	            		"FOREIGN KEY("+ NOTECARD_ID +") REFERENCES " + NOTECARD_TABLE_NAME + "("+ COLUMN_ID +") ON DELETE CASCADE" + 
+	            ");";
+    		
+    	db.execSQL(createStatement);
+    }
+    
 }
