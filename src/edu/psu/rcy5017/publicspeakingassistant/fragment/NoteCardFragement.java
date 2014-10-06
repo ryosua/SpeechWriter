@@ -1,9 +1,10 @@
 package edu.psu.rcy5017.publicspeakingassistant.fragment;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import edu.psu.rcy501.publicspeakingassistant.R;
-import edu.psu.rcy5017.publicspeakingassistant.testmodel.NoteCard;
+import edu.psu.rcy5017.publicspeakingassistant.datasource.NoteDataSource;
+import edu.psu.rcy5017.publicspeakingassistant.model.Note;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,10 +15,11 @@ import android.widget.TextView;
 
 public class NoteCardFragement extends Fragment {
 	
-	private final NoteCard noteCard;
+	private NoteDataSource datasource;
+	private final long noteCardID;
 	
-	public NoteCardFragement(NoteCard noteCard) {
-		this.noteCard = noteCard;
+	public NoteCardFragement(long noteCardID) {
+		this.noteCardID = noteCardID;
 	}
 
     @Override
@@ -28,15 +30,30 @@ public class NoteCardFragement extends Fragment {
         
         LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.linearlayout_note_card_fragment);
         
+        datasource = new NoteDataSource(getActivity());
+        datasource.open();
+        
         // Create text for each note on the note card.
-        ArrayList<String> notes = noteCard.getNotes();
-        for(int i = 0; i < notes.size(); i++)
+        final List<Note> notes = datasource.getAllNotes(noteCardID);
+        for(Note note: notes)
         {
         	TextView text = new TextView(this.getActivity());
-            text.setText(notes.get(i));
+            text.setText(note.getText());
             layout.addView(text);
         }
        
         return rootView;
+    }
+    
+    @Override
+	public void onResume() {
+        datasource.open();
+        super.onResume();
+    }
+
+    @Override
+	public void onPause() {
+        datasource.close();
+        super.onPause();
     }
 }

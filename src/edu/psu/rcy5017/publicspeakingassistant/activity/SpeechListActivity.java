@@ -31,8 +31,6 @@ public class SpeechListActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_speech_list);
         
-        Log.d(TAG, "created");
-        
         datasource = new SpeechDataSource(this);
         datasource.open();
 
@@ -155,8 +153,9 @@ public class SpeechListActivity extends ListActivity {
     * @param speech the speech to start
     */
     private void startSpeech(Speech speech) {
-    	final Intent intent = new Intent(this, MainActivity.class);   
-        startActivity(intent);
+    	final Intent intent = new Intent(this, MainActivity.class);
+    	intent.putExtra("id", speech.getId());
+    	startActivityForResult(intent, RequestCodes.START_SPEECH_REQUEST_CODE);
     }
     
     private void editSpeech(Speech speech) {

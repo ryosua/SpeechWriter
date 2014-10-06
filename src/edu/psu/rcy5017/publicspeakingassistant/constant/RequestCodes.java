@@ -12,6 +12,7 @@ public final class RequestCodes {
 	public static final int RENAME_NOTECARD_REQUEST_CODE = 1003;
 	public static final int EDIT_NOTECARD_REQUEST_CODE = 1004;
 	public static final int EDIT_NOTE_REQUEST_CODE = 1005;
+	public static final int START_SPEECH_REQUEST_CODE = 1005;
 
 	private RequestCodes() {
 		// Prevent the instantiation of this class.
