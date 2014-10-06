@@ -12,7 +12,7 @@ import android.util.Log;
 
 public class NoteCardDataSource extends DataSource {
 	
-	private static final String TAG = "NoteCard";
+	private static final String TAG = "NoteCardDataSource";
 	
 	private String[] allColumns = { DatabaseHelper.COLUMN_ID,
             DatabaseHelper.NOTECARD_TITLE, DatabaseHelper.SPEECH_ID };
