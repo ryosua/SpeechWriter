@@ -9,6 +9,8 @@ import edu.psu.rcy5017.publicspeakingassistant.model.Note;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 
 public class NoteListActivity extends ListActivity {
@@ -21,7 +23,7 @@ public class NoteListActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notecard_list);
+        setContentView(R.layout.activity_note_list);
         
         datasource = new NoteDataSource(this);
         datasource.open();
@@ -39,6 +41,32 @@ public class NoteListActivity extends ListActivity {
         
         // Register the ListView  for Context menu  
         registerForContextMenu(getListView());
+    }
+    
+    /**
+     * Called via the onClick attribute of the buttons in main.xml.
+     * @param view the calling view
+     */
+    public void onClick(View view) {
+    	@SuppressWarnings("unchecked")
+		final ArrayAdapter<Note> adapter = (ArrayAdapter<Note>) getListAdapter();
+    	
+    	// Get the speechID passed from list activity.
+        final Intent intent = this.getIntent();
+       
+        switch (view.getId()) {
+        
+        case R.id.add_note:
+        	Log.d(TAG, "TODO: Add note.");
+        	final long noteCardID = intent.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
+        	final Note note = datasource.createNote("New Note", noteCardID);
+            // Save the new notecard to the database.
+            adapter.add(note);
+            //TODO: Force user to overwrite the default name.
+            //renameNoteCard(note, adapter.getCount() - 1);
+            break;    
+        }
+        adapter.notifyDataSetChanged();
     }
 	
 }
