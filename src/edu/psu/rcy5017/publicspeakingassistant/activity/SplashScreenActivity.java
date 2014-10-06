@@ -9,8 +9,8 @@ import android.util.Log;
 import android.view.Window;
 
 public class SplashScreenActivity extends Activity {
-	
-	private static final String TAG = "SplashScreenActivity";
+    
+    private static final String TAG = "SplashScreenActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +38,11 @@ public class SplashScreenActivity extends Activity {
                 // Start app main activity
                 Intent i = new Intent(SplashScreenActivity.this, SpeechListActivity.class);
                 startActivity(i);
-		
+        
                 // close this activity
                 finish();
             }
         }, SPLASH_TIME_OUT);
     }
+    
 }

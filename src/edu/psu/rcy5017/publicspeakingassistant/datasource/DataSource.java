@@ -6,14 +6,14 @@ import android.database.sqlite.SQLiteDatabase;
 import edu.psu.rcy5017.publicspeakingassistant.DatabaseHelper;
 
 public abstract class DataSource {
-	
-	private SQLiteDatabase database;
-	private DatabaseHelper dbHelper;
-	
-	public DataSource(Context context) {
-		 dbHelper = new DatabaseHelper(context);
-	}
-	
+    
+    private SQLiteDatabase database;
+    private DatabaseHelper dbHelper;
+    
+    public DataSource(Context context) {
+         dbHelper = new DatabaseHelper(context);
+    }
+    
     public void open() throws SQLException {
         database = getDbHelper().getWritableDatabase();
     }
@@ -21,12 +21,12 @@ public abstract class DataSource {
     public void close() {
         getDbHelper().close();
     }
-	
-	public SQLiteDatabase getDatabase() {
-		return database;
-	}
+    
+    public SQLiteDatabase getDatabase() {
+        return database;
+    }
 
-	public DatabaseHelper getDbHelper() {
-		return dbHelper;
-	}
+    public DatabaseHelper getDbHelper() {
+        return dbHelper;
+    }
 }

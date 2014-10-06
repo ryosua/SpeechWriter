@@ -25,15 +25,15 @@ import android.view.MenuItem;
  */
 public class MainActivity extends FragmentActivity implements
 ActionBar.TabListener {
-	private static final String TAG = "MainActivity";
-	
-	private NoteCardDataSource datasource;
-	private ViewPager viewPager;
-	
+    private static final String TAG = "MainActivity";
+    
+    private NoteCardDataSource datasource;
+    private ViewPager viewPager;
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-    	super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
         // Get speechId from intent.
@@ -71,12 +71,12 @@ ActionBar.TabListener {
          
             @Override
             public void onPageScrolled(int arg0, float arg1, int arg2) {
-            	// Do nothing.
+                // Do nothing.
             }
          
             @Override
             public void onPageScrollStateChanged(int arg0) {
-            	// Do nothing.
+                // Do nothing.
             }
         });
         
@@ -103,23 +103,23 @@ ActionBar.TabListener {
         return super.onOptionsItemSelected(item);
     }
 
-	@Override
-	public void onTabReselected(Tab tab, FragmentTransaction ft) {
-		// Do nothing.
-	}
+    @Override
+    public void onTabReselected(Tab tab, FragmentTransaction ft) {
+        // Do nothing.
+    }
 
-	 @Override
+     @Override
     public void onTabSelected(Tab tab, FragmentTransaction ft) {
         // show respected fragment view
         viewPager.setCurrentItem(tab.getPosition());
     }
 
-	@Override
-	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-		// Do nothing.
-	}
-	
-	@Override
+    @Override
+    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+        // Do nothing.
+    }
+    
+    @Override
     protected void onResume() {
         datasource.open();
         super.onResume();

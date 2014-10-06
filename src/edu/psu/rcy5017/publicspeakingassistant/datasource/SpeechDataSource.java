@@ -11,8 +11,8 @@ import edu.psu.rcy5017.publicspeakingassistant.DatabaseHelper;
 import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
 
 public class SpeechDataSource extends DataSource {
-	
-	private static final String TAG = "SpeechDataSource";
+    
+    private static final String TAG = "SpeechDataSource";
 
     private String[] allColumns = { DatabaseHelper.COLUMN_ID,
             DatabaseHelper.SPEECH_TITLE };
@@ -58,10 +58,10 @@ public class SpeechDataSource extends DataSource {
      * @return the number of rows affected
      */
     public int renameSpeech(Speech speech, String newTitle) {
-    	final ContentValues args = new ContentValues();
+        final ContentValues args = new ContentValues();
         args.put(DatabaseHelper.SPEECH_TITLE, newTitle);
         return getDatabase().update(
-        		DatabaseHelper.SPEECH_TABLE_NAME, args, DatabaseHelper.COLUMN_ID + "=" + speech.getId(), null);
+                DatabaseHelper.SPEECH_TABLE_NAME, args, DatabaseHelper.COLUMN_ID + "=" + speech.getId(), null);
     }
     
     /**
@@ -91,9 +91,9 @@ public class SpeechDataSource extends DataSource {
      * @return the speech
      */
     private Speech cursorToSpeech(Cursor cursor) {
-    	final long newSpeechId = cursor.getLong(0);
-		final String newSpeechTitle = cursor.getString(1);
-		final Speech speech = new Speech(newSpeechId, newSpeechTitle);
+        final long newSpeechId = cursor.getLong(0);
+        final String newSpeechTitle = cursor.getString(1);
+        final Speech speech = new Speech(newSpeechId, newSpeechTitle);
         
         return speech;
     }

@@ -6,19 +6,19 @@ package edu.psu.rcy5017.publicspeakingassistant.model;
  *
  */
 public class NoteCard {
-	
-	private final long id;
+    
+    private final long id;
     private final long speechID;
     
     private String title;
     
     public NoteCard(long id, String title, long speechID) {
-		this.id = id;
-		this.title = title;
-		this.speechID = speechID;
-	}
+        this.id = id;
+        this.title = title;
+        this.speechID = speechID;
+    }
 
-	public long getId() {
+    public long getId() {
         return id;
     }
   
@@ -31,8 +31,8 @@ public class NoteCard {
     }
 
     public long getSpeechID() {
-		return speechID;
-	}
+        return speechID;
+    }
 
     // Will be used by the ArrayAdapter in the ListView
     @Override

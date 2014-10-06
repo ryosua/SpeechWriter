@@ -9,8 +9,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
  
 public class TabsPagerAdapter extends FragmentPagerAdapter {
-	
-	private final List<NoteCard> noteList;
+    
+    private final List<NoteCard> noteList;
  
     public TabsPagerAdapter(FragmentManager fm, List<NoteCard> noteList) {
         super(fm);
@@ -20,7 +20,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
  
     @Override
     public Fragment getItem(int index) {
-    	return new NoteCardFragement(noteList.get(index).getId());
+        return new NoteCardFragement(noteList.get(index).getId());
     }
  
     @Override

@@ -20,7 +20,7 @@ import android.widget.TextView.OnEditorActionListener;
  *
  */
 public class EditTextActivity extends Activity {
-	
+    
     private static final String TAG = "EditTextActivity";
     
     private int position;
@@ -53,11 +53,11 @@ public class EditTextActivity extends Activity {
         
         // Add the done button listener.
         textField.setOnEditorActionListener(new OnEditorActionListener() {
-        	@Override
+            @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || 
-                		(actionId == EditorInfo.IME_ACTION_DONE)) {
-                	saveAndFinish(textField, position);
+                        (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    saveAndFinish(textField, position);
                 }    
                 return false;
             }
@@ -66,28 +66,28 @@ public class EditTextActivity extends Activity {
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-    	if (item.getItemId() == android.R.id.home) {
-    		saveAndFinish(textField, position);
-    	}
-    	
-    	return false;
+        if (item.getItemId() == android.R.id.home) {
+            saveAndFinish(textField, position);
+        }
+        
+        return false;
     }
     
     @Override
     public void onBackPressed() {
-    	saveAndFinish(textField, position);
+        saveAndFinish(textField, position);
     }
     
     private void saveAndFinish(EditText textField, int position) {
-    	final String editedText = textField.getText().toString();
-    	
-    	final Intent intent = new Intent();
-    	intent.putExtra("position", position);
-    	intent.putExtra("id", id);
-    	intent.putExtra("text", editedText);
-    	    	
-    	setResult(RESULT_OK, intent);
-    	finish();
+        final String editedText = textField.getText().toString();
+        
+        final Intent intent = new Intent();
+        intent.putExtra("position", position);
+        intent.putExtra("id", id);
+        intent.putExtra("text", editedText);
+                
+        setResult(RESULT_OK, intent);
+        finish();
     }
     
 }

@@ -11,43 +11,43 @@ import android.database.Cursor;
 import android.util.Log;
 
 public class NoteDataSource extends DataSource {
-	
-	private static final String TAG = "NoteDataSource";
-	
-	private String[] allColumns = { DatabaseHelper.COLUMN_ID,
+    
+    private static final String TAG = "NoteDataSource";
+    
+    private String[] allColumns = { DatabaseHelper.COLUMN_ID,
             DatabaseHelper.NOTE_TEXT, DatabaseHelper.NOTECARD_ID };
 
-	public NoteDataSource(Context context) {
-		super(context);
-	}
-	
-	/**
-	 * Creates a new note in the database.
-	 * @param text the text of the note
-	 * @param noteCardID the note card that the note belongs to
-	 * @return the note created
-	 */
-	public Note createNote(String text, long noteCardID) {
-		final ContentValues values = new ContentValues();
-		values.put(DatabaseHelper.NOTE_TEXT, text);
-		values.put(DatabaseHelper.NOTECARD_ID, noteCardID);
-		long insertId = getDatabase().insert(DatabaseHelper.NOTE_TABLE_NAME, null,
-		        values);
-		Cursor cursor = getDatabase().query(DatabaseHelper.NOTE_TABLE_NAME,
-		        allColumns, DatabaseHelper.COLUMN_ID + " = " + insertId, null,
-		        null, null, null);
-		cursor.moveToFirst();
-		Note note = cursorToNote(cursor);
-		cursor.close();
-		return note;
-	}
-	
-	/**
-	 * Deletes the note in the database.
-	 * @param note the note to delete
-	 */
+    public NoteDataSource(Context context) {
+        super(context);
+    }
+    
+    /**
+     * Creates a new note in the database.
+     * @param text the text of the note
+     * @param noteCardID the note card that the note belongs to
+     * @return the note created
+     */
+    public Note createNote(String text, long noteCardID) {
+        final ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.NOTE_TEXT, text);
+        values.put(DatabaseHelper.NOTECARD_ID, noteCardID);
+        long insertId = getDatabase().insert(DatabaseHelper.NOTE_TABLE_NAME, null,
+                values);
+        Cursor cursor = getDatabase().query(DatabaseHelper.NOTE_TABLE_NAME,
+                allColumns, DatabaseHelper.COLUMN_ID + " = " + insertId, null,
+                null, null, null);
+        cursor.moveToFirst();
+        Note note = cursorToNote(cursor);
+        cursor.close();
+        return note;
+    }
+    
+    /**
+     * Deletes the note in the database.
+     * @param note the note to delete
+     */
     public void deleteNote(Note note) {
-    	long id = note.getId();
+        long id = note.getId();
         Log.d(TAG, "Note deleted with id: " + id);
         getDatabase().delete(DatabaseHelper.NOTE_TABLE_NAME, DatabaseHelper.COLUMN_ID
                 + " = " + id, null);
@@ -60,10 +60,10 @@ public class NoteDataSource extends DataSource {
      * @return the number of rows affected
      */
     public int changeNoteText(Note note, String newText) {
-    	final ContentValues args = new ContentValues();
+        final ContentValues args = new ContentValues();
         args.put(DatabaseHelper.NOTE_TEXT, newText);
         return getDatabase().update(
-        		DatabaseHelper.NOTE_TABLE_NAME, args, DatabaseHelper.COLUMN_ID + "=" + note.getId(), null);
+                DatabaseHelper.NOTE_TABLE_NAME, args, DatabaseHelper.COLUMN_ID + "=" + note.getId(), null);
     }
     
     /**
@@ -71,7 +71,7 @@ public class NoteDataSource extends DataSource {
      * @return the note list
      */
     public List<Note> getAllNotes() {
-    	List<Note> notes = new ArrayList<Note>();
+        List<Note> notes = new ArrayList<Note>();
 
         Cursor cursor = getDatabase().query(DatabaseHelper.NOTE_TABLE_NAME,
                 allColumns, null, null, null, null, null);
@@ -93,9 +93,9 @@ public class NoteDataSource extends DataSource {
      * @return the note list
      */
     public List<Note> getAllNotes(long noteCardID) {
-    	List<Note> notes = new ArrayList<Note>();
-    	
-    	final String selection = DatabaseHelper.NOTECARD_ID + "=" + noteCardID;
+        List<Note> notes = new ArrayList<Note>();
+        
+        final String selection = DatabaseHelper.NOTECARD_ID + "=" + noteCardID;
         Cursor cursor = getDatabase().query(DatabaseHelper.NOTE_TABLE_NAME,
                 allColumns, selection, null, null, null, null);
 
@@ -109,17 +109,17 @@ public class NoteDataSource extends DataSource {
         cursor.close();
         return notes;
     }
-	
-	/**
+    
+    /**
      * Converts a cursor to a note.
      * @param cursor the cursor to convert
      * @return the note
      */
     private Note cursorToNote(Cursor cursor) {
-    	final long newNoteId = cursor.getLong(0);
-		final String newNoteText = cursor.getString(1);
-		final long newNoteNoteCardId = cursor.getLong(2);
-		final Note note = new Note(newNoteId, newNoteNoteCardId, newNoteText);
+        final long newNoteId = cursor.getLong(0);
+        final String newNoteText = cursor.getString(1);
+        final long newNoteNoteCardId = cursor.getLong(2);
+        final Note note = new Note(newNoteId, newNoteNoteCardId, newNoteText);
         
         return note;
     }

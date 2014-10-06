@@ -21,10 +21,10 @@ import android.widget.ListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class NoteListActivity extends ListActivity {
-	
-	private static final String TAG = "NoteListActivity";
-	
-	private NoteDataSource datasource;
+    
+    private static final String TAG = "NoteListActivity";
+    
+    private NoteDataSource datasource;
     private long noteCardID;
     
     @Override
@@ -41,9 +41,9 @@ public class NoteListActivity extends ListActivity {
        
         final List<Note> values = datasource.getAllNotes(noteCardID);
         
-    	// Use the SimpleCursorAdapter to show the elements in a ListView.
+        // Use the SimpleCursorAdapter to show the elements in a ListView.
         final ArrayAdapter<Note> adapter = 
-        		new ArrayAdapter<Note>(this, android.R.layout.simple_list_item_1, values);
+                new ArrayAdapter<Note>(this, android.R.layout.simple_list_item_1, values);
         setListAdapter(adapter);
         
         // Register the ListView  for Context menu  
@@ -55,18 +55,18 @@ public class NoteListActivity extends ListActivity {
      * @param view the calling view
      */
     public void onClick(View view) {
-    	@SuppressWarnings("unchecked")
-		final ArrayAdapter<Note> adapter = (ArrayAdapter<Note>) getListAdapter();
-    	
-    	// Get the speechID passed from list activity.
+        @SuppressWarnings("unchecked")
+        final ArrayAdapter<Note> adapter = (ArrayAdapter<Note>) getListAdapter();
+        
+        // Get the speechID passed from list activity.
         final Intent intent = this.getIntent();
        
         switch (view.getId()) {
         
         case R.id.add_note:
-        	Log.d(TAG, "TODO: Add note.");
-        	final long noteCardID = intent.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
-        	final Note note = datasource.createNote("New Note", noteCardID);
+            Log.d(TAG, "TODO: Add note.");
+            final long noteCardID = intent.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
+            final Note note = datasource.createNote("New Note", noteCardID);
             // Save the new notecard to the database.
             adapter.add(note);
             editNote(note, adapter.getCount() - 1);
@@ -77,8 +77,8 @@ public class NoteListActivity extends ListActivity {
     
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-    	final Note note = (Note) getListAdapter().getItem(position);
-    	editNote(note, position);
+        final Note note = (Note) getListAdapter().getItem(position);
+        editNote(note, position);
     }
     
     @Override
@@ -99,52 +99,52 @@ public class NoteListActivity extends ListActivity {
         final Note note = (Note) getListAdapter().getItem(info.position);
         
         switch (item.getItemId()) {
-        		
-        	case R.id.edit_note:
-		    	editNote(note, info.position);
-		    	return true;
-		    
-	        case R.id.delete_note:
-	            datasource.deleteNote(note);
-	            adapter.remove(note);
-	            adapter.notifyDataSetChanged();
-	            return true;
+                
+            case R.id.edit_note:
+                editNote(note, info.position);
+                return true;
+            
+            case R.id.delete_note:
+                datasource.deleteNote(note);
+                adapter.remove(note);
+                adapter.notifyDataSetChanged();
+                return true;
         }
      
-      	return false;
+        return false;
     }
     
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	if (requestCode == RequestCodes.EDIT_NOTE_REQUEST_CODE && resultCode == RESULT_OK) {
-    		final long newNoteId = data.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
-    		final String newNoteText = data.getStringExtra("text");
-    		final Note note = new Note(newNoteId, noteCardID, newNoteText);
-    		final int position = data.getIntExtra("position", DefaultValues.DEFAULT_INT_VALUE);
-    		
-    		@SuppressWarnings("unchecked")
-    		final ArrayAdapter<Note> adapter = (ArrayAdapter<Note>) getListAdapter();
-    		
-    		// Get the note card item to update.
-    		final Note noteToUpdate = 
-    				adapter.getItem(position);
-    		
-    		// Update the title.
-    		noteToUpdate.setText(note.getText());
-    		adapter.notifyDataSetChanged();
-    		
-    		// Save the changes to the database.
-    		datasource.open();
-    		datasource.changeNoteText(note, note.getText());
-		}
+        if (requestCode == RequestCodes.EDIT_NOTE_REQUEST_CODE && resultCode == RESULT_OK) {
+            final long newNoteId = data.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
+            final String newNoteText = data.getStringExtra("text");
+            final Note note = new Note(newNoteId, noteCardID, newNoteText);
+            final int position = data.getIntExtra("position", DefaultValues.DEFAULT_INT_VALUE);
+            
+            @SuppressWarnings("unchecked")
+            final ArrayAdapter<Note> adapter = (ArrayAdapter<Note>) getListAdapter();
+            
+            // Get the note card item to update.
+            final Note noteToUpdate = 
+                    adapter.getItem(position);
+            
+            // Update the title.
+            noteToUpdate.setText(note.getText());
+            adapter.notifyDataSetChanged();
+            
+            // Save the changes to the database.
+            datasource.open();
+            datasource.changeNoteText(note, note.getText());
+        }
     }
     
     private void editNote(Note note, int position) {
-		final Intent intent = new Intent(this, EditTextActivity.class);
-    	intent.putExtra("position", position );
-    	intent.putExtra("id", note.getId());
-    	intent.putExtra("text", note.getText());
-    	startActivityForResult(intent, RequestCodes.EDIT_NOTE_REQUEST_CODE);
-	}
-	
+        final Intent intent = new Intent(this, EditTextActivity.class);
+        intent.putExtra("position", position );
+        intent.putExtra("id", note.getId());
+        intent.putExtra("text", note.getText());
+        startActivityForResult(intent, RequestCodes.EDIT_NOTE_REQUEST_CODE);
+    }
+    
 }

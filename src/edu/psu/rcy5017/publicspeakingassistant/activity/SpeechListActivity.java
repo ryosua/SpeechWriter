@@ -21,9 +21,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class SpeechListActivity extends ListActivity {
-	
-	private static final String TAG = "SpeechListActivity";
-		
+    
+    private static final String TAG = "SpeechListActivity";
+        
     private SpeechDataSource datasource;
         
     @Override
@@ -38,7 +38,7 @@ public class SpeechListActivity extends ListActivity {
         
         // Use the SimpleCursorAdapter to show the elements in a ListView.
         final ArrayAdapter<Speech> adapter = 
-        		new ArrayAdapter<Speech>(this, android.R.layout.simple_list_item_1, values);
+                new ArrayAdapter<Speech>(this, android.R.layout.simple_list_item_1, values);
         setListAdapter(adapter);
        
         // Register the ListView  for Context menu  
@@ -56,7 +56,7 @@ public class SpeechListActivity extends ListActivity {
         switch (view.getId()) {
         
         case R.id.add_speech:
-        	final Speech speech = datasource.createSpeech("New Speech");
+            final Speech speech = datasource.createSpeech("New Speech");
             // Save the new speech to the database.
             adapter.add(speech);
             // Force user to overwrite the default name.
@@ -69,8 +69,8 @@ public class SpeechListActivity extends ListActivity {
        
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-    	final Speech speech = (Speech) getListAdapter().getItem(position);
-    	startSpeech(speech);
+        final Speech speech = (Speech) getListAdapter().getItem(position);
+        startSpeech(speech);
     }
     
     @Override
@@ -91,26 +91,26 @@ public class SpeechListActivity extends ListActivity {
         final Speech speech = (Speech) getListAdapter().getItem(info.position);
         
         switch (item.getItemId()) {
-        	case R.id.start_speech:
-		    	startSpeech(speech);
-		    	return true;
-		    	
-        	case R.id.edit_speech:
-		    	editSpeech(speech);
-		    	return true;
-		    	
-        	case R.id.rename_speech:
-		    	renameSpeech(speech, info.position);
-		        return true;
+            case R.id.start_speech:
+                startSpeech(speech);
+                return true;
+                
+            case R.id.edit_speech:
+                editSpeech(speech);
+                return true;
+                
+            case R.id.rename_speech:
+                renameSpeech(speech, info.position);
+                return true;
         
-	        case R.id.delete_speech:
-	            datasource.deleteSpeech(speech);
-	            adapter.remove(speech);
-	            adapter.notifyDataSetChanged();
-	            return true;
+            case R.id.delete_speech:
+                datasource.deleteSpeech(speech);
+                adapter.remove(speech);
+                adapter.notifyDataSetChanged();
+                return true;
         }
      
-      	return false;
+        return false;
     }
 
     @Override
@@ -127,27 +127,27 @@ public class SpeechListActivity extends ListActivity {
     
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	if (requestCode == RequestCodes.RENAME_SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
-    		final long newSpeechId = data.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
-    		final String newSpeechTitle = data.getStringExtra("text");
-    		final Speech speech = new Speech(newSpeechId, newSpeechTitle);
-    		final int position = data.getIntExtra("position", DefaultValues.DEFAULT_INT_VALUE);
-    		
-    		@SuppressWarnings("unchecked")
-    		final ArrayAdapter<Speech> adapter = (ArrayAdapter<Speech>) getListAdapter();
-    		
-    		// Get the speech item to update.
-    		final Speech speechToUpdate = 
-    				adapter.getItem(position);
-    		
-    		// Update the title.
-    		speechToUpdate.setTitle(speech.getTitle());
-    		adapter.notifyDataSetChanged();
-    		
-    		// Save the changes to the database.
-    		datasource.open();
-    		datasource.renameSpeech(speech, speech.getTitle());
-		}
+        if (requestCode == RequestCodes.RENAME_SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
+            final long newSpeechId = data.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
+            final String newSpeechTitle = data.getStringExtra("text");
+            final Speech speech = new Speech(newSpeechId, newSpeechTitle);
+            final int position = data.getIntExtra("position", DefaultValues.DEFAULT_INT_VALUE);
+            
+            @SuppressWarnings("unchecked")
+            final ArrayAdapter<Speech> adapter = (ArrayAdapter<Speech>) getListAdapter();
+            
+            // Get the speech item to update.
+            final Speech speechToUpdate = 
+                    adapter.getItem(position);
+            
+            // Update the title.
+            speechToUpdate.setTitle(speech.getTitle());
+            adapter.notifyDataSetChanged();
+            
+            // Save the changes to the database.
+            datasource.open();
+            datasource.renameSpeech(speech, speech.getTitle());
+        }
     }
     
    /**
@@ -155,15 +155,15 @@ public class SpeechListActivity extends ListActivity {
     * @param speech the speech to start
     */
     private void startSpeech(Speech speech) {
-    	final Intent intent = new Intent(this, MainActivity.class);
-    	intent.putExtra("id", speech.getId());
-    	startActivityForResult(intent, RequestCodes.START_SPEECH_REQUEST_CODE);
+        final Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("id", speech.getId());
+        startActivityForResult(intent, RequestCodes.START_SPEECH_REQUEST_CODE);
     }
     
     private void editSpeech(Speech speech) {
-    	final Intent intent = new Intent(this, NoteCardListActivity.class);
-    	intent.putExtra("id", speech.getId());
-    	startActivityForResult(intent, RequestCodes.EDIT_SPEECH_REQUEST_CODE);
+        final Intent intent = new Intent(this, NoteCardListActivity.class);
+        intent.putExtra("id", speech.getId());
+        startActivityForResult(intent, RequestCodes.EDIT_SPEECH_REQUEST_CODE);
     }
     
     /**
@@ -171,11 +171,11 @@ public class SpeechListActivity extends ListActivity {
      * @param speech the speech to rename
      */
     private void renameSpeech(Speech speech, int position) {
-    	final Intent intent = new Intent(this, EditTextActivity.class);
-    	intent.putExtra("position", position );
-    	intent.putExtra("id", speech.getId());
-    	intent.putExtra("text", speech.getTitle());
-    	startActivityForResult(intent, RequestCodes.RENAME_SPEECH_REQUEST_CODE);
+        final Intent intent = new Intent(this, EditTextActivity.class);
+        intent.putExtra("position", position );
+        intent.putExtra("id", speech.getId());
+        intent.putExtra("text", speech.getTitle());
+        startActivityForResult(intent, RequestCodes.RENAME_SPEECH_REQUEST_CODE);
     }
 
 } 

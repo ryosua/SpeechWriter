@@ -12,11 +12,11 @@ public class Speech {
     private String title;
     
     public Speech(long id, String title) {
-		this.id = id;
-		this.title = title;
-	}
+        this.id = id;
+        this.title = title;
+    }
 
-	public long getId() {
+    public long getId() {
         return id;
     }
 

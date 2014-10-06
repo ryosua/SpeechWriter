@@ -14,13 +14,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class NoteCardFragement extends Fragment {
-	
-	private NoteDataSource datasource;
-	private final long noteCardID;
-	
-	public NoteCardFragement(long noteCardID) {
-		this.noteCardID = noteCardID;
-	}
+    
+    private NoteDataSource datasource;
+    private final long noteCardID;
+    
+    public NoteCardFragement(long noteCardID) {
+        this.noteCardID = noteCardID;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,7 +37,7 @@ public class NoteCardFragement extends Fragment {
         final List<Note> notes = datasource.getAllNotes(noteCardID);
         for(Note note: notes)
         {
-        	TextView text = new TextView(this.getActivity());
+            TextView text = new TextView(this.getActivity());
             text.setText(note.getText());
             layout.addView(text);
         }
@@ -46,14 +46,15 @@ public class NoteCardFragement extends Fragment {
     }
     
     @Override
-	public void onResume() {
+    public void onResume() {
         datasource.open();
         super.onResume();
     }
 
     @Override
-	public void onPause() {
+    public void onPause() {
         datasource.close();
         super.onPause();
     }
+    
 }
