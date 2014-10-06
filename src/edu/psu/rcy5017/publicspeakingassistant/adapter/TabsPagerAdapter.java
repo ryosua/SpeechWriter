@@ -4,7 +4,6 @@ import java.util.List;
 
 import edu.psu.rcy5017.publicspeakingassistant.fragment.NoteCardFragement;
 import edu.psu.rcy5017.publicspeakingassistant.model.NoteCard;
-import edu.psu.rcy5017.publicspeakingassistant.testmodel.NoteCardList;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
