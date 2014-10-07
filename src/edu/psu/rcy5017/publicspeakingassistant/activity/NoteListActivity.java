@@ -51,7 +51,7 @@ public class NoteListActivity extends ListActivity {
     }
     
     /**
-     * Called via the onClick attribute of the buttons in main.xml.
+     * Called via the onClick attribute of the buttons in xml file.
      * @param view the calling view
      */
     public void onClick(View view) {
