@@ -7,6 +7,8 @@
     <string name="new_speech_button_text">New Speech</string>
     <string name="new_notecard_button_text">New Note Card</string>
     <string name="new_note_button_text">New Note</string>
+    <string name="start_speech_button_text">Start</string>
+    <string name="default_speech_time">0:00</string>
     <string name="placeholder">placeholder</string>
     
 </resources>

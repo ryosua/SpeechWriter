@@ -17,6 +17,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
 
 /**
  * The activity that displays notes and speech time, while the speaker is giving a speech.
@@ -82,7 +84,20 @@ ActionBar.TabListener {
         
         Log.d(TAG, "Main activity started");
     }
-
+    
+    /**
+     * Called via the onClick attribute of the buttons in xml file.
+     * @param view the calling view
+     */
+    public void onClick(View view) {
+      
+        switch (view.getId()) {
+        
+            case R.id.start_speech_button:
+                Log.d(TAG, "TODO: Start Timer");
+                break;    
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
