@@ -1,6 +1,8 @@
 package edu.psu.rcy5017.publicspeakingassistant.activity;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import edu.psu.rcy501.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.adapter.TabsPagerAdapter;
@@ -17,8 +19,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 /**
  * The activity that displays notes and speech time, while the speaker is giving a speech.
@@ -30,9 +31,11 @@ ActionBar.TabListener {
     private static final String TAG = "MainActivity";
     
     private NoteCardDataSource datasource;
-    private ViewPager viewPager;
+    private ViewPager viewPager;    
+    private TextView timerText;
     
-
+    int seconds;
+      
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,22 +86,17 @@ ActionBar.TabListener {
         });
         
         Log.d(TAG, "Main activity started");
+         
+        // Set initial time to 0.
+        timerText = (TextView) findViewById(R.id.timer_text);
+        seconds = 0;
+        
+        // Start the timer.
+        Timer speechTimer = new Timer();
+        UpdateSpeechTimerTask updateTask = new UpdateSpeechTimerTask();
+        speechTimer.schedule(updateTask, 0, 1000);
     }
     
-    /**
-     * Called via the onClick attribute of the buttons in xml file.
-     * @param view the calling view
-     */
-    public void onClick(View view) {
-      
-        switch (view.getId()) {
-        
-            case R.id.start_speech_button:
-                Log.d(TAG, "TODO: Start Timer");
-                break;    
-        }
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -144,5 +142,64 @@ ActionBar.TabListener {
     protected void onPause() {
         datasource.close();
         super.onPause();
+    }
+    
+    /** Converts seconds to a digital time - [minutes]:[seconds]. 
+     * @param seconds time in seconds
+     * @return the digital display
+     */
+    private String secondsToDigitalTime(int seconds) {
+        String display = "";
+                
+        int remaingSeconds = 0; // The number of seconds left after converting seconds to minutes.
+        
+        // Convert minutes to seconds.
+        if (seconds >= 60) {
+            int minutes = seconds / 60;
+            
+            if (minutes >= 10) {
+                display += minutes / 10;
+                display += minutes % 10;
+                display += ":";
+            } else {
+                display += 0;
+                display += minutes;
+                display += ":";
+            }
+            remaingSeconds = seconds % 60;
+        } else {
+            display += "00:";
+            remaingSeconds = seconds;
+        }
+        
+        // Display the remaining seconds.
+        if (remaingSeconds >= 10) {
+            display += remaingSeconds / 10;
+            display += remaingSeconds % 10;
+        } else {
+            display += "0";
+            display += remaingSeconds;
+        }
+        
+        return display;
+    }
+    
+    /**
+     * A task that updates a speech timer every second on the main activity.
+     * @author Ryan Yosua
+     *
+     */
+    private final class UpdateSpeechTimerTask extends TimerTask {
+        
+        @Override
+        public void run() {
+            MainActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    seconds++;
+                    timerText.setText(secondsToDigitalTime(seconds));
+                }
+            });
+        }
     }
 }
