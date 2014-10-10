@@ -10,22 +10,22 @@ import android.support.v4.app.FragmentPagerAdapter;
  
 public class TabsPagerAdapter extends FragmentPagerAdapter {
     
-    private final List<NoteCard> noteList;
+    private final List<NoteCard> noteCardList;
  
-    public TabsPagerAdapter(FragmentManager fm, List<NoteCard> noteList) {
+    public TabsPagerAdapter(FragmentManager fm, List<NoteCard> noteCardList) {
         super(fm);
         
-        this.noteList = noteList;
+        this.noteCardList = noteCardList;
     }
  
     @Override
     public Fragment getItem(int index) {
-        return new NoteCardFragement(noteList.get(index).getId());
+        return new NoteCardFragement(noteCardList.get(index).getId());
     }
  
     @Override
     public int getCount() {
-        final int count = noteList.size();
+        final int count = noteCardList.size();
         return count;
     }
  
