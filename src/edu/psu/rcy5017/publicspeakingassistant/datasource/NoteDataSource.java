@@ -55,7 +55,7 @@ public class NoteDataSource extends DataSource {
     
     /**
      * Changes the note text in the database.
-     * @param note the note card to change text
+     * @param note the note to change text
      * @param newText the new text to change for this note
      * @return the number of rows affected
      */
