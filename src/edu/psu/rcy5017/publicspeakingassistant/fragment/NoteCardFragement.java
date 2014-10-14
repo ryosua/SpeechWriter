@@ -15,9 +15,10 @@ import android.widget.TextView;
 
 public class NoteCardFragement extends Fragment {
     
+    private final float FONT_SIZE = 40;
     private NoteDataSource datasource;
     private final long noteCardID;
-    
+   
     public NoteCardFragement(long noteCardID) {
         this.noteCardID = noteCardID;
     }
@@ -37,8 +38,13 @@ public class NoteCardFragement extends Fragment {
         final List<Note> notes = datasource.getAllNotes(noteCardID);
         for(Note note: notes)
         {
+            // Create text.
             final TextView text = new TextView(this.getActivity());
             text.setText(note.getText());
+            
+            // Change text size.
+            text.setTextSize(FONT_SIZE);
+             
             layout.addView(text);
         }
        
