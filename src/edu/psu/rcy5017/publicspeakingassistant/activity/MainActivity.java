@@ -34,7 +34,7 @@ ActionBar.TabListener {
     private ViewPager viewPager;    
     private TextView timerText;
     
-    int seconds;
+    private int seconds;
       
     @Override
     protected void onCreate(Bundle savedInstanceState) {
