@@ -77,8 +77,7 @@ public class NoteListActivity extends ListActivity {
     
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        final Note note = (Note) getListAdapter().getItem(position);
-        editNote(note, position);
+        v.showContextMenu();
     }
     
     @Override

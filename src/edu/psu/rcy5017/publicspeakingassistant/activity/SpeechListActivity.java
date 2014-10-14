@@ -69,8 +69,7 @@ public class SpeechListActivity extends ListActivity {
        
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        final Speech speech = (Speech) getListAdapter().getItem(position);
-        startSpeech(speech);
+        v.showContextMenu();
     }
     
     @Override

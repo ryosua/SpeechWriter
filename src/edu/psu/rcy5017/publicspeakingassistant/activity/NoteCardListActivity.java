@@ -79,8 +79,7 @@ public class NoteCardListActivity extends ListActivity {
     
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        final NoteCard noteCard = (NoteCard) getListAdapter().getItem(position);
-        editNoteCard(noteCard);
+        v.showContextMenu();
     }
     
     @Override
