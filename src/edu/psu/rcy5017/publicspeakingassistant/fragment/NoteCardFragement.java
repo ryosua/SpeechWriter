@@ -26,9 +26,9 @@ public class NoteCardFragement extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
  
-        View rootView = inflater.inflate(R.layout.fragment_note_card, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_note_card, container, false);
         
-        LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.linearlayout_note_card_fragment);
+        final LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.linearlayout_note_card_fragment);
         
         datasource = new NoteDataSource(getActivity());
         datasource.open();
@@ -37,7 +37,7 @@ public class NoteCardFragement extends Fragment {
         final List<Note> notes = datasource.getAllNotes(noteCardID);
         for(Note note: notes)
         {
-            TextView text = new TextView(this.getActivity());
+            final TextView text = new TextView(this.getActivity());
             text.setText(note.getText());
             layout.addView(text);
         }
