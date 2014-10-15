@@ -46,8 +46,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
         createSpeechTable(db);
         createNoteCardTable(db);
         createNoteTable(db);
-        //createSpeechRecording(db);
-        //createBulletPointTable(db);
+        createSpeechRecording(db);
     }
 
     @Override
@@ -90,6 +89,19 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
                         NOTE_TEXT + " TEXT NOT NULL," +
                         NOTECARD_ID + " INTEGER NOT NULL," +
                         "FOREIGN KEY("+ NOTECARD_ID +") REFERENCES " + NOTECARD_TABLE_NAME + "("+ COLUMN_ID +") ON DELETE CASCADE" + 
+                ");";
+            
+        db.execSQL(createStatement);
+    }
+    
+    private void createSpeechRecording(SQLiteDatabase db) {
+        final String createStatement =
+                "CREATE TABLE " + SPEECH_RECORDING_TABLE_NAME + " (" +
+                        COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        SPEECH_RECORDING_TITLE + " TEXT NOT NULL," +
+                        SPEECH_RECORDING_FILE + " TEXT NOT NULL," +
+                        SPEECH_ID + " INTEGER NOT NULL," +
+                        "FOREIGN KEY("+ SPEECH_ID +") REFERENCES " + SPEECH_TABLE_NAME + "("+ COLUMN_ID +") ON DELETE CASCADE" +  
                 ");";
             
         db.execSQL(createStatement);
