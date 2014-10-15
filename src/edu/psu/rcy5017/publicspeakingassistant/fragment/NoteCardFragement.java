@@ -2,7 +2,7 @@ package edu.psu.rcy5017.publicspeakingassistant.fragment;
 
 import java.util.List;
 
-import edu.psu.rcy501.publicspeakingassistant.R;
+import edu.psu.rcy5017.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.NoteDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.model.Note;
 import android.os.Bundle;

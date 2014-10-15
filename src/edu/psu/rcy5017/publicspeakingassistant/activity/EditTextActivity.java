@@ -1,6 +1,6 @@
 package edu.psu.rcy5017.publicspeakingassistant.activity;
 
-import edu.psu.rcy501.publicspeakingassistant.R;
+import edu.psu.rcy5017.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import android.app.Activity;
 import android.content.Intent;

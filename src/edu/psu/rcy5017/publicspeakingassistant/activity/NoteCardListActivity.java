@@ -2,7 +2,7 @@ package edu.psu.rcy5017.publicspeakingassistant.activity;
 
 import java.util.List;
 
-import edu.psu.rcy501.publicspeakingassistant.R;
+import edu.psu.rcy5017.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.NoteCardDataSource;
