@@ -67,27 +67,6 @@ public class NoteDataSource extends DataSource {
     }
     
     /**
-     * Gets a list of every note from every note card.
-     * @return the note list
-     */
-    public List<Note> getAllNotes() {
-        List<Note> notes = new ArrayList<Note>();
-
-        Cursor cursor = getDatabase().query(DatabaseHelper.NOTE_TABLE_NAME,
-                allColumns, null, null, null, null, null);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            Note note = cursorToNote(cursor);
-            notes.add(note);
-            cursor.moveToNext();
-        }
-        // make sure to close the cursor
-        cursor.close();
-        return notes;
-    }
-    
-    /**
      * Get a list of notes associated with a note card.
      * @param noteCardID the note card to get notes from
      * @return the note list

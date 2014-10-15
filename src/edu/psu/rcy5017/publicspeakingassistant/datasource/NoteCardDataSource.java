@@ -65,28 +65,7 @@ public class NoteCardDataSource extends DataSource {
         return getDatabase().update(
                 DatabaseHelper.NOTECARD_TABLE_NAME, args, DatabaseHelper.COLUMN_ID + "=" + noteCard.getId(), null);
     }
-    
-    /**
-     * Gets a list of every note card from every speech.
-     * @return the note card list
-     */
-    public List<NoteCard> getAllNotecards() {
-        List<NoteCard> noteCards = new ArrayList<NoteCard>();
-
-        Cursor cursor = getDatabase().query(DatabaseHelper.NOTECARD_TABLE_NAME,
-                allColumns, null, null, null, null, null);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            NoteCard noteCard = cursorToNoteCard(cursor);
-            noteCards.add(noteCard);
-            cursor.moveToNext();
-        }
-        // make sure to close the cursor
-        cursor.close();
-        return noteCards;
-    }
-    
+     
     /**
      * Get a list of note cards associated with a speech.
      * @param speechID the speech to get note cards from
