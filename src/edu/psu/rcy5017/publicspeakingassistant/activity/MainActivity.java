@@ -1,14 +1,18 @@
 package edu.psu.rcy5017.publicspeakingassistant.activity;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import edu.psu.rcy501.publicspeakingassistant.R;
+import edu.psu.rcy5017.publicspeakingassistant.AudioCntl;
+import edu.psu.rcy5017.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.adapter.TabsPagerAdapter;
 import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.NoteCardDataSource;
+import edu.psu.rcy5017.publicspeakingassistant.datasource.SpeechRecordingDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.model.NoteCard;
+import edu.psu.rcy5017.publicspeakingassistant.model.SpeechRecording;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
@@ -30,7 +34,9 @@ public class MainActivity extends FragmentActivity implements
 ActionBar.TabListener {
     private static final String TAG = "MainActivity";
     
+    private AudioCntl audioCntl = AudioCntl.INSTANCE;    
     private NoteCardDataSource datasource;
+    private long speechID;
     private ViewPager viewPager;    
     private TextView timerText;
     
@@ -41,9 +47,11 @@ ActionBar.TabListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
+        Log.d(TAG, "Main activity started");
+        
         // Get speechId from intent.
         final Intent intent = this.getIntent();
-        long speechID = intent.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
+        speechID = intent.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
         
         datasource = new NoteCardDataSource(this);
         datasource.open();
@@ -63,7 +71,6 @@ ActionBar.TabListener {
             actionBar.addTab(actionBar.newTab().setText(noteCard.getTitle())
                     .setTabListener(this));
         }
-        
         
         // On swiping the viewpager make respective tab selected.
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -85,18 +92,19 @@ ActionBar.TabListener {
             }
         });
         
-        Log.d(TAG, "Main activity started");
-         
         // Set initial time to 0.
         timerText = (TextView) findViewById(R.id.timer_text);
         seconds = 0;
+        
+        // Start the speech recording.
+        startRecording();
         
         // Start the timer.
         Timer speechTimer = new Timer();
         UpdateSpeechTimerTask updateTask = new UpdateSpeechTimerTask();
         speechTimer.schedule(updateTask, 0, 1000);
     }
-    
+       
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -131,7 +139,7 @@ ActionBar.TabListener {
     public void onTabUnselected(Tab tab, FragmentTransaction ft) {
         // Do nothing.
     }
-    
+        
     @Override
     protected void onResume() {
         datasource.open();
@@ -141,6 +149,7 @@ ActionBar.TabListener {
     @Override
     protected void onPause() {
         datasource.close();
+        audioCntl.stopRecording();
         super.onPause();
     }
     
@@ -182,6 +191,17 @@ ActionBar.TabListener {
         }
         
         return display;
+    }
+    
+    private void startRecording() {
+        // Create the speech recording record in the database, name it with the date it was created.
+        final SpeechRecordingDataSource datasource = new SpeechRecordingDataSource(this);
+        datasource.open();
+        final SpeechRecording speechRecording = datasource.createSpeechRecording(new Date().toString() , speechID);
+        datasource.close();
+        
+        // Start the voice recording.
+        audioCntl.startRecording(speechRecording.getFile());
     }
     
     /**
