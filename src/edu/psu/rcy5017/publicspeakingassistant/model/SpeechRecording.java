@@ -11,7 +11,7 @@ public class SpeechRecording {
     public SpeechRecording(long id, String title, long speechID) {
         this.id = id;
         this.title = title;
-        this.file = this.id + "";
+        this.file = "/" + this.id;
         this.speechID = speechID;
     }
      
