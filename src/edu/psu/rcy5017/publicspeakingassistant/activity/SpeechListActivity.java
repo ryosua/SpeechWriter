@@ -1,4 +1,5 @@
 package edu.psu.rcy5017.publicspeakingassistant.activity;
+
 import java.util.List;
 
 import edu.psu.rcy501.publicspeakingassistant.R;
@@ -101,6 +102,10 @@ public class SpeechListActivity extends ListActivity {
             case R.id.rename_speech:
                 renameSpeech(speech, info.position);
                 return true;
+                
+            case R.id.speech_recordings:
+                viewSpeechRecordings(speech);
+                return true;
         
             case R.id.delete_speech:
                 datasource.deleteSpeech(speech);
@@ -159,10 +164,24 @@ public class SpeechListActivity extends ListActivity {
         startActivityForResult(intent, RequestCodes.START_SPEECH_REQUEST_CODE);
     }
     
+    /**
+     * Opens the note card list activity.
+     * @param speech the speech to edit
+     */
     private void editSpeech(Speech speech) {
         final Intent intent = new Intent(this, NoteCardListActivity.class);
         intent.putExtra("id", speech.getId());
         startActivityForResult(intent, RequestCodes.EDIT_SPEECH_REQUEST_CODE);
+    }
+    
+    /**
+     * Opens the speech recordings list activity.
+     * @param speech the speech to edit
+     */
+    private void viewSpeechRecordings(Speech speech) {
+        final Intent intent = new Intent(this, SpeechRecordingListActivity.class);
+        intent.putExtra("id", speech.getId());
+        startActivityForResult(intent, RequestCodes.VIEW_SPEECH_RECORDINGS_REQUEST_CODE);
     }
     
     /**
