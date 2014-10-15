@@ -35,7 +35,6 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
     // SpeechRecording Table
     public static final String SPEECH_RECORDING_TABLE_NAME = "SpeechRecording";
     public static final String SPEECH_RECORDING_TITLE = "Title";
-    public static final String SPEECH_RECORDING_FILE = "File";
     
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -99,7 +98,6 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
                 "CREATE TABLE " + SPEECH_RECORDING_TABLE_NAME + " (" +
                         COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         SPEECH_RECORDING_TITLE + " TEXT NOT NULL," +
-                        SPEECH_RECORDING_FILE + " TEXT NOT NULL," +
                         SPEECH_ID + " INTEGER NOT NULL," +
                         "FOREIGN KEY("+ SPEECH_ID +") REFERENCES " + SPEECH_TABLE_NAME + "("+ COLUMN_ID +") ON DELETE CASCADE" +  
                 ");";
