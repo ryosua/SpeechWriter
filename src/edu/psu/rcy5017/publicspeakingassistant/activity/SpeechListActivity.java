@@ -1,15 +1,18 @@
 package edu.psu.rcy5017.publicspeakingassistant.activity;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import edu.psu.rcy5017.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.SpeechDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
+import edu.psu.rcy5017.publicspeakingassistant.task.SpeechTask;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -24,7 +27,8 @@ import android.widget.ListView;
 public class SpeechListActivity extends ListActivity {
     
     private static final String TAG = "SpeechListActivity";
-        
+    
+    private ArrayAdapter<Speech> adapter;
     private SpeechDataSource datasource;
         
     @Override
@@ -33,17 +37,26 @@ public class SpeechListActivity extends ListActivity {
         setContentView(R.layout.activity_speech_list);
         
         datasource = new SpeechDataSource(this);
-        datasource.open();
-
-        final List<Speech> values = datasource.getAllSpeeches();
         
-        // Use the SimpleCursorAdapter to show the elements in a ListView.
-        final ArrayAdapter<Speech> adapter = 
-                new ArrayAdapter<Speech>(this, android.R.layout.simple_list_item_1, values);
-        setListAdapter(adapter);
-       
+        @SuppressWarnings("unchecked")
+        List<Speech> values = null;
+        try {
+            values = new GetSpeechesTask().execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        
+        if(values != null) {
+            // Use the SimpleCursorAdapter to show the elements in a ListView.
+            adapter = new ArrayAdapter<Speech>(this, android.R.layout.simple_list_item_1, values);
+            setListAdapter(adapter);
+        }
+        
         // Register the ListView  for Context menu  
         registerForContextMenu(getListView());
+        
     }
 
     /**
@@ -57,15 +70,18 @@ public class SpeechListActivity extends ListActivity {
         switch (view.getId()) {
         
         case R.id.add_speech:
-            final Speech speech = datasource.createSpeech("New Speech");
-            // Save the new speech to the database.
-            adapter.add(speech);
-            // Force user to overwrite the default name.
-            renameSpeech(speech, adapter.getCount() - 1);
+            
+            Speech speech = null;
+            try {
+                speech = new CreateSpeechTask().execute().get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
             
             break;    
         }
-        adapter.notifyDataSetChanged();
     }
        
     @Override
@@ -108,27 +124,14 @@ public class SpeechListActivity extends ListActivity {
                 return true;
         
             case R.id.delete_speech:
-                datasource.deleteSpeech(speech);
-                adapter.remove(speech);
-                adapter.notifyDataSetChanged();
+                // Delete the speech, and update the adapter.
+                new DeleteSpeechTask(speech).execute();
                 return true;
         }
      
         return false;
     }
 
-    @Override
-    protected void onResume() {
-        datasource.open();
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        datasource.close();
-        super.onPause();
-    }
-    
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RequestCodes.RENAME_SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
@@ -147,10 +150,9 @@ public class SpeechListActivity extends ListActivity {
             // Update the title.
             speechToUpdate.setTitle(speech.getTitle());
             adapter.notifyDataSetChanged();
-            
+                
             // Save the changes to the database.
-            datasource.open();
-            datasource.renameSpeech(speech, speech.getTitle());
+            new RenameSpeechTask(speech).execute();
         }
     }
     
@@ -195,5 +197,82 @@ public class SpeechListActivity extends ListActivity {
         intent.putExtra("text", speech.getTitle());
         startActivityForResult(intent, RequestCodes.RENAME_SPEECH_REQUEST_CODE);
     }
+    
+    private class CreateSpeechTask extends AsyncTask<Void, Void, Speech> {
+        
+        private Speech speech;
 
+        @Override
+        protected Speech doInBackground(Void... params) {
+            datasource.open();
+            speech = datasource.createSpeech("New Speech");
+            datasource.close();
+            return speech;
+        }
+        
+        @Override
+        protected void onPostExecute(Speech result) {
+            // Save the new speech to the database.
+            adapter.add(speech);
+            // Force user to overwrite the default name.
+            renameSpeech(speech, adapter.getCount() - 1);
+            adapter.notifyDataSetChanged();
+        }
+        
+    }
+    
+    private class DeleteSpeechTask extends SpeechTask
+    {  
+        /**
+         * Creates a task that deletes a speech in the database
+         * @param speech the speech to delete
+         */
+        public DeleteSpeechTask(Speech speech) {
+            super(speech);
+        }
+        
+        @Override
+        protected Void doInBackground(Void... params) {
+            datasource.open();
+            datasource.deleteSpeech(getSpeech());
+            datasource.close();
+            return null;
+        }
+        
+        @Override
+        protected void onPostExecute(Void result) {
+            adapter.remove(getSpeech());
+            adapter.notifyDataSetChanged();
+        }
+    }
+    
+    private class RenameSpeechTask extends SpeechTask {
+        
+        public RenameSpeechTask(Speech speech) {
+            super(speech);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            final Speech speech = getSpeech();
+            datasource.open();
+            datasource.renameSpeech(speech, speech.getTitle());
+            datasource.close();
+            return null;
+        }
+    }
+    
+    private class GetSpeechesTask extends AsyncTask<Void, Void, List<Speech>> {
+        
+        @Override
+        protected List<Speech> doInBackground(Void... params) {
+            datasource.open();
+            final List<Speech> values = datasource.getAllSpeeches();
+            datasource.close();
+            
+            return values;
+        }
+        
+    }
+   
 } 
