@@ -183,8 +183,8 @@ public class NoteCardListActivity extends ListActivity {
         
     }
     
-    private class DeleteNoteCardTask extends NoteCardTask
-    {  
+    private class DeleteNoteCardTask extends NoteCardTask {  
+        
         public DeleteNoteCardTask(NoteCard noteCard) {
             super(noteCard);
         }
@@ -205,7 +205,7 @@ public class NoteCardListActivity extends ListActivity {
     }
     
     private class RenameNoteCardTask extends NoteCardTask {
-        
+     
         public RenameNoteCardTask(NoteCard noteCard) {
             super(noteCard);
         }
@@ -218,6 +218,7 @@ public class NoteCardListActivity extends ListActivity {
             datasource.close();
             return null;
         }
+        
     }
     
     private class GetNoteCardsTask extends AsyncTask<Void, Void, List<NoteCard>> {
@@ -232,4 +233,5 @@ public class NoteCardListActivity extends ListActivity {
         }
         
     }
+    
 }
