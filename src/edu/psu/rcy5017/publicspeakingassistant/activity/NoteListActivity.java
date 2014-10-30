@@ -1,14 +1,17 @@
 package edu.psu.rcy5017.publicspeakingassistant.activity;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import edu.psu.rcy5017.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.NoteDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.model.Note;
+import edu.psu.rcy5017.publicspeakingassistant.task.NoteTask;
 import android.app.ListActivity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -24,6 +27,7 @@ public class NoteListActivity extends ListActivity {
     
     private static final String TAG = "NoteListActivity";
     
+    private ArrayAdapter<Note> adapter;
     private NoteDataSource datasource;
     private long noteCardID;
     
@@ -33,18 +37,24 @@ public class NoteListActivity extends ListActivity {
         setContentView(R.layout.activity_note_list);
         
         datasource = new NoteDataSource(this);
-        datasource.open();
         
         // Get the note card id passed from list activity.
         final Intent intent = this.getIntent();
         noteCardID = intent.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
        
-        final List<Note> values = datasource.getAllNotes(noteCardID);
+        List<Note> values = null;
+        try {
+            values = new GetNotesTask().execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         
-        // Use the SimpleCursorAdapter to show the elements in a ListView.
-        final ArrayAdapter<Note> adapter = 
-                new ArrayAdapter<Note>(this, android.R.layout.simple_list_item_1, values);
-        setListAdapter(adapter);
+        if (values != null) {
+            adapter = new ArrayAdapter<Note>(this, android.R.layout.simple_list_item_1, values);
+            setListAdapter(adapter);
+        }
         
         // Register the ListView  for Context menu  
         registerForContextMenu(getListView());
@@ -66,8 +76,17 @@ public class NoteListActivity extends ListActivity {
         case R.id.add_note:
             Log.d(TAG, "TODO: Add note.");
             final long noteCardID = intent.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
-            final Note note = datasource.createNote("New Note", noteCardID);
-            // Save the new notecard to the database.
+            // Create and save the new notecard to the database.
+            Note note = null;
+            try {
+                note = new CreateNoteTask().execute().get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            
+            if (note != null)
             adapter.add(note);
             editNote(note, adapter.getCount() - 1);
             break;    
@@ -92,9 +111,7 @@ public class NoteListActivity extends ListActivity {
     public boolean onContextItemSelected(MenuItem item) {
         final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
                 .getMenuInfo();
-        
-        @SuppressWarnings("unchecked")
-        final ArrayAdapter<Note> adapter = (ArrayAdapter<Note>) getListAdapter();
+ 
         final Note note = (Note) getListAdapter().getItem(info.position);
         
         switch (item.getItemId()) {
@@ -104,9 +121,7 @@ public class NoteListActivity extends ListActivity {
                 return true;
             
             case R.id.delete_note:
-                datasource.deleteNote(note);
-                adapter.remove(note);
-                adapter.notifyDataSetChanged();
+                new DeleteNoteTask(note).execute();
                 return true;
         }
      
@@ -120,10 +135,7 @@ public class NoteListActivity extends ListActivity {
             final String newNoteText = data.getStringExtra("text");
             final Note note = new Note(newNoteId, noteCardID, newNoteText);
             final int position = data.getIntExtra("position", DefaultValues.DEFAULT_INT_VALUE);
-            
-            @SuppressWarnings("unchecked")
-            final ArrayAdapter<Note> adapter = (ArrayAdapter<Note>) getListAdapter();
-            
+              
             // Get the note card item to update.
             final Note noteToUpdate = 
                     adapter.getItem(position);
@@ -133,8 +145,7 @@ public class NoteListActivity extends ListActivity {
             adapter.notifyDataSetChanged();
             
             // Save the changes to the database.
-            datasource.open();
-            datasource.changeNoteText(note, note.getText());
+            new ChangeNoteTextTask(noteToUpdate).execute();
         }
     }
     
@@ -144,6 +155,81 @@ public class NoteListActivity extends ListActivity {
         intent.putExtra("id", note.getId());
         intent.putExtra("text", note.getText());
         startActivityForResult(intent, RequestCodes.EDIT_NOTE_REQUEST_CODE);
+    }
+    
+    private class GetNotesTask extends AsyncTask<Void, Void, List<Note>> {
+        
+        @Override
+        protected List<Note> doInBackground(Void... params) {
+            datasource.open();
+            final List<Note> values = datasource.getAllNotes(noteCardID);
+            datasource.close();
+            
+            return values;
+        }
+        
+    }
+    
+    private class CreateNoteTask extends AsyncTask<Void, Void, Note> {
+        
+        private Note note;
+
+        @Override
+        protected Note doInBackground(Void... params) {
+            datasource.open();
+            note = datasource.createNote("New Note", noteCardID);
+            datasource.close();
+            return note;
+        }
+        
+        @Override
+        protected void onPostExecute(Note result) {
+            // Save the new note to the database.
+            adapter.add(note);
+            // Force user to overwrite the default text.
+            editNote(note, adapter.getCount() - 1);
+            adapter.notifyDataSetChanged();
+        }
+        
+    }
+    
+    private class ChangeNoteTextTask extends NoteTask {
+        
+        public ChangeNoteTextTask(Note note) {
+            super(note);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            final Note note = getNote();
+            datasource.open();
+            datasource.changeNoteText(note, note.getText());
+            datasource.close();
+            return null;
+        }
+        
+    }
+    
+    private class DeleteNoteTask extends NoteTask {  
+        
+        public DeleteNoteTask(Note note) {
+            super(note);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            datasource.open();
+            datasource.deleteNote(getNote());
+            datasource.close();
+            return null;
+        }
+        
+        @Override
+        protected void onPostExecute(Void result) {
+            adapter.remove(getNote());
+            adapter.notifyDataSetChanged();
+        }
+        
     }
     
 }
