@@ -38,7 +38,6 @@ public class SpeechListActivity extends ListActivity {
         
         datasource = new SpeechDataSource(this);
         
-        @SuppressWarnings("unchecked")
         List<Speech> values = null;
         try {
             values = new GetSpeechesTask().execute().get();
@@ -214,8 +213,7 @@ public class SpeechListActivity extends ListActivity {
         
     }
     
-    private class DeleteSpeechTask extends SpeechTask
-    {  
+    private class DeleteSpeechTask extends SpeechTask {  
         /**
          * Creates a task that deletes a speech in the database
          * @param speech the speech to delete
