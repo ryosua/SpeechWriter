@@ -1,9 +1,11 @@
 package edu.psu.rcy5017.publicspeakingassistant.activity;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -18,12 +20,16 @@ import edu.psu.rcy5017.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.SpeechRecordingDataSource;
+import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
 import edu.psu.rcy5017.publicspeakingassistant.model.SpeechRecording;
+import edu.psu.rcy5017.publicspeakingassistant.task.SpeechRecordingTask;
+import edu.psu.rcy5017.publicspeakingassistant.task.SpeechTask;
 
 public class SpeechRecordingListActivity extends ListActivity {
     
     private static final String TAG = "SpeechRecordingListActivity";
     
+    private ArrayAdapter<SpeechRecording> adapter;
     private SpeechRecordingDataSource datasource;
     private long speechID;
     
@@ -33,18 +39,25 @@ public class SpeechRecordingListActivity extends ListActivity {
         setContentView(R.layout.activity_speech_recording_list);
         
         datasource = new SpeechRecordingDataSource(this);
-        datasource.open();
         
         // Get the speechID passed from list activity.
         final Intent intent = this.getIntent();
         speechID = intent.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
         
-        final List<SpeechRecording> values = datasource.getAllSpeechRecordings(speechID);
+        List<SpeechRecording> values = null;
+        try {
+            values = new GetSpeechRecordingsTask().execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         
-        // Use the SimpleCursorAdapter to show the elements in a ListView.
-        final ArrayAdapter<SpeechRecording> adapter = 
-                new ArrayAdapter<SpeechRecording>(this, android.R.layout.simple_list_item_1, values);
-        setListAdapter(adapter);
+        if(values != null) {
+            // Use the SimpleCursorAdapter to show the elements in a ListView.
+            adapter = new ArrayAdapter<SpeechRecording>(this, android.R.layout.simple_list_item_1, values);
+            setListAdapter(adapter);
+        }
        
         // Register the ListView  for Context menu  
         registerForContextMenu(getListView());
@@ -57,10 +70,7 @@ public class SpeechRecordingListActivity extends ListActivity {
             final String newSpeechRecordingTitle = data.getStringExtra("text");
             final SpeechRecording speechRecording = new SpeechRecording(newSpeechRecordingId, newSpeechRecordingTitle, speechID);
             final int position = data.getIntExtra("position", DefaultValues.DEFAULT_INT_VALUE);
-            
-            @SuppressWarnings("unchecked")
-            final ArrayAdapter<SpeechRecording> adapter = (ArrayAdapter<SpeechRecording>) getListAdapter();
-            
+                 
             // Get the speech item to update.
             final SpeechRecording speechRecordingToUpdate = 
                     adapter.getItem(position);
@@ -70,8 +80,7 @@ public class SpeechRecordingListActivity extends ListActivity {
             adapter.notifyDataSetChanged();
             
             // Save the changes to the database.
-            datasource.open();
-            datasource.renameSpeechRecording(speechRecording, speechRecording.getTitle());
+            new RenameSpeechRecordingTask(speechRecordingToUpdate).execute();
         }
     }
     
@@ -92,9 +101,7 @@ public class SpeechRecordingListActivity extends ListActivity {
     public boolean onContextItemSelected(MenuItem item) {
         final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
                 .getMenuInfo();
-        
-        @SuppressWarnings("unchecked")
-        final ArrayAdapter<SpeechRecording> adapter = (ArrayAdapter<SpeechRecording>) getListAdapter();
+       
         final SpeechRecording speechRecording = (SpeechRecording) getListAdapter().getItem(info.position);
         
         switch (item.getItemId()) {
@@ -107,27 +114,13 @@ public class SpeechRecordingListActivity extends ListActivity {
                 return true;
        
             case R.id.delete_speech_recording:
-                datasource.deleteSpeechRecording(speechRecording);
-                adapter.remove(speechRecording);
-                adapter.notifyDataSetChanged();
+                new DeleteSpeechRecordingTask(speechRecording).execute();
                 return true;
         }
      
         return false;
     }
-   
-    @Override
-    protected void onResume() {
-        datasource.open();
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        datasource.close();
-        super.onPause();
-    }
-    
+      
     private void playSpeechRecording(SpeechRecording speechRecording) {
         final AudioCntl audioCntl = AudioCntl.INSTANCE;
         audioCntl.startPlaying(speechRecording.getFile());
@@ -144,5 +137,59 @@ public class SpeechRecordingListActivity extends ListActivity {
         intent.putExtra("text", speechRecording.getTitle());
         startActivityForResult(intent, RequestCodes.RENAME_SPEECH_RECORDING_REQUEST_CODE);
     }
+    
+    private class GetSpeechRecordingsTask extends AsyncTask<Void, Void, List<SpeechRecording>> {
+        
+        @Override
+        protected List<SpeechRecording> doInBackground(Void... params) {
+            datasource.open();
+            final List<SpeechRecording> values = datasource.getAllSpeechRecordings(speechID);
+            datasource.close();
+            
+            return values;
+        }
+        
+    }
+    
+    private class DeleteSpeechRecordingTask extends SpeechRecordingTask {  
+        /**
+         * Creates a task that deletes a speech in the database
+         * @param speech the speech to delete
+         */
+        public DeleteSpeechRecordingTask(SpeechRecording speechRecording) {
+            super(speechRecording);
+        }
+        
+        @Override
+        protected Void doInBackground(Void... params) {
+            datasource.open();
+            datasource.deleteSpeechRecording(getSpeechRecording());
+            datasource.close();
+            return null;
+        }
+        
+        @Override
+        protected void onPostExecute(Void result) {
+            adapter.remove(getSpeechRecording());
+            adapter.notifyDataSetChanged();
+        }
+        
+    }
+    
+    private class RenameSpeechRecordingTask extends SpeechRecordingTask {
+        
+        public RenameSpeechRecordingTask(SpeechRecording speechRecording) {
+            super(speechRecording);
+        }
 
+        @Override
+        protected Void doInBackground(Void... params) {
+            final SpeechRecording speechRecording = getSpeechRecording();
+            datasource.open();
+            datasource.renameSpeechRecording(speechRecording, speechRecording.getTitle());
+            datasource.close();
+            return null;
+        }
+    }
+    
 }
