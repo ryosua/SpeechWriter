@@ -64,8 +64,6 @@ public class SpeechListActivity extends ListActivity {
      * @param view the calling view
      */
     public void onClick(View view) {
-        @SuppressWarnings("unchecked")
-        final ArrayAdapter<Speech> adapter = (ArrayAdapter<Speech>) getListAdapter();
     
         switch (view.getId()) {
         
@@ -102,8 +100,6 @@ public class SpeechListActivity extends ListActivity {
         final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
                 .getMenuInfo();
         
-        @SuppressWarnings("unchecked")
-        final ArrayAdapter<Speech> adapter = (ArrayAdapter<Speech>) getListAdapter();
         final Speech speech = (Speech) getListAdapter().getItem(info.position);
         
         switch (item.getItemId()) {
@@ -139,10 +135,7 @@ public class SpeechListActivity extends ListActivity {
             final String newSpeechTitle = data.getStringExtra("text");
             final Speech speech = new Speech(newSpeechId, newSpeechTitle);
             final int position = data.getIntExtra("position", DefaultValues.DEFAULT_INT_VALUE);
-            
-            @SuppressWarnings("unchecked")
-            final ArrayAdapter<Speech> adapter = (ArrayAdapter<Speech>) getListAdapter();
-            
+                
             // Get the speech item to update.
             final Speech speechToUpdate = 
                     adapter.getItem(position);
