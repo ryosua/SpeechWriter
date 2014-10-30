@@ -20,10 +20,8 @@ import edu.psu.rcy5017.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.SpeechRecordingDataSource;
-import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
 import edu.psu.rcy5017.publicspeakingassistant.model.SpeechRecording;
 import edu.psu.rcy5017.publicspeakingassistant.task.SpeechRecordingTask;
-import edu.psu.rcy5017.publicspeakingassistant.task.SpeechTask;
 
 public class SpeechRecordingListActivity extends ListActivity {
     

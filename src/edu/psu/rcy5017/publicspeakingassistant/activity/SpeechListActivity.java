@@ -68,9 +68,8 @@ public class SpeechListActivity extends ListActivity {
         
         case R.id.add_speech:
             
-            Speech speech = null;
             try {
-                speech = new CreateSpeechTask().execute().get();
+                new CreateSpeechTask().execute().get();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
