@@ -65,33 +65,24 @@ public class NoteListActivity extends ListActivity {
      * @param view the calling view
      */
     public void onClick(View view) {
-        @SuppressWarnings("unchecked")
-        final ArrayAdapter<Note> adapter = (ArrayAdapter<Note>) getListAdapter();
-        
         // Get the speechID passed from list activity.
         final Intent intent = this.getIntent();
        
         switch (view.getId()) {
         
-        case R.id.add_note:
-            Log.d(TAG, "TODO: Add note.");
-            final long noteCardID = intent.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
+        case R.id.add_note: 
             // Create and save the new notecard to the database.
-            Note note = null;
             try {
-                note = new CreateNoteTask().execute().get();
+                new CreateNoteTask().execute().get();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
             
-            if (note != null)
-            adapter.add(note);
-            editNote(note, adapter.getCount() - 1);
             break;    
         }
-        adapter.notifyDataSetChanged();
+        
     }
     
     @Override
