@@ -126,4 +126,12 @@ public final class DragNDropAdapter<E> extends BaseAdapter implements RemoveList
 		mContent.remove(from);
 		mContent.add(to,temp);
 	}
+
+    public void remove(E element) {
+        mContent.remove(element);
+    }
+
+    public void add(E element) {
+        mContent.add(element);
+    }
 }
