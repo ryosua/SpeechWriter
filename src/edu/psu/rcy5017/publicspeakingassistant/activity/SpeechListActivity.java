@@ -32,7 +32,7 @@ public class SpeechListActivity extends DragNDropListActivity {
     
     private static final String TAG = "SpeechListActivity";
     
-    private ArrayAdapter<Speech> adapter;
+    private DragNDropAdapter<Speech> adapter;
     private SpeechDataSource datasource;
         
     @Override
@@ -52,12 +52,9 @@ public class SpeechListActivity extends DragNDropListActivity {
         }
         
         if(values != null) {
-            ArrayList<String> content = new ArrayList<String>();
-            content.add("Item 1");
-            content.add("Item 2");
-            content.add("Item 3");
+            adapter = new DragNDropAdapter<Speech>(this, new int[]{R.layout.dragitem}, new int[]{R.id.TextView01}, values);//new DragNDropAdapter(this,content)
             
-            setListAdapter(new DragNDropAdapter(this, new int[]{R.layout.dragitem}, new int[]{R.id.TextView01}, content));//new DragNDropAdapter(this,content)
+            setListAdapter(adapter);
             ListView listView = getListView();
             
             if (listView instanceof DragNDropListView) {

@@ -17,6 +17,8 @@
 package com.ericharlow.DragNDrop;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,22 +26,22 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public final class DragNDropAdapter extends BaseAdapter implements RemoveListener, DropListener{
+public final class DragNDropAdapter<E> extends BaseAdapter implements RemoveListener, DropListener{
 
 	private int[] mIds;
     private int[] mLayouts;
     private LayoutInflater mInflater;
-    private ArrayList<String> mContent;
+    private List<E> mContent;
 
-    public DragNDropAdapter(Context context, ArrayList<String> content) {
+    public DragNDropAdapter(Context context, List<E> content) {
         init(context,new int[]{android.R.layout.simple_list_item_1},new int[]{android.R.id.text1}, content);
     }
     
-    public DragNDropAdapter(Context context, int[] itemLayouts, int[] itemIDs, ArrayList<String> content) {
+    public DragNDropAdapter(Context context, int[] itemLayouts, int[] itemIDs, List<E> content) {
     	init(context,itemLayouts,itemIDs, content);
     }
 
-    private void init(Context context, int[] layouts, int[] ids, ArrayList<String> content) {
+    private void init(Context context, int[] layouts, int[] ids, List<E> content) {
     	// Cache the LayoutInflate to avoid asking for a new one each time.
     	mInflater = LayoutInflater.from(context);
     	mIds = ids;
@@ -63,7 +65,7 @@ public final class DragNDropAdapter extends BaseAdapter implements RemoveListene
      *
      * @see android.widget.ListAdapter#getItem(int)
      */
-    public String getItem(int position) {
+    public E getItem(int position) {
         return mContent.get(position);
     }
 
@@ -105,7 +107,7 @@ public final class DragNDropAdapter extends BaseAdapter implements RemoveListene
         }
 
         // Bind the data efficiently with the holder.
-        holder.text.setText(mContent.get(position));
+        holder.text.setText(mContent.get(position).toString());
 
         return convertView;
     }
@@ -120,7 +122,7 @@ public final class DragNDropAdapter extends BaseAdapter implements RemoveListene
 	}
 
 	public void onDrop(int from, int to) {
-		String temp = mContent.get(from);
+		E temp = mContent.get(from);
 		mContent.remove(from);
 		mContent.add(to,temp);
 	}
