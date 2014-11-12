@@ -18,10 +18,11 @@
         
     </LinearLayout>
 
-    <ListView
+    <com.ericharlow.DragNDrop.DragNDropListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/placeholder" />
+        android:text="@string/placeholder" > 
+        </com.ericharlow.DragNDrop.DragNDropListView>
 
 </LinearLayout>

@@ -1,7 +1,12 @@
 package edu.psu.rcy5017.publicspeakingassistant.activity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import com.ericharlow.DragNDrop.DragNDropAdapter;
+import com.ericharlow.DragNDrop.DragNDropListActivity;
+import com.ericharlow.DragNDrop.DragNDropListView;
 
 import edu.psu.rcy5017.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
@@ -10,7 +15,6 @@ import edu.psu.rcy5017.publicspeakingassistant.datasource.SpeechDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
 import edu.psu.rcy5017.publicspeakingassistant.task.SpeechTask;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,7 +28,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class SpeechListActivity extends ListActivity {
+public class SpeechListActivity extends DragNDropListActivity {
     
     private static final String TAG = "SpeechListActivity";
     
@@ -48,14 +52,23 @@ public class SpeechListActivity extends ListActivity {
         }
         
         if(values != null) {
-            // Use the SimpleCursorAdapter to show the elements in a ListView.
-            adapter = new ArrayAdapter<Speech>(this, android.R.layout.simple_list_item_1, values);
-            setListAdapter(adapter);
+            ArrayList<String> content = new ArrayList<String>();
+            content.add("Item 1");
+            content.add("Item 2");
+            content.add("Item 3");
+            
+            setListAdapter(new DragNDropAdapter(this, new int[]{R.layout.dragitem}, new int[]{R.id.TextView01}, content));//new DragNDropAdapter(this,content)
+            ListView listView = getListView();
+            
+            if (listView instanceof DragNDropListView) {
+                ((DragNDropListView) listView).setDropListener(getMDropListener());
+                ((DragNDropListView) listView).setRemoveListener(getMRemoveListener());
+                ((DragNDropListView) listView).setDragListener(getMDragListener());
+            }
         }
         
         // Register the ListView  for Context menu  
         registerForContextMenu(getListView());
-        
     }
 
     /**
