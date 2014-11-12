@@ -12,6 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * 
+ * THE ORIGINAL FILE WAS MODIFIED
  */
 
 package com.ericharlow.DragNDrop;
@@ -36,6 +38,10 @@ public class DragNDropListView extends ListView {
 	int mStartPosition;
 	int mEndPosition;
 	int mDragPointOffset;		//Used to adjust drag view location
+	
+	//Used to recognize a click.
+	private final float SCROLL_THRESHOLD = 10;
+	private boolean isOnClick;
 	
 	ImageView mDragView;
 	GestureDetector mGestureDetector;
@@ -82,19 +88,32 @@ public class DragNDropListView extends ListView {
                     mDragPointOffset -= ((int)ev.getRawY()) - y;
 					startDrag(mItemPosition,y);
 					drag(0,y);// replace 0 with x if desired
+					isOnClick = true;
 				}	
 				break;
 			case MotionEvent.ACTION_MOVE:
+			    if (isOnClick && (Math.abs(x - ev.getX()) > SCROLL_THRESHOLD || Math.abs(y - ev.getY()) > SCROLL_THRESHOLD)) {
+	                isOnClick = false;
+	            }
 				drag(0,y);// replace 0 with x if desired
 				break;
 			case MotionEvent.ACTION_CANCEL:
 			case MotionEvent.ACTION_UP:
+			    if (isOnClick) {
+	                mDragMode = false;
+	                mEndPosition = pointToPosition(x,y);
+	                stopDrag(mStartPosition - getFirstVisiblePosition());
+	                if (mDropListener != null && mStartPosition != INVALID_POSITION && mEndPosition != INVALID_POSITION) 
+	                     mDropListener.onDrop(mStartPosition, mEndPosition);
+	                return super.onTouchEvent(ev);
+	            }
 			default:
 				mDragMode = false;
 				mEndPosition = pointToPosition(x,y);
 				stopDrag(mStartPosition - getFirstVisiblePosition());
 				if (mDropListener != null && mStartPosition != INVALID_POSITION && mEndPosition != INVALID_POSITION) 
 	        		 mDropListener.onDrop(mStartPosition, mEndPosition);
+			
 				break;
 		}
 		return true;
