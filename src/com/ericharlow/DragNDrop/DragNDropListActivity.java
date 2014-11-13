@@ -56,17 +56,6 @@ public class DragNDropListActivity extends ListActivity {
         }
         */
     }
-
-	private DropListener mDropListener = 
-		new DropListener() {
-        public void onDrop(int from, int to) {
-        	ListAdapter adapter = getListAdapter();
-        	if (adapter instanceof DragNDropAdapter) {
-        		((DragNDropAdapter)adapter).onDrop(from, to);
-        		getListView().invalidateViews();
-        	}
-        }
-    };
     
     private RemoveListener mRemoveListener =
         new RemoveListener() {
@@ -107,11 +96,7 @@ public class DragNDropListActivity extends ListActivity {
     };
     
     private static String[] mListContent={"Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6", "Item 7"};
-    
-    public DropListener getMDropListener() {
-        return mDropListener;
-    }
-    
+       
     public RemoveListener getMRemoveListener() {
         return mRemoveListener;
     }

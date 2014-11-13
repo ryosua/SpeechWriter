@@ -12,6 +12,7 @@ import edu.psu.rcy5017.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.SpeechDataSource;
+import edu.psu.rcy5017.publicspeakingassistant.listener.DropListenerImpl;
 import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
 import edu.psu.rcy5017.publicspeakingassistant.task.SpeechTask;
 
@@ -55,10 +56,10 @@ public class SpeechListActivity extends DragNDropListActivity {
             adapter = new DragNDropAdapter<Speech>(this, new int[]{R.layout.dragitem}, new int[]{R.id.TextView01}, values);//new DragNDropAdapter(this,content)
             
             setListAdapter(adapter);
-            ListView listView = getListView();
+            final ListView listView = getListView();
             
             if (listView instanceof DragNDropListView) {
-                ((DragNDropListView) listView).setDropListener(getMDropListener());
+                ((DragNDropListView) listView).setDropListener(new DropListenerImpl(adapter, listView));
                 ((DragNDropListView) listView).setRemoveListener(getMRemoveListener());
                 ((DragNDropListView) listView).setDragListener(getMDragListener());
             }
