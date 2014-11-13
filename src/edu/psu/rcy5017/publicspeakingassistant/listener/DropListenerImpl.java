@@ -16,8 +16,8 @@ public class DropListenerImpl implements DropListener {
         this.listView = listView;
     }
     
+    @Override
     public void onDrop(int from, int to) {
-        ListAdapter adapter = adapter;
         if (adapter instanceof DragNDropAdapter) {
             ((DragNDropAdapter)adapter).onDrop(from, to);
             listView.invalidateViews();
