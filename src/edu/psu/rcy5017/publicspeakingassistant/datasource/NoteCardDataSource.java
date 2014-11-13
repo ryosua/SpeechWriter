@@ -76,7 +76,7 @@ public class NoteCardDataSource extends DataSource {
         
         final String selection = DatabaseHelper.SPEECH_ID + "=" + speechID;
         Cursor cursor = getDatabase().query(DatabaseHelper.NOTECARD_TABLE_NAME,
-                allColumns, selection, null, null, null, null);
+                allColumns, selection, null, null, null, DatabaseHelper.NOTE_ORDER);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {

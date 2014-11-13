@@ -76,7 +76,7 @@ public class NoteDataSource extends DataSource {
         
         final String selection = DatabaseHelper.NOTECARD_ID + "=" + noteCardID;
         Cursor cursor = getDatabase().query(DatabaseHelper.NOTE_TABLE_NAME,
-                allColumns, selection, null, null, null, null);
+                allColumns, selection, null, null, null, DatabaseHelper.NOTE_ORDER);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {

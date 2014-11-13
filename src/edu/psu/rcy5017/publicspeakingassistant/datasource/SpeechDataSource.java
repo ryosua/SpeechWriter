@@ -72,7 +72,7 @@ public class SpeechDataSource extends DataSource {
         List<Speech> speeches = new ArrayList<Speech>();
 
         Cursor cursor = getDatabase().query(DatabaseHelper.SPEECH_TABLE_NAME,
-                allColumns, null, null, null, null, null);
+                allColumns, null, null, null, null, DatabaseHelper.SPEECH_ORDER);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {

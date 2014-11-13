@@ -76,7 +76,7 @@ public class SpeechRecordingDataSource extends DataSource {
         
         final String selection = DatabaseHelper.SPEECH_ID + "=" + speechID;
         Cursor cursor = getDatabase().query(DatabaseHelper.SPEECH_RECORDING_TABLE_NAME,
-                allColumns, selection, null, null, null, null);
+                allColumns, selection, null, null, null, DatabaseHelper.SPEECH_RECORDING_ORDER);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
