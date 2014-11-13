@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 import edu.psu.rcy5017.publicspeakingassistant.DatabaseHelper;
+import edu.psu.rcy5017.publicspeakingassistant.model.Note;
 import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
 
 public class SpeechDataSource extends DataSource {
@@ -60,6 +61,19 @@ public class SpeechDataSource extends DataSource {
     public int renameSpeech(Speech speech, String newTitle) {
         final ContentValues args = new ContentValues();
         args.put(DatabaseHelper.SPEECH_TITLE, newTitle);
+        return getDatabase().update(
+                DatabaseHelper.SPEECH_TABLE_NAME, args, DatabaseHelper.COLUMN_ID + "=" + speech.getId(), null);
+    }
+    
+    /**
+     * Changes the order of the speech in the database
+     * @param speech the speech to change order
+     * @param order the new order of the speech
+     * @return the number of rows affected
+     */
+    public int changeSpeechOrder(Speech speech, int order) {
+        final ContentValues args = new ContentValues();
+        args.put(DatabaseHelper.SPEECH_ORDER, order);
         return getDatabase().update(
                 DatabaseHelper.SPEECH_TABLE_NAME, args, DatabaseHelper.COLUMN_ID + "=" + speech.getId(), null);
     }

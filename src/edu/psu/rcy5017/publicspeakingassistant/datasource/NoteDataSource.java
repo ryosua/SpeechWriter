@@ -67,6 +67,19 @@ public class NoteDataSource extends DataSource {
     }
     
     /**
+     * Changes the order of the note in the database
+     * @param note the note to change order
+     * @param order the new order of the note
+     * @return the number of rows affected
+     */
+    public int changeNoteOrder(Note note, int order) {
+        final ContentValues args = new ContentValues();
+        args.put(DatabaseHelper.NOTE_ORDER, order);
+        return getDatabase().update(
+                DatabaseHelper.NOTE_TABLE_NAME, args, DatabaseHelper.COLUMN_ID + "=" + note.getId(), null);
+    }
+    
+    /**
      * Get a list of notes associated with a note card.
      * @param noteCardID the note card to get notes from
      * @return the note list
