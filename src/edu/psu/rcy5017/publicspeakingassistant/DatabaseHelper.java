@@ -21,20 +21,25 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
     // Speech Table
     public static final String SPEECH_TABLE_NAME = "Speech";
     public static final String SPEECH_TITLE = "Title";
+    public static final String SPEECH_ORDER = "Order";
     
     // NoteCard Table
     public static final String NOTECARD_TABLE_NAME = "Notecard";
     public static final String NOTECARD_TITLE = "Title";
+    public static final String NOTECARD_ORDER = "Order";
     public static final String SPEECH_ID = "SpeechID";
     
     // Note Table
     public static final String NOTE_TABLE_NAME = "Note";
     public static final String NOTE_TEXT = "Text";
+    public static final String NOTE_ORDER = "Order";
     public static final String NOTECARD_ID = "NoteCardID";
     
     // SpeechRecording Table
     public static final String SPEECH_RECORDING_TABLE_NAME = "SpeechRecording";
     public static final String SPEECH_RECORDING_TITLE = "Title";
+    public static final String SPEECH_RECORDING_ORDER = "Order";
+    
     
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -64,6 +69,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
                     "CREATE TABLE " + SPEECH_TABLE_NAME + " (" +
                             COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                             SPEECH_TITLE + " TEXT NOT NULL" +
+                            SPEECH_ORDER + " INTEGER NOT NULL" +
                     ");";
         
         db.execSQL(createStatement);
@@ -74,6 +80,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
                 "CREATE TABLE " + NOTECARD_TABLE_NAME + " (" +
                         COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         NOTECARD_TITLE + " TEXT NOT NULL," +
+                        NOTECARD_ORDER + " INTEGER NOT NULL," +
                         SPEECH_ID + " INTEGER NOT NULL," +
                         "FOREIGN KEY("+ SPEECH_ID +") REFERENCES " + SPEECH_TABLE_NAME + "("+ COLUMN_ID +") ON DELETE CASCADE" + 
                 ");";
@@ -86,6 +93,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
                 "CREATE TABLE " + NOTE_TABLE_NAME + " (" +
                         COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         NOTE_TEXT + " TEXT NOT NULL," +
+                        NOTE_ORDER + " NOTE_ORDER NOT NULL," +
                         NOTECARD_ID + " INTEGER NOT NULL," +
                         "FOREIGN KEY("+ NOTECARD_ID +") REFERENCES " + NOTECARD_TABLE_NAME + "("+ COLUMN_ID +") ON DELETE CASCADE" + 
                 ");";
@@ -98,6 +106,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
                 "CREATE TABLE " + SPEECH_RECORDING_TABLE_NAME + " (" +
                         COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         SPEECH_RECORDING_TITLE + " TEXT NOT NULL," +
+                        SPEECH_RECORDING_ORDER + " INTEGER NOT NULL," +
                         SPEECH_ID + " INTEGER NOT NULL," +
                         "FOREIGN KEY("+ SPEECH_ID +") REFERENCES " + SPEECH_TABLE_NAME + "("+ COLUMN_ID +") ON DELETE CASCADE" +  
                 ");";
