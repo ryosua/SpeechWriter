@@ -11,10 +11,12 @@ public class NoteCard {
     private final long speechID;
     
     private String title;
+    private int order;
     
     public NoteCard(long id, String title, long speechID) {
         this.id = id;
         this.title = title;
+        this.order = (int)id;
         this.speechID = speechID;
     }
 
@@ -28,6 +30,14 @@ public class NoteCard {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+    
+    public int getOrder() {
+        return order;
+    }
+    
+    public void setOrder(int order) {
+        this.order = order;
     }
 
     public long getSpeechID() {

@@ -6,11 +6,13 @@ public class SpeechRecording {
     private final long speechID;
     
     private String title;
+    private int order;
     private String file;
     
     public SpeechRecording(long id, String title, long speechID) {
         this.id = id;
         this.title = title;
+        this.order = (int)id;
         this.file = "/" + this.id;
         this.speechID = speechID;
     }
@@ -25,6 +27,14 @@ public class SpeechRecording {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+    
+    public int getOrder() {
+        return order;
+    }
+    
+    public void setOrder(int order) {
+        this.order = order;
     }
     
     public String getFile() {

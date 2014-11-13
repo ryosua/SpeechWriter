@@ -10,10 +10,12 @@ public class Speech {
     private final long id;
     
     private String title;
+    private int order;
     
     public Speech(long id, String title) {
         this.id = id;
         this.title = title;
+        this.order = (int)id;
     }
 
     public long getId() {
@@ -26,6 +28,14 @@ public class Speech {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+    
+    public int getOrder() {
+        return order;
+    }
+    
+    public void setOrder(int order) {
+        this.order = order;
     }
 
     // Will be used by the ArrayAdapter in the ListView

@@ -11,11 +11,13 @@ public class Note {
     private final long noteCardID;
     
     private String text;
+    private int order;
    
     public Note(long id, long noteCardID, String text) {
         this.id = id;
         this.noteCardID = noteCardID;
         this.text = text;
+        this.order = (int)id;
     }
 
     public long getId() {
@@ -32,6 +34,14 @@ public class Note {
 
     public long getNoteCardID() {
         return noteCardID;
+    }
+    
+    public int getOrder() {
+        return order;
+    }
+    
+    public void setOrder(int order) {
+        this.order = order;
     }
 
     // Will be used by the ArrayAdapter in the ListView
