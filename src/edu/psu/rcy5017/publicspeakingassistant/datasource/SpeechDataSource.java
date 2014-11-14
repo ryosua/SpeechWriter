@@ -23,13 +23,15 @@ public class SpeechDataSource extends DataSource {
     }
 
     /**
-     * Creates a new speech in the database.
+     * Creates a new speech in the database. The speech has an order of 0.
      * @param title the title of the speech
      * @return the speech created
      */
     public Speech createSpeech(String title) {
+        final int DEFAULT_ORDER = 0;
         final ContentValues values = new ContentValues();
         values.put(DatabaseHelper.SPEECH_TITLE, title);
+        values.put(DatabaseHelper.SPEECH_ORDER, DEFAULT_ORDER);
         long insertId = getDatabase().insert(DatabaseHelper.SPEECH_TABLE_NAME, null,
                 values);
         Cursor cursor = getDatabase().query(DatabaseHelper.SPEECH_TABLE_NAME,
