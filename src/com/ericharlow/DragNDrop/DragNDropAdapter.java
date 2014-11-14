@@ -18,7 +18,6 @@
 
 package com.ericharlow.DragNDrop;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;

@@ -7,7 +7,7 @@ import android.util.Log;
 /**
  * A helper class that is responsible for creating and updating the app database, 
  * and for creating all the tables in the database.
- * @author ryosua
+ * @author Ryan Yosua
  *
  */
 public final class DatabaseHelper extends SQLiteOpenHelper {

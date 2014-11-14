@@ -18,7 +18,6 @@
 
 package com.ericharlow.DragNDrop;
 
-import edu.psu.rcy5017.publicspeakingassistant.R;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
