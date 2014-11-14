@@ -12,9 +12,9 @@ import android.widget.BaseAdapter;
  */
 public class DeleteTask<E> extends AsyncTask<Void, Void, Void> {
     
-    final BaseAdapter adapter;
-    final DataSource<E> datasource;
-    final E objectToDelete;
+    private final BaseAdapter adapter;
+    private final DataSource<E> datasource;
+    private final E objectToDelete;
     
     public DeleteTask(DataSource<E> datasource, BaseAdapter adapter, E objectToDelete) {
         this.adapter = adapter;

@@ -14,8 +14,8 @@ import android.os.AsyncTask;
  */
 public class GetAllTask<E> extends AsyncTask<Void, Void, List<E>> {
     
-    final DataSource<E> datasource;
-    final long parentID;
+    private final DataSource<E> datasource;
+    private final long parentID;
     
     /**
      * 
