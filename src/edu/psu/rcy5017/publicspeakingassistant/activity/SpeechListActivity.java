@@ -5,17 +5,19 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import com.ericharlow.DragNDrop.DragNDropAdapter;
-import com.ericharlow.DragNDrop.DragNDropListActivity;
 import com.ericharlow.DragNDrop.DragNDropListView;
 
 import edu.psu.rcy5017.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.SpeechDataSource;
+import edu.psu.rcy5017.publicspeakingassistant.listener.DragListenerImpl;
 import edu.psu.rcy5017.publicspeakingassistant.listener.DropListenerImpl;
+import edu.psu.rcy5017.publicspeakingassistant.listener.RemoveListenerImpl;
 import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
 import edu.psu.rcy5017.publicspeakingassistant.task.SpeechTask;
 
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,7 +31,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class SpeechListActivity extends DragNDropListActivity {
+public class SpeechListActivity extends ListActivity {
     
     private static final String TAG = "SpeechListActivity";
     
@@ -53,15 +55,15 @@ public class SpeechListActivity extends DragNDropListActivity {
         }
         
         if(values != null) {
-            adapter = new DragNDropAdapter<Speech>(this, new int[]{R.layout.dragitem}, new int[]{R.id.TextView01}, values);//new DragNDropAdapter(this,content)
+            adapter = new DragNDropAdapter<Speech>(this, new int[]{R.layout.dragitem}, new int[]{R.id.TextView01}, values);
             
             setListAdapter(adapter);
             final ListView listView = getListView();
             
             if (listView instanceof DragNDropListView) {
                 ((DragNDropListView) listView).setDropListener(new DropListenerImpl(adapter, listView));
-                ((DragNDropListView) listView).setRemoveListener(getMRemoveListener());
-                ((DragNDropListView) listView).setDragListener(getMDragListener());
+                ((DragNDropListView) listView).setRemoveListener(new RemoveListenerImpl(adapter, listView));
+                ((DragNDropListView) listView).setDragListener(new DragListenerImpl());
             }
         }
         
