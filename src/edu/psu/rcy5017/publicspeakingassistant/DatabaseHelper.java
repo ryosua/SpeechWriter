@@ -21,24 +21,24 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
     // Speech Table
     public static final String SPEECH_TABLE_NAME = "Speech";
     public static final String SPEECH_TITLE = "Title";
-    public static final String SPEECH_ORDER = "Order";
+    public static final String SPEECH_ORDER = "ListOrder";
     
     // NoteCard Table
     public static final String NOTECARD_TABLE_NAME = "Notecard";
     public static final String NOTECARD_TITLE = "Title";
-    public static final String NOTECARD_ORDER = "Order";
+    public static final String NOTECARD_ORDER = "ListOrder";
     public static final String SPEECH_ID = "SpeechID";
     
     // Note Table
     public static final String NOTE_TABLE_NAME = "Note";
     public static final String NOTE_TEXT = "Text";
-    public static final String NOTE_ORDER = "Order";
+    public static final String NOTE_ORDER = "ListOrder";
     public static final String NOTECARD_ID = "NoteCardID";
     
     // SpeechRecording Table
     public static final String SPEECH_RECORDING_TABLE_NAME = "SpeechRecording";
     public static final String SPEECH_RECORDING_TITLE = "Title";
-    public static final String SPEECH_RECORDING_ORDER = "Order";
+    public static final String SPEECH_RECORDING_ORDER = "ListOrder";
     
     
     public DatabaseHelper(Context context) {
@@ -68,7 +68,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
         final String createStatement =
                     "CREATE TABLE " + SPEECH_TABLE_NAME + " (" +
                             COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                            SPEECH_TITLE + " TEXT NOT NULL" +
+                            SPEECH_TITLE + " TEXT NOT NULL," +
                             SPEECH_ORDER + " INTEGER NOT NULL" +
                     ");";
         
