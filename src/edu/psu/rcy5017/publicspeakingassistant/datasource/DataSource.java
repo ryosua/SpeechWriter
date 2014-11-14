@@ -10,33 +10,39 @@ import edu.psu.rcy5017.publicspeakingassistant.DatabaseHelper;
 public abstract class DataSource<E> {
     
     private SQLiteDatabase database;
-    private DatabaseHelper dbHelper;
+    private final DatabaseHelper dbHelper;
     
     public DataSource(Context context) {
          dbHelper = new DatabaseHelper(context);
     }
     
-    public void open() throws SQLException {
+    public final void open() throws SQLException {
         database = getDbHelper().getWritableDatabase();
     }
 
-    public void close() {
+    public final void close() {
         getDbHelper().close();
     }
     
-    public SQLiteDatabase getDatabase() {
+    public final SQLiteDatabase getDatabase() {
         return database;
     }
 
-    public DatabaseHelper getDbHelper() {
+    public final DatabaseHelper getDbHelper() {
         return dbHelper;
     }
     
     /**
      * Gets a list of all all of the elements in a table.
      * @param parentID the id of the parent that you are fetching from, use 0 if none. Example: if you are fetching note cards, the parentID would be the id of the speech that they belong to.
-     * @return
+     * @return the list of elements
      */
     public abstract List<E> getAll(long parentID);
+    
+    /**
+     * Deletes an object from the table.
+     * @param objectToDelete the object to delete
+     */
+    public abstract void deleteObject(E objectToDelete);
  
 }

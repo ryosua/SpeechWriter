@@ -43,18 +43,7 @@ public class NoteCardDataSource extends DataSource<NoteCard> {
         cursor.close();
         return noteCard;
     }
-    
-    /**
-     * Deletes the note card in the database.
-     * @param noteCard the note card to delete
-     */
-    public void deleteNoteCard(NoteCard noteCard) {
-        long id = noteCard.getId();
-        Log.d(TAG, "Note card deleted with id: " + id);
-        getDatabase().delete(DatabaseHelper.NOTECARD_TABLE_NAME, DatabaseHelper.COLUMN_ID
-                + " = " + id, null);
-    }
-    
+        
     /**
      * Renames the note card in the database.
      * @param noteCard the note card to rename
@@ -99,6 +88,14 @@ public class NoteCardDataSource extends DataSource<NoteCard> {
         // make sure to close the cursor
         cursor.close();
         return noteCards;
+    }
+
+    @Override
+    public void deleteObject(NoteCard objectToDelete) {
+        long id = objectToDelete.getId();
+        Log.d(TAG, "Note card deleted with id: " + id);
+        getDatabase().delete(DatabaseHelper.NOTECARD_TABLE_NAME, DatabaseHelper.COLUMN_ID
+                + " = " + id, null);
     }
 
 }

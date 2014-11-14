@@ -43,18 +43,7 @@ public class NoteDataSource extends DataSource<Note> {
         cursor.close();
         return note;
     }
-    
-    /**
-     * Deletes the note in the database.
-     * @param note the note to delete
-     */
-    public void deleteNote(Note note) {
-        long id = note.getId();
-        Log.d(TAG, "Note deleted with id: " + id);
-        getDatabase().delete(DatabaseHelper.NOTE_TABLE_NAME, DatabaseHelper.COLUMN_ID
-                + " = " + id, null);
-    }
-    
+     
     /**
      * Changes the note text in the database.
      * @param note the note to change text
@@ -112,6 +101,14 @@ public class NoteDataSource extends DataSource<Note> {
         // make sure to close the cursor
         cursor.close();
         return notes;
+    }
+
+    @Override
+    public void deleteObject(Note objectToDelete) {
+        long id = objectToDelete.getId();
+        Log.d(TAG, "Note deleted with id: " + id);
+        getDatabase().delete(DatabaseHelper.NOTE_TABLE_NAME, DatabaseHelper.COLUMN_ID
+                + " = " + id, null);
     }
 
 }

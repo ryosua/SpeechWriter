@@ -21,6 +21,7 @@ import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.SpeechRecordingDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.model.SpeechRecording;
+import edu.psu.rcy5017.publicspeakingassistant.task.DeleteTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.SpeechRecordingTask;
 
 public class SpeechRecordingListActivity extends ListActivity {
@@ -112,7 +113,9 @@ public class SpeechRecordingListActivity extends ListActivity {
                 return true;
        
             case R.id.delete_speech_recording:
-                new DeleteSpeechRecordingTask(speechRecording).execute();
+                new DeleteTask<SpeechRecording>(datasource, adapter, speechRecording).execute();
+                adapter.remove(speechRecording);
+                adapter.notifyDataSetChanged();
                 return true;
         }
      
@@ -145,31 +148,6 @@ public class SpeechRecordingListActivity extends ListActivity {
             datasource.close();
             
             return values;
-        }
-        
-    }
-    
-    private class DeleteSpeechRecordingTask extends SpeechRecordingTask {  
-        /**
-         * Creates a task that deletes a speech in the database
-         * @param speech the speech to delete
-         */
-        public DeleteSpeechRecordingTask(SpeechRecording speechRecording) {
-            super(speechRecording);
-        }
-        
-        @Override
-        protected Void doInBackground(Void... params) {
-            datasource.open();
-            datasource.deleteSpeechRecording(getSpeechRecording());
-            datasource.close();
-            return null;
-        }
-        
-        @Override
-        protected void onPostExecute(Void result) {
-            adapter.remove(getSpeechRecording());
-            adapter.notifyDataSetChanged();
         }
         
     }

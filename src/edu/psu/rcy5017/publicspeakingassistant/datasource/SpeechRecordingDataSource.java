@@ -43,18 +43,7 @@ public class SpeechRecordingDataSource extends DataSource<SpeechRecording> {
         cursor.close();
         return speechRecording;
     }
-    
-    /**
-     * Deletes the speech recording in the database.
-     * @param speechRecording the speech recording to delete
-     */
-    public void deleteSpeechRecording(SpeechRecording speechRecording) {
-        long id = speechRecording.getId();
-        Log.d(TAG, "Speech recording deleted with id: " + id);
-        getDatabase().delete(DatabaseHelper.SPEECH_RECORDING_TABLE_NAME, DatabaseHelper.COLUMN_ID
-                + " = " + id, null);
-    }
-    
+       
     /**
      * Renames the speech recording in the database.
      * @param speechRecording the speech recording to rename
@@ -122,6 +111,14 @@ public class SpeechRecordingDataSource extends DataSource<SpeechRecording> {
         
         cursor.close();
         return speechRecordings;
+    }
+
+    @Override
+    public void deleteObject(SpeechRecording objectToDelete) {
+        long id = objectToDelete.getId();
+        Log.d(TAG, "Speech recording deleted with id: " + id);
+        getDatabase().delete(DatabaseHelper.SPEECH_RECORDING_TABLE_NAME, DatabaseHelper.COLUMN_ID
+                + " = " + id, null);
     }
 
 }

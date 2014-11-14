@@ -7,10 +7,10 @@ import edu.psu.rcy5017.publicspeakingassistant.datasource.DataSource;
 import android.os.AsyncTask;
 
 /**
- * A class that gets all of the elements from a particular table corresponding to a datasource.
+ * A task that gets all of the elements from a particular table corresponding to a Datasource.
  * @author Ryan Yosua
  *
- * @param <E> The element that your task will return. This will be one of the types from the model package.
+ * @param <E> The type of the element that your task will return. This will be one of the types from the model package.
  */
 public class GetAllTask<E> extends AsyncTask<Void, Void, List<E>> {
     

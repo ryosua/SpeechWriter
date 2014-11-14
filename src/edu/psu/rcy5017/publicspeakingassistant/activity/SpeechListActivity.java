@@ -14,6 +14,7 @@ import edu.psu.rcy5017.publicspeakingassistant.listener.DragListenerImpl;
 import edu.psu.rcy5017.publicspeakingassistant.listener.DropListenerImpl;
 import edu.psu.rcy5017.publicspeakingassistant.listener.RemoveListenerImpl;
 import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
+import edu.psu.rcy5017.publicspeakingassistant.task.DeleteTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.GetAllTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.SpeechTask;
 
@@ -131,7 +132,9 @@ public class SpeechListActivity extends ListActivity {
         
             case R.id.delete_speech:
                 // Delete the speech, and update the adapter.
-                new DeleteSpeechTask(speech).execute();
+                new DeleteTask<Speech>(datasource, adapter, speech).execute();
+                adapter.remove(speech);
+                adapter.notifyDataSetChanged();
                 return true;
         }
      
@@ -223,31 +226,7 @@ public class SpeechListActivity extends ListActivity {
         }
         
     }
-    
-    private class DeleteSpeechTask extends SpeechTask {  
-        /**
-         * Creates a task that deletes a speech in the database
-         * @param speech the speech to delete
-         */
-        public DeleteSpeechTask(Speech speech) {
-            super(speech);
-        }
-        
-        @Override
-        protected Void doInBackground(Void... params) {
-            datasource.open();
-            datasource.deleteSpeech(getSpeech());
-            datasource.close();
-            return null;
-        }
-        
-        @Override
-        protected void onPostExecute(Void result) {
-            adapter.remove(getSpeech());
-            adapter.notifyDataSetChanged();
-        }
-    }
-    
+
     private class RenameSpeechTask extends SpeechTask {
         
         public RenameSpeechTask(Speech speech) {

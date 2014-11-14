@@ -109,4 +109,12 @@ public class SpeechDataSource extends DataSource<Speech> {
         cursor.close();
         return speeches;
     }
+
+    @Override
+    public void deleteObject(Speech objectToDelete) {
+        long id = objectToDelete.getId();
+        Log.d(TAG, "Speech deleted with id: " + id);
+        getDatabase().delete(DatabaseHelper.SPEECH_TABLE_NAME, DatabaseHelper.COLUMN_ID
+                + " = " + id, null);
+    }
 } 

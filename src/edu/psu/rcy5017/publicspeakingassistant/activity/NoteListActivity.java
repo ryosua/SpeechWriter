@@ -8,7 +8,7 @@ import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.NoteDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.model.Note;
-import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
+import edu.psu.rcy5017.publicspeakingassistant.task.DeleteTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.GetAllTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.NoteTask;
 import android.app.ListActivity;
@@ -103,7 +103,9 @@ public class NoteListActivity extends ListActivity {
                 return true;
             
             case R.id.delete_note:
-                new DeleteNoteTask(note).execute();
+                new DeleteTask<Note>(datasource, adapter, note).execute();
+                adapter.remove(note);
+                adapter.notifyDataSetChanged();
                 return true;
         }
      
@@ -178,27 +180,5 @@ public class NoteListActivity extends ListActivity {
         }
         
     }
-    
-    private class DeleteNoteTask extends NoteTask {  
-        
-        public DeleteNoteTask(Note note) {
-            super(note);
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            datasource.open();
-            datasource.deleteNote(getNote());
-            datasource.close();
-            return null;
-        }
-        
-        @Override
-        protected void onPostExecute(Void result) {
-            adapter.remove(getNote());
-            adapter.notifyDataSetChanged();
-        }
-        
-    }
-    
+     
 }
