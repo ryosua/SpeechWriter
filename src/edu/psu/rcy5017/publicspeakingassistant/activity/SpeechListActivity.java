@@ -132,7 +132,7 @@ public class SpeechListActivity extends ListActivity {
         
             case R.id.delete_speech:
                 // Delete the speech, and update the adapter.
-                new DeleteTask<Speech>(datasource, adapter, speech).execute();
+                new DeleteTask<Speech>(datasource, speech).execute();
                 adapter.remove(speech);
                 adapter.notifyDataSetChanged();
                 return true;

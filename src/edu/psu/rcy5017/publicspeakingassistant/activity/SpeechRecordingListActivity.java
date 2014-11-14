@@ -113,7 +113,7 @@ public class SpeechRecordingListActivity extends ListActivity {
                 return true;
        
             case R.id.delete_speech_recording:
-                new DeleteTask<SpeechRecording>(datasource, adapter, speechRecording).execute();
+                new DeleteTask<SpeechRecording>(datasource, speechRecording).execute();
                 adapter.remove(speechRecording);
                 adapter.notifyDataSetChanged();
                 return true;

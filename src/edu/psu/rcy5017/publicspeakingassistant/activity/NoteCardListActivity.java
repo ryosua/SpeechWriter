@@ -110,7 +110,7 @@ public class NoteCardListActivity extends ListActivity {
                 return true;
         
             case R.id.delete_notecard:
-                new DeleteTask<NoteCard>(datasource, adapter, noteCard).execute();
+                new DeleteTask<NoteCard>(datasource, noteCard).execute();
                 adapter.remove(noteCard);
                 adapter.notifyDataSetChanged();
                 return true;

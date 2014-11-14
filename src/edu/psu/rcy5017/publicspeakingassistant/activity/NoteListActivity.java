@@ -103,7 +103,7 @@ public class NoteListActivity extends ListActivity {
                 return true;
             
             case R.id.delete_note:
-                new DeleteTask<Note>(datasource, adapter, note).execute();
+                new DeleteTask<Note>(datasource, note).execute();
                 adapter.remove(note);
                 adapter.notifyDataSetChanged();
                 return true;

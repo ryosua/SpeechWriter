@@ -2,7 +2,6 @@ package edu.psu.rcy5017.publicspeakingassistant.task;
 
 import edu.psu.rcy5017.publicspeakingassistant.datasource.DataSource;
 import android.os.AsyncTask;
-import android.widget.BaseAdapter;
 
 /**
  * A task that deletes a model instance that corresponding to a Datasource.
@@ -12,12 +11,10 @@ import android.widget.BaseAdapter;
  */
 public class DeleteTask<E> extends AsyncTask<Void, Void, Void> {
     
-    private final BaseAdapter adapter;
     private final DataSource<E> datasource;
     private final E objectToDelete;
     
-    public DeleteTask(DataSource<E> datasource, BaseAdapter adapter, E objectToDelete) {
-        this.adapter = adapter;
+    public DeleteTask(DataSource<E> datasource, E objectToDelete) {
         this.datasource = datasource;
         this.objectToDelete = objectToDelete;
     }
