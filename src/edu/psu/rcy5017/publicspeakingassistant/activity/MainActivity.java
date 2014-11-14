@@ -161,7 +161,6 @@ ActionBar.TabListener {
     @Override
     protected void onPause() {
         audioCntl.stopRecording();
-        audioCntl.stopPlaying();
         super.onPause();
     }
     
