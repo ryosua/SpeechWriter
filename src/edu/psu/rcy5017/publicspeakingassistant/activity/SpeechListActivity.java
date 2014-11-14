@@ -16,7 +16,7 @@ import edu.psu.rcy5017.publicspeakingassistant.listener.RemoveListenerImpl;
 import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
 import edu.psu.rcy5017.publicspeakingassistant.task.DeleteTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.GetAllTask;
-import edu.psu.rcy5017.publicspeakingassistant.task.SpeechTask;
+import edu.psu.rcy5017.publicspeakingassistant.task.RenameSpeechTask;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -158,7 +158,7 @@ public class SpeechListActivity extends ListActivity {
             adapter.notifyDataSetChanged();
                 
             // Save the changes to the database.
-            new RenameSpeechTask(speech).execute();
+            new RenameSpeechTask(datasource, speech).execute();
         }
     }
     
@@ -227,20 +227,4 @@ public class SpeechListActivity extends ListActivity {
         
     }
 
-    private class RenameSpeechTask extends SpeechTask {
-        
-        public RenameSpeechTask(Speech speech) {
-            super(speech);
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            final Speech speech = getSpeech();
-            datasource.open();
-            datasource.renameSpeech(speech, speech.getTitle());
-            datasource.close();
-            return null;
-        }
-    }
- 
 } 
