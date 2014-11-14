@@ -14,6 +14,7 @@ import edu.psu.rcy5017.publicspeakingassistant.listener.DragListenerImpl;
 import edu.psu.rcy5017.publicspeakingassistant.listener.DropListenerImpl;
 import edu.psu.rcy5017.publicspeakingassistant.listener.RemoveListenerImpl;
 import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
+import edu.psu.rcy5017.publicspeakingassistant.task.GetAllTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.SpeechTask;
 
 import android.app.ListActivity;
@@ -45,7 +46,7 @@ public class SpeechListActivity extends ListActivity {
         
         List<Speech> values = null;
         try {
-            values = new GetSpeechesTask().execute().get();
+            values = new GetAllTask<Speech>(datasource, 0).execute().get(); // pass a 0 for parent id because speech is at the top of the type hierarchy.
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -262,18 +263,5 @@ public class SpeechListActivity extends ListActivity {
             return null;
         }
     }
-    
-    private class GetSpeechesTask extends AsyncTask<Void, Void, List<Speech>> {
-        
-        @Override
-        protected List<Speech> doInBackground(Void... params) {
-            datasource.open();
-            final List<Speech> values = datasource.getAllSpeeches();
-            datasource.close();
-            
-            return values;
-        }
-        
-    }
-   
+ 
 } 

@@ -10,7 +10,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
-public class NoteCardDataSource extends DataSource {
+public class NoteCardDataSource extends DataSource<NoteCard> {
     
     private static final String TAG = "NoteCardDataSource";
     
@@ -28,8 +28,10 @@ public class NoteCardDataSource extends DataSource {
      * @return the note card created
      */
     public NoteCard createNoteCard(String title, long speechID) {
+        final int DEFAULT_ORDER = 0;
         final ContentValues values = new ContentValues();
         values.put(DatabaseHelper.NOTECARD_TITLE, title);
+        values.put(DatabaseHelper.NOTECARD_ORDER, DEFAULT_ORDER);
         values.put(DatabaseHelper.SPEECH_ID, speechID);
         long insertId = getDatabase().insert(DatabaseHelper.NOTECARD_TABLE_NAME, null,
                 values);
@@ -65,30 +67,7 @@ public class NoteCardDataSource extends DataSource {
         return getDatabase().update(
                 DatabaseHelper.NOTECARD_TABLE_NAME, args, DatabaseHelper.COLUMN_ID + "=" + noteCard.getId(), null);
     }
-     
-    /**
-     * Get a list of note cards associated with a speech.
-     * @param speechID the speech to get note cards from
-     * @return the note card list
-     */
-    public List<NoteCard> getAllNoteCards(long speechID) {
-        List<NoteCard> noteCards = new ArrayList<NoteCard>();
-        
-        final String selection = DatabaseHelper.SPEECH_ID + "=" + speechID;
-        Cursor cursor = getDatabase().query(DatabaseHelper.NOTECARD_TABLE_NAME,
-                allColumns, selection, null, null, null, DatabaseHelper.NOTE_ORDER);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            NoteCard noteCard = cursorToNoteCard(cursor);
-            noteCards.add(noteCard);
-            cursor.moveToNext();
-        }
-        // make sure to close the cursor
-        cursor.close();
-        return noteCards;
-    }
-    
+         
     /**
      * Converts a cursor to a note card.
      * @param cursor the cursor to convert
@@ -101,6 +80,25 @@ public class NoteCardDataSource extends DataSource {
         final NoteCard noteCard = new NoteCard(newNoteCardId, newNoteCardTitle, newNoteCardSpeechId);
         
         return noteCard;
+    }
+
+    @Override
+    public List<NoteCard> getAll(long parentID) {
+        final List<NoteCard> noteCards = new ArrayList<NoteCard>();
+        
+        final String selection = DatabaseHelper.SPEECH_ID + "=" + parentID;
+        Cursor cursor = getDatabase().query(DatabaseHelper.NOTECARD_TABLE_NAME,
+                allColumns, selection, null, null, null, DatabaseHelper.NOTE_ORDER);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            NoteCard noteCard = cursorToNoteCard(cursor);
+            noteCards.add(noteCard);
+            cursor.moveToNext();
+        }
+        // make sure to close the cursor
+        cursor.close();
+        return noteCards;
     }
 
 }

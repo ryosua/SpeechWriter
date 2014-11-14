@@ -1,10 +1,12 @@
 package edu.psu.rcy5017.publicspeakingassistant.fragment;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import edu.psu.rcy5017.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.NoteDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.model.Note;
+import edu.psu.rcy5017.publicspeakingassistant.task.GetAllTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -32,35 +34,32 @@ public class NoteCardFragement extends Fragment {
         final LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.linearlayout_note_card_fragment);
         
         datasource = new NoteDataSource(getActivity());
-        datasource.open();
         
         // Create text for each note on the note card.
-        final List<Note> notes = datasource.getAllNotes(noteCardID);
-        for(Note note: notes)
-        {
-            // Create text.
-            final TextView text = new TextView(this.getActivity());
-            text.setText(note.getText());
-            
-            // Change text size.
-            text.setTextSize(FONT_SIZE);
-             
-            layout.addView(text);
+        List<Note> notes = null;
+        try {
+            notes = new GetAllTask<Note>(datasource, noteCardID).execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        
+        if (notes != null) {
+            for(Note note: notes)
+            {
+                // Create text.
+                final TextView text = new TextView(this.getActivity());
+                text.setText(note.getText());
+                
+                // Change text size.
+                text.setTextSize(FONT_SIZE);
+                 
+                layout.addView(text);
+            }
         }
        
         return rootView;
-    }
-    
-    @Override
-    public void onResume() {
-        datasource.open();
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        datasource.close();
-        super.onPause();
     }
     
 }

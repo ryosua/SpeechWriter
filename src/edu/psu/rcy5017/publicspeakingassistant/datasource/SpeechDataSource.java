@@ -8,10 +8,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 import edu.psu.rcy5017.publicspeakingassistant.DatabaseHelper;
-import edu.psu.rcy5017.publicspeakingassistant.model.Note;
 import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
 
-public class SpeechDataSource extends DataSource {
+public class SpeechDataSource extends DataSource<Speech> {
     
     private static final String TAG = "SpeechDataSource";
 
@@ -79,13 +78,23 @@ public class SpeechDataSource extends DataSource {
         return getDatabase().update(
                 DatabaseHelper.SPEECH_TABLE_NAME, args, DatabaseHelper.COLUMN_ID + "=" + speech.getId(), null);
     }
-    
+      
     /**
-     * Gets a list of speeches.
-     * @return the speech list
+     * Converts a cursor to a speech.
+     * @param cursor the cursor to convert
+     * @return the speech
      */
-    public List<Speech> getAllSpeeches() {
-        List<Speech> speeches = new ArrayList<Speech>();
+    private Speech cursorToSpeech(Cursor cursor) {
+        final long newSpeechId = cursor.getLong(0);
+        final String newSpeechTitle = cursor.getString(1);
+        final Speech speech = new Speech(newSpeechId, newSpeechTitle);
+        
+        return speech;
+    }
+
+    @Override
+    public List<Speech> getAll(long parentID) {
+        final List<Speech> speeches = new ArrayList<Speech>();
 
         Cursor cursor = getDatabase().query(DatabaseHelper.SPEECH_TABLE_NAME,
                 allColumns, null, null, null, null, DatabaseHelper.SPEECH_ORDER);
@@ -99,18 +108,5 @@ public class SpeechDataSource extends DataSource {
         // make sure to close the cursor
         cursor.close();
         return speeches;
-    }
-    
-    /**
-     * Converts a cursor to a speech.
-     * @param cursor the cursor to convert
-     * @return the speech
-     */
-    private Speech cursorToSpeech(Cursor cursor) {
-        final long newSpeechId = cursor.getLong(0);
-        final String newSpeechTitle = cursor.getString(1);
-        final Speech speech = new Speech(newSpeechId, newSpeechTitle);
-        
-        return speech;
     }
 } 

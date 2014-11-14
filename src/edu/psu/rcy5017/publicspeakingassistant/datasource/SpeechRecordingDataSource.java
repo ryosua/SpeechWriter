@@ -10,7 +10,7 @@ import android.util.Log;
 import edu.psu.rcy5017.publicspeakingassistant.DatabaseHelper;
 import edu.psu.rcy5017.publicspeakingassistant.model.SpeechRecording;
 
-public class SpeechRecordingDataSource extends DataSource {
+public class SpeechRecordingDataSource extends DataSource<SpeechRecording> {
     
     private static final String TAG = "SpeechRecordingDataSource";
     
@@ -28,8 +28,10 @@ public class SpeechRecordingDataSource extends DataSource {
      * @return the speech recording created
      */
     public SpeechRecording createSpeechRecording(String title, long speechID) {
+        final int DEFAULT_ORDER = 0;
         final ContentValues values = new ContentValues();
         values.put(DatabaseHelper.SPEECH_RECORDING_TITLE, title);
+        values.put(DatabaseHelper.SPEECH_RECORDING_ORDER, DEFAULT_ORDER);
         values.put(DatabaseHelper.SPEECH_ID, speechID);
         long insertId = getDatabase().insert(DatabaseHelper.SPEECH_RECORDING_TABLE_NAME, null,
                 values);
@@ -101,6 +103,25 @@ public class SpeechRecordingDataSource extends DataSource {
         final SpeechRecording speechRecording = new SpeechRecording(newSpeechRecordingId, newSpeechRecordingTitle, newSpeechRecordingSpeechId);
         
         return speechRecording;
+    }
+
+    @Override
+    public List<SpeechRecording> getAll(long parentID) {
+        final List<SpeechRecording> speechRecordings = new ArrayList<SpeechRecording>();
+        
+        final String selection = DatabaseHelper.SPEECH_ID + "=" + parentID;
+        Cursor cursor = getDatabase().query(DatabaseHelper.SPEECH_RECORDING_TABLE_NAME,
+                allColumns, selection, null, null, null, DatabaseHelper.SPEECH_RECORDING_ORDER);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            SpeechRecording speechRecording = cursorToSpeechRecording(cursor);
+            speechRecordings.add(speechRecording);
+            cursor.moveToNext();
+        }
+        
+        cursor.close();
+        return speechRecordings;
     }
 
 }

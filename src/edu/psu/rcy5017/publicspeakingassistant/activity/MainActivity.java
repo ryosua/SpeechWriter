@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutionException;
 
 import edu.psu.rcy5017.publicspeakingassistant.AudioCntl;
 import edu.psu.rcy5017.publicspeakingassistant.R;
@@ -12,13 +13,16 @@ import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.NoteCardDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.SpeechRecordingDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.model.NoteCard;
+import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
 import edu.psu.rcy5017.publicspeakingassistant.model.SpeechRecording;
+import edu.psu.rcy5017.publicspeakingassistant.task.GetAllTask;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -39,6 +43,7 @@ ActionBar.TabListener {
     private long speechID;
     private ViewPager viewPager;    
     private TextView timerText;
+    final SpeechRecordingDataSource speechRecordingdatasource = new SpeechRecordingDataSource(this);
     
     private int seconds;
       
@@ -54,55 +59,63 @@ ActionBar.TabListener {
         speechID = intent.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
         
         datasource = new NoteCardDataSource(this);
-        datasource.open();
         
-        final List<NoteCard> notecards = datasource.getAllNoteCards(speechID);
-       
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        final ActionBar actionBar = getActionBar();
-        final TabsPagerAdapter tabAdapter = new TabsPagerAdapter(getSupportFragmentManager(), notecards);
- 
-        viewPager.setAdapter(tabAdapter);
-        actionBar.setHomeButtonEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);        
-         
-        // Create a tab for each note card.
-        for (NoteCard noteCard : notecards) {
-            actionBar.addTab(actionBar.newTab().setText(noteCard.getTitle())
-                    .setTabListener(this));
+        List<NoteCard> notecards = null;
+        try {
+            notecards = new GetAllTask<NoteCard>(datasource, speechID).execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
         
-        // On swiping the viewpager make respective tab selected.
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                // on changing the page
-                // make respected tab selected
-                actionBar.setSelectedNavigationItem(position);
+        if (notecards != null) {
+            viewPager = (ViewPager) findViewById(R.id.pager);
+            final ActionBar actionBar = getActionBar();
+            final TabsPagerAdapter tabAdapter = new TabsPagerAdapter(getSupportFragmentManager(), notecards);
+     
+            viewPager.setAdapter(tabAdapter);
+            actionBar.setHomeButtonEnabled(false);
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);        
+             
+            // Create a tab for each note card.
+            for (NoteCard noteCard : notecards) {
+                actionBar.addTab(actionBar.newTab().setText(noteCard.getTitle())
+                        .setTabListener(this));
             }
-         
-            @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
-                // Do nothing.
-            }
-         
-            @Override
-            public void onPageScrollStateChanged(int arg0) {
-                // Do nothing.
-            }
-        });
-        
-        // Set initial time to 0.
-        timerText = (TextView) findViewById(R.id.timer_text);
-        seconds = 0;
-        
-        // Start the speech recording.
-        startRecording();
-        
-        // Start the timer.
-        Timer speechTimer = new Timer();
-        UpdateSpeechTimerTask updateTask = new UpdateSpeechTimerTask();
-        speechTimer.schedule(updateTask, 0, 1000);
+            
+            // On swiping the viewpager make respective tab selected.
+            viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageSelected(int position) {
+                    // on changing the page
+                    // make respected tab selected
+                    actionBar.setSelectedNavigationItem(position);
+                }
+             
+                @Override
+                public void onPageScrolled(int arg0, float arg1, int arg2) {
+                    // Do nothing.
+                }
+             
+                @Override
+                public void onPageScrollStateChanged(int arg0) {
+                    // Do nothing.
+                }
+            });
+            
+            // Set initial time to 0.
+            timerText = (TextView) findViewById(R.id.timer_text);
+            seconds = 0;
+            
+            // Start the speech recording.
+            startRecording();
+            
+            // Start the timer.
+            Timer speechTimer = new Timer();
+            UpdateSpeechTimerTask updateTask = new UpdateSpeechTimerTask();
+            speechTimer.schedule(updateTask, 0, 1000);
+        }
     }
        
     @Override
@@ -142,14 +155,13 @@ ActionBar.TabListener {
         
     @Override
     protected void onResume() {
-        datasource.open();
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        datasource.close();
         audioCntl.stopRecording();
+        audioCntl.stopPlaying();
         super.onPause();
     }
     
@@ -194,14 +206,17 @@ ActionBar.TabListener {
     }
     
     private void startRecording() {
-        // Create the speech recording record in the database, name it with the date it was created.
-        final SpeechRecordingDataSource datasource = new SpeechRecordingDataSource(this);
-        datasource.open();
-        final SpeechRecording speechRecording = datasource.createSpeechRecording(new Date().toString() , speechID);
-        datasource.close();
-        
-        // Start the voice recording.
-        audioCntl.startRecording(speechRecording.getFile());
+        try {
+            // Create the speech recording record in the database, name it with the date it was created.
+            final SpeechRecording speechRecording = new CreateSpeechRecordingTask().execute().get();
+            
+            // Start the voice recording.
+            audioCntl.startRecording(speechRecording.getFile());
+        } catch(InterruptedException ie) {
+            ie.printStackTrace();
+        } catch(ExecutionException ee) { 
+            ee.printStackTrace();
+        }
     }
     
     /**
@@ -221,5 +236,18 @@ ActionBar.TabListener {
                 }
             });
         }
+    }
+    
+    public class CreateSpeechRecordingTask extends AsyncTask<Void, Void, SpeechRecording> {
+
+        @Override
+        protected SpeechRecording doInBackground(Void... params) {
+            speechRecordingdatasource.open();
+            final SpeechRecording speechRecording = speechRecordingdatasource.createSpeechRecording(new Date().toString() , speechID);
+            speechRecordingdatasource.close();
+            
+            return speechRecording;
+        }
+
     }
 }

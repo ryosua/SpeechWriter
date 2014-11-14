@@ -7,7 +7,9 @@ import edu.psu.rcy5017.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.NoteCardDataSource;
+import edu.psu.rcy5017.publicspeakingassistant.model.Note;
 import edu.psu.rcy5017.publicspeakingassistant.model.NoteCard;
+import edu.psu.rcy5017.publicspeakingassistant.task.GetAllTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.NoteCardTask;
 import android.app.ListActivity;
 import android.content.Intent;
@@ -44,7 +46,7 @@ public class NoteCardListActivity extends ListActivity {
         
         List<NoteCard> values = null;
         try {
-            values = new GetNoteCardsTask().execute().get();
+            values = new GetAllTask<NoteCard>(datasource, speechID).execute().get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -72,17 +74,7 @@ public class NoteCardListActivity extends ListActivity {
         switch (view.getId()) {
         
         case R.id.add_note_card:
-            
-            final long speechID = intent.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
-            
-            try {
-                final NoteCard noteCard = new CreateNoteCardTask().execute().get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-         
+            new CreateNoteCardTask().execute();
             break;    
         }
     }
@@ -220,18 +212,5 @@ public class NoteCardListActivity extends ListActivity {
         }
         
     }
-    
-    private class GetNoteCardsTask extends AsyncTask<Void, Void, List<NoteCard>> {
-        
-        @Override
-        protected List<NoteCard> doInBackground(Void... params) {
-            datasource.open();
-            final List<NoteCard> values = datasource.getAllNoteCards(speechID);
-            datasource.close();
-            
-            return values;
-        }
-        
-    }
-    
+   
 }

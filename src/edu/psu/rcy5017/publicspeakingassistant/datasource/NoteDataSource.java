@@ -10,7 +10,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
-public class NoteDataSource extends DataSource {
+public class NoteDataSource extends DataSource<Note> {
     
     private static final String TAG = "NoteDataSource";
     
@@ -28,8 +28,10 @@ public class NoteDataSource extends DataSource {
      * @return the note created
      */
     public Note createNote(String text, long noteCardID) {
+        final int DEFAULT_ORDER = 0;
         final ContentValues values = new ContentValues();
         values.put(DatabaseHelper.NOTE_TEXT, text);
+        values.put(DatabaseHelper.NOTE_ORDER, DEFAULT_ORDER);
         values.put(DatabaseHelper.NOTECARD_ID, noteCardID);
         long insertId = getDatabase().insert(DatabaseHelper.NOTE_TABLE_NAME, null,
                 values);
@@ -80,14 +82,24 @@ public class NoteDataSource extends DataSource {
     }
     
     /**
-     * Get a list of notes associated with a note card.
-     * @param noteCardID the note card to get notes from
-     * @return the note list
+     * Converts a cursor to a note.
+     * @param cursor the cursor to convert
+     * @return the note
      */
-    public List<Note> getAllNotes(long noteCardID) {
-        List<Note> notes = new ArrayList<Note>();
+    private Note cursorToNote(Cursor cursor) {
+        final long newNoteId = cursor.getLong(0);
+        final String newNoteText = cursor.getString(1);
+        final long newNoteNoteCardId = cursor.getLong(2);
+        final Note note = new Note(newNoteId, newNoteNoteCardId, newNoteText);
         
-        final String selection = DatabaseHelper.NOTECARD_ID + "=" + noteCardID;
+        return note;
+    }
+
+    @Override
+    public List<Note> getAll(long parentID) {
+        final List<Note> notes = new ArrayList<Note>();
+        
+        final String selection = DatabaseHelper.NOTECARD_ID + "=" + parentID;
         Cursor cursor = getDatabase().query(DatabaseHelper.NOTE_TABLE_NAME,
                 allColumns, selection, null, null, null, DatabaseHelper.NOTE_ORDER);
 
@@ -100,20 +112,6 @@ public class NoteDataSource extends DataSource {
         // make sure to close the cursor
         cursor.close();
         return notes;
-    }
-    
-    /**
-     * Converts a cursor to a note.
-     * @param cursor the cursor to convert
-     * @return the note
-     */
-    private Note cursorToNote(Cursor cursor) {
-        final long newNoteId = cursor.getLong(0);
-        final String newNoteText = cursor.getString(1);
-        final long newNoteNoteCardId = cursor.getLong(2);
-        final Note note = new Note(newNoteId, newNoteNoteCardId, newNoteText);
-        
-        return note;
     }
 
 }

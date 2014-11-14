@@ -8,6 +8,8 @@ import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.NoteDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.model.Note;
+import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
+import edu.psu.rcy5017.publicspeakingassistant.task.GetAllTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.NoteTask;
 import android.app.ListActivity;
 import android.content.Intent;
@@ -44,7 +46,7 @@ public class NoteListActivity extends ListActivity {
        
         List<Note> values = null;
         try {
-            values = new GetNotesTask().execute().get();
+            values = new GetAllTask<Note>(datasource, noteCardID).execute().get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -65,24 +67,13 @@ public class NoteListActivity extends ListActivity {
      * @param view the calling view
      */
     public void onClick(View view) {
-        // Get the speechID passed from list activity.
-        final Intent intent = this.getIntent();
-       
         switch (view.getId()) {
         
         case R.id.add_note: 
             // Create and save the new notecard to the database.
-            try {
-                new CreateNoteTask().execute().get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-            
+            new CreateNoteTask().execute();
             break;    
         }
-        
     }
     
     @Override
@@ -147,20 +138,7 @@ public class NoteListActivity extends ListActivity {
         intent.putExtra("text", note.getText());
         startActivityForResult(intent, RequestCodes.EDIT_NOTE_REQUEST_CODE);
     }
-    
-    private class GetNotesTask extends AsyncTask<Void, Void, List<Note>> {
-        
-        @Override
-        protected List<Note> doInBackground(Void... params) {
-            datasource.open();
-            final List<Note> values = datasource.getAllNotes(noteCardID);
-            datasource.close();
-            
-            return values;
-        }
-        
-    }
-    
+      
     private class CreateNoteTask extends AsyncTask<Void, Void, Note> {
         
         private Note note;
