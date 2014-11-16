@@ -11,13 +11,14 @@ import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.SpeechDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.listener.DragListenerImpl;
-import edu.psu.rcy5017.publicspeakingassistant.listener.DropListenerImpl;
+import edu.psu.rcy5017.publicspeakingassistant.listener.DropReorderListener;
 import edu.psu.rcy5017.publicspeakingassistant.listener.RemoveListenerImpl;
 import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
 import edu.psu.rcy5017.publicspeakingassistant.task.CreateSpeechTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.DeleteTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.GetAllTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.RenameSpeechTask;
+import edu.psu.rcy5017.publicspeakingassistant.task.UpdateOrderTask;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -53,7 +54,7 @@ public class SpeechListActivity extends ListActivity {
             
             final ListView listView = getListView();
             if (listView instanceof DragNDropListView) {
-                ((DragNDropListView) listView).setDropListener(new DropListenerImpl<Speech>(adapter, listView));
+                ((DragNDropListView) listView).setDropListener(new DropReorderListener<Speech>(adapter, datasource, listView));
                 ((DragNDropListView) listView).setRemoveListener(new RemoveListenerImpl<Speech>(adapter, listView));
                 ((DragNDropListView) listView).setDragListener(new DragListenerImpl());
             }
@@ -82,9 +83,14 @@ public class SpeechListActivity extends ListActivity {
                 final Speech speech = new CreateSpeechTask(datasource).execute().get();
                 // Save the new speech to the view.
                 adapter.add(speech);
+   
+                // Update the order of the speech.
+                new UpdateOrderTask<Speech>(datasource, speech, adapter.getCount());
+                
                 // Force user to overwrite the default name.
                 renameSpeech(speech, adapter.getCount() - 1);
                 adapter.notifyDataSetChanged();
+                
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
