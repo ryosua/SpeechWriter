@@ -14,13 +14,13 @@ import edu.psu.rcy5017.publicspeakingassistant.listener.DragListenerImpl;
 import edu.psu.rcy5017.publicspeakingassistant.listener.DropListenerImpl;
 import edu.psu.rcy5017.publicspeakingassistant.listener.RemoveListenerImpl;
 import edu.psu.rcy5017.publicspeakingassistant.model.Speech;
+import edu.psu.rcy5017.publicspeakingassistant.task.CreateSpeechTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.DeleteTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.GetAllTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.RenameSpeechTask;
 
 import android.app.ListActivity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -45,26 +45,23 @@ public class SpeechListActivity extends ListActivity {
         
         datasource = new SpeechDataSource(this);
         
-        List<Speech> values = null;
         try {
-            values = new GetAllTask<Speech>(datasource, 0).execute().get(); // pass a 0 for parent id because speech is at the top of the type hierarchy.
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        
-        if(values != null) {
+            final List<Speech> values = new GetAllTask<Speech>(datasource, 0).execute().get(); // pass a 0 for parent id because speech is at the top of the type hierarchy.
+  
             adapter = new DragNDropAdapter<Speech>(this, new int[]{R.layout.dragitem}, new int[]{R.id.TextView01}, values);
-            
             setListAdapter(adapter);
-            final ListView listView = getListView();
             
+            final ListView listView = getListView();
             if (listView instanceof DragNDropListView) {
                 ((DragNDropListView) listView).setDropListener(new DropListenerImpl<Speech>(adapter, listView));
                 ((DragNDropListView) listView).setRemoveListener(new RemoveListenerImpl<Speech>(adapter, listView));
                 ((DragNDropListView) listView).setDragListener(new DragListenerImpl());
             }
+            
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
         
         // Register the ListView  for Context menu  
@@ -82,7 +79,12 @@ public class SpeechListActivity extends ListActivity {
         case R.id.add_speech:
             
             try {
-                new CreateSpeechTask().execute().get();
+                final Speech speech = new CreateSpeechTask(datasource).execute().get();
+                // Save the new speech to the view.
+                adapter.add(speech);
+                // Force user to overwrite the default name.
+                renameSpeech(speech, adapter.getCount() - 1);
+                adapter.notifyDataSetChanged();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -204,27 +206,4 @@ public class SpeechListActivity extends ListActivity {
         startActivityForResult(intent, RequestCodes.RENAME_SPEECH_REQUEST_CODE);
     }
     
-    private class CreateSpeechTask extends AsyncTask<Void, Void, Speech> {
-        
-        private Speech speech;
-
-        @Override
-        protected Speech doInBackground(Void... params) {
-            datasource.open();
-            speech = datasource.createSpeech("New Speech");
-            datasource.close();
-            return speech;
-        }
-        
-        @Override
-        protected void onPostExecute(Speech result) {
-            // Save the new speech to the database.
-            adapter.add(speech);
-            // Force user to overwrite the default name.
-            renameSpeech(speech, adapter.getCount() - 1);
-            adapter.notifyDataSetChanged();
-        }
-        
-    }
-
 } 

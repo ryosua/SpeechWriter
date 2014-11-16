@@ -8,12 +8,12 @@ import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.NoteDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.model.Note;
+import edu.psu.rcy5017.publicspeakingassistant.task.ChangeNoteTextTask;
+import edu.psu.rcy5017.publicspeakingassistant.task.CreateNoteTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.DeleteTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.GetAllTask;
-import edu.psu.rcy5017.publicspeakingassistant.task.NoteTask;
 import android.app.ListActivity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -69,9 +69,21 @@ public class NoteListActivity extends ListActivity {
     public void onClick(View view) {
         switch (view.getId()) {
         
-        case R.id.add_note: 
-            // Create and save the new notecard to the database.
-            new CreateNoteTask().execute();
+        case R.id.add_note:
+            try {
+                // Create and save the new notecard to the database.
+                final Note note = new CreateNoteTask(datasource, noteCardID).execute().get();
+                // Save the new note to the database.
+                adapter.add(note);
+                // Force user to overwrite the default text.
+                editNote(note, adapter.getCount() - 1);
+                adapter.notifyDataSetChanged();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+       
             break;    
         }
     }
@@ -129,7 +141,7 @@ public class NoteListActivity extends ListActivity {
             adapter.notifyDataSetChanged();
             
             // Save the changes to the database.
-            new ChangeNoteTextTask(noteToUpdate).execute();
+            new ChangeNoteTextTask(datasource, noteToUpdate).execute();
         }
     }
     
@@ -141,44 +153,4 @@ public class NoteListActivity extends ListActivity {
         startActivityForResult(intent, RequestCodes.EDIT_NOTE_REQUEST_CODE);
     }
       
-    private class CreateNoteTask extends AsyncTask<Void, Void, Note> {
-        
-        private Note note;
-
-        @Override
-        protected Note doInBackground(Void... params) {
-            datasource.open();
-            note = datasource.createNote("New Note", noteCardID);
-            datasource.close();
-            return note;
-        }
-        
-        @Override
-        protected void onPostExecute(Note result) {
-            // Save the new note to the database.
-            adapter.add(note);
-            // Force user to overwrite the default text.
-            editNote(note, adapter.getCount() - 1);
-            adapter.notifyDataSetChanged();
-        }
-        
-    }
-    
-    private class ChangeNoteTextTask extends NoteTask {
-        
-        public ChangeNoteTextTask(Note note) {
-            super(note);
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            final Note note = getNote();
-            datasource.open();
-            datasource.changeNoteText(note, note.getText());
-            datasource.close();
-            return null;
-        }
-        
-    }
-     
 }

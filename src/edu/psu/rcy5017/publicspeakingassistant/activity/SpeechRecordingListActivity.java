@@ -5,7 +5,6 @@ import java.util.concurrent.ExecutionException;
 
 import android.app.ListActivity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -22,7 +21,8 @@ import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.SpeechRecordingDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.model.SpeechRecording;
 import edu.psu.rcy5017.publicspeakingassistant.task.DeleteTask;
-import edu.psu.rcy5017.publicspeakingassistant.task.SpeechRecordingTask;
+import edu.psu.rcy5017.publicspeakingassistant.task.GetAllTask;
+import edu.psu.rcy5017.publicspeakingassistant.task.RenameSpeechRecordingTask;
 
 public class SpeechRecordingListActivity extends ListActivity {
     
@@ -42,20 +42,18 @@ public class SpeechRecordingListActivity extends ListActivity {
         // Get the speechID passed from list activity.
         final Intent intent = this.getIntent();
         speechID = intent.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
-        
-        List<SpeechRecording> values = null;
+       
         try {
-            values = new GetSpeechRecordingsTask().execute().get();
+            final List<SpeechRecording> values = new GetAllTask<SpeechRecording>(datasource, speechID).execute().get();
+            
+            // Use the SimpleCursorAdapter to show the elements in a ListView.
+            adapter = new ArrayAdapter<SpeechRecording>(this, android.R.layout.simple_list_item_1, values);
+            setListAdapter(adapter);
+            
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
-        }
-        
-        if(values != null) {
-            // Use the SimpleCursorAdapter to show the elements in a ListView.
-            adapter = new ArrayAdapter<SpeechRecording>(this, android.R.layout.simple_list_item_1, values);
-            setListAdapter(adapter);
         }
        
         // Register the ListView  for Context menu  
@@ -79,7 +77,7 @@ public class SpeechRecordingListActivity extends ListActivity {
             adapter.notifyDataSetChanged();
             
             // Save the changes to the database.
-            new RenameSpeechRecordingTask(speechRecordingToUpdate).execute();
+            new RenameSpeechRecordingTask(datasource, speechRecordingToUpdate).execute();
         }
     }
     
@@ -138,34 +136,5 @@ public class SpeechRecordingListActivity extends ListActivity {
         intent.putExtra("text", speechRecording.getTitle());
         startActivityForResult(intent, RequestCodes.RENAME_SPEECH_RECORDING_REQUEST_CODE);
     }
-    
-    private class GetSpeechRecordingsTask extends AsyncTask<Void, Void, List<SpeechRecording>> {
-        
-        @Override
-        protected List<SpeechRecording> doInBackground(Void... params) {
-            datasource.open();
-            final List<SpeechRecording> values = datasource.getAllSpeechRecordings(speechID);
-            datasource.close();
-            
-            return values;
-        }
-        
-    }
-    
-    private class RenameSpeechRecordingTask extends SpeechRecordingTask {
-        
-        public RenameSpeechRecordingTask(SpeechRecording speechRecording) {
-            super(speechRecording);
-        }
 
-        @Override
-        protected Void doInBackground(Void... params) {
-            final SpeechRecording speechRecording = getSpeechRecording();
-            datasource.open();
-            datasource.renameSpeechRecording(speechRecording, speechRecording.getTitle());
-            datasource.close();
-            return null;
-        }
-    }
-    
 }

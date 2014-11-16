@@ -14,6 +14,7 @@ import edu.psu.rcy5017.publicspeakingassistant.datasource.NoteCardDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.SpeechRecordingDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.model.NoteCard;
 import edu.psu.rcy5017.publicspeakingassistant.model.SpeechRecording;
+import edu.psu.rcy5017.publicspeakingassistant.task.CreateSpeechRecordingTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.GetAllTask;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -38,11 +39,11 @@ ActionBar.TabListener {
     private static final String TAG = "MainActivity";
     
     private AudioCntl audioCntl = AudioCntl.INSTANCE;    
-    private NoteCardDataSource datasource;
+    private NoteCardDataSource noteCarddatasource;
     private long speechID;
     private ViewPager viewPager;    
     private TextView timerText;
-    final SpeechRecordingDataSource speechRecordingdatasource = new SpeechRecordingDataSource(this);
+    private SpeechRecordingDataSource speechRecordingdatasource;
     
     private int seconds;
       
@@ -57,11 +58,12 @@ ActionBar.TabListener {
         final Intent intent = this.getIntent();
         speechID = intent.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
         
-        datasource = new NoteCardDataSource(this);
+        noteCarddatasource = new NoteCardDataSource(this);
+        speechRecordingdatasource = new SpeechRecordingDataSource(this);
         
         List<NoteCard> notecards = null;
         try {
-            notecards = new GetAllTask<NoteCard>(datasource, speechID).execute().get();
+            notecards = new GetAllTask<NoteCard>(noteCarddatasource, speechID).execute().get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -206,7 +208,7 @@ ActionBar.TabListener {
     private void startRecording() {
         try {
             // Create the speech recording record in the database, name it with the date it was created.
-            final SpeechRecording speechRecording = new CreateSpeechRecordingTask().execute().get();
+            final SpeechRecording speechRecording = new CreateSpeechRecordingTask(speechRecordingdatasource, speechID).execute().get();
             
             // Start the voice recording.
             audioCntl.startRecording(speechRecording.getFile());
@@ -235,17 +237,5 @@ ActionBar.TabListener {
             });
         }
     }
-    
-    public class CreateSpeechRecordingTask extends AsyncTask<Void, Void, SpeechRecording> {
 
-        @Override
-        protected SpeechRecording doInBackground(Void... params) {
-            speechRecordingdatasource.open();
-            final SpeechRecording speechRecording = speechRecordingdatasource.createSpeechRecording(new Date().toString() , speechID);
-            speechRecordingdatasource.close();
-            
-            return speechRecording;
-        }
-
-    }
 }

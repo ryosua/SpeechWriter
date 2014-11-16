@@ -8,12 +8,12 @@ import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.NoteCardDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.model.NoteCard;
+import edu.psu.rcy5017.publicspeakingassistant.task.CreateNoteCardTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.DeleteTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.GetAllTask;
-import edu.psu.rcy5017.publicspeakingassistant.task.NoteCardTask;
+import edu.psu.rcy5017.publicspeakingassistant.task.RenameNoteCardTask;
 import android.app.ListActivity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -43,20 +43,18 @@ public class NoteCardListActivity extends ListActivity {
         // Get the speechID passed from list activity.
         final Intent intent = this.getIntent();
         speechID = intent.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
-        
-        List<NoteCard> values = null;
+       
         try {
-            values = new GetAllTask<NoteCard>(datasource, speechID).execute().get();
+            final List<NoteCard> values = new GetAllTask<NoteCard>(datasource, speechID).execute().get();
+           
+            // Use the SimpleCursorAdapter to show the elements in a ListView.
+            adapter = new ArrayAdapter<NoteCard>(this, android.R.layout.simple_list_item_1, values);
+            setListAdapter(adapter);
+            
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
-        }
-        
-        if (values != null) {
-            // Use the SimpleCursorAdapter to show the elements in a ListView.
-            adapter = new ArrayAdapter<NoteCard>(this, android.R.layout.simple_list_item_1, values);
-            setListAdapter(adapter);
         }
         
         // Register the ListView  for Context menu  
@@ -71,7 +69,21 @@ public class NoteCardListActivity extends ListActivity {
         switch (view.getId()) {
         
         case R.id.add_note_card:
-            new CreateNoteCardTask().execute();
+            
+            try {
+                final NoteCard noteCard  = new CreateNoteCardTask(datasource, speechID).execute().get();
+                // Add the note card to the adapter.
+                adapter.add(noteCard);
+                // Force user to overwrite the default name.
+                renameNoteCard(noteCard, adapter.getCount() - 1);
+                adapter.notifyDataSetChanged();
+                
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+
             break;    
         }
     }
@@ -133,7 +145,7 @@ public class NoteCardListActivity extends ListActivity {
             adapter.notifyDataSetChanged();
             
             // Save the changes to the database.
-            new RenameNoteCardTask(noteCardToUpdate).execute();
+            new RenameNoteCardTask(noteCardToUpdate, datasource).execute();
         }
     }
 
@@ -150,45 +162,5 @@ public class NoteCardListActivity extends ListActivity {
         intent.putExtra("text", noteCard.getTitle());
         startActivityForResult(intent, RequestCodes.RENAME_NOTECARD_REQUEST_CODE);
     }
-    
-    private class CreateNoteCardTask extends AsyncTask<Void, Void, NoteCard> {
-        
-        private NoteCard noteCard;
-
-        @Override
-        protected NoteCard doInBackground(Void... params) {
-            datasource.open();
-            noteCard = datasource.createNoteCard("New Note Card", speechID);
-            datasource.close();
-            return noteCard;
-        }
-        
-        @Override
-        protected void onPostExecute(NoteCard noteCard) {
-            // Save the new speech to the database.
-            adapter.add(noteCard);
-            // Force user to overwrite the default name.
-            renameNoteCard(noteCard, adapter.getCount() - 1);
-            adapter.notifyDataSetChanged();
-        }
-        
-    }
      
-    private class RenameNoteCardTask extends NoteCardTask {
-     
-        public RenameNoteCardTask(NoteCard noteCard) {
-            super(noteCard);
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            final NoteCard noteCard = getNoteCard();
-            datasource.open();
-            datasource.renameNotecard(noteCard, noteCard.getTitle());
-            datasource.close();
-            return null;
-        }
-        
-    }
-   
 }
