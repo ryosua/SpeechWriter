@@ -6,7 +6,7 @@ import android.widget.ListView;
 import com.ericharlow.DragNDrop.DragNDropAdapter;
 import com.ericharlow.DragNDrop.DropListener;
 
-public class DropListenerImpl implements DropListener {
+public class DropListenerImpl<E> implements DropListener {
     
     private final ListAdapter adapter;
     private final ListView listView;
@@ -19,7 +19,7 @@ public class DropListenerImpl implements DropListener {
     @Override
     public void onDrop(int from, int to) {
         if (adapter instanceof DragNDropAdapter) {
-            ((DragNDropAdapter)adapter).onDrop(from, to);
+            ((DragNDropAdapter<E>)adapter).onDrop(from, to);
             listView.invalidateViews();
         }
     }

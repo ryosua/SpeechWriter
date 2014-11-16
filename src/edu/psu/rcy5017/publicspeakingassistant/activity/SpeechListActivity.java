@@ -61,8 +61,8 @@ public class SpeechListActivity extends ListActivity {
             final ListView listView = getListView();
             
             if (listView instanceof DragNDropListView) {
-                ((DragNDropListView) listView).setDropListener(new DropListenerImpl(adapter, listView));
-                ((DragNDropListView) listView).setRemoveListener(new RemoveListenerImpl(adapter, listView));
+                ((DragNDropListView) listView).setDropListener(new DropListenerImpl<Speech>(adapter, listView));
+                ((DragNDropListView) listView).setRemoveListener(new RemoveListenerImpl<Speech>(adapter, listView));
                 ((DragNDropListView) listView).setDragListener(new DragListenerImpl());
             }
         }

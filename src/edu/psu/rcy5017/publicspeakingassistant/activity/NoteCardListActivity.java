@@ -68,9 +68,6 @@ public class NoteCardListActivity extends ListActivity {
      * @param view the calling view
      */
     public void onClick(View view) {
-        // Get the speechID passed from list activity.
-        final Intent intent = this.getIntent();
-       
         switch (view.getId()) {
         
         case R.id.add_note_card:
