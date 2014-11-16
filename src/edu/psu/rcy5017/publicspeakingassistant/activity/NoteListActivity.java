@@ -3,15 +3,22 @@ package edu.psu.rcy5017.publicspeakingassistant.activity;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import com.ericharlow.DragNDrop.DragNDropAdapter;
+import com.ericharlow.DragNDrop.DragNDropListView;
+
 import edu.psu.rcy5017.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.NoteDataSource;
+import edu.psu.rcy5017.publicspeakingassistant.listener.DragListenerImpl;
+import edu.psu.rcy5017.publicspeakingassistant.listener.DropReorderListener;
+import edu.psu.rcy5017.publicspeakingassistant.listener.RemoveListenerImpl;
 import edu.psu.rcy5017.publicspeakingassistant.model.Note;
 import edu.psu.rcy5017.publicspeakingassistant.task.ChangeNoteTextTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.CreateNoteTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.DeleteTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.GetAllTask;
+import edu.psu.rcy5017.publicspeakingassistant.task.UpdateOrderTask;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,7 +28,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
@@ -29,7 +35,7 @@ public class NoteListActivity extends ListActivity {
     
     private static final String TAG = "NoteListActivity";
     
-    private ArrayAdapter<Note> adapter;
+    private DragNDropAdapter<Note> adapter;
     private NoteDataSource datasource;
     private long noteCardID;
     
@@ -44,19 +50,26 @@ public class NoteListActivity extends ListActivity {
         final Intent intent = this.getIntent();
         noteCardID = intent.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
        
-        List<Note> values = null;
         try {
-            values = new GetAllTask<Note>(datasource, noteCardID).execute().get();
+            final List<Note> values = new GetAllTask<Note>(datasource, noteCardID).execute().get();
+            
+            adapter = new DragNDropAdapter<Note>(this, new int[]{R.layout.dragitem}, new int[]{R.id.TextView01}, values);
+            
+            setListAdapter(adapter);
+            
+            final ListView listView = getListView();
+            if (listView instanceof DragNDropListView) {
+                ((DragNDropListView) listView).setDropListener(new DropReorderListener<Note>(adapter, datasource, listView));
+                ((DragNDropListView) listView).setRemoveListener(new RemoveListenerImpl<Note>(adapter, listView));
+                ((DragNDropListView) listView).setDragListener(new DragListenerImpl());
+            }
+            
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        
-        if (values != null) {
-            adapter = new ArrayAdapter<Note>(this, android.R.layout.simple_list_item_1, values);
-            setListAdapter(adapter);
-        }
+      
         
         // Register the ListView  for Context menu  
         registerForContextMenu(getListView());
@@ -71,8 +84,12 @@ public class NoteListActivity extends ListActivity {
         
         case R.id.add_note:
             try {
-                // Create and save the new notecard to the database.
+                // Create and save the new note to the database.
                 final Note note = new CreateNoteTask(datasource, noteCardID).execute().get();
+                
+                // Update the order of the note.
+                new UpdateOrderTask<Note>(datasource, note, adapter.getCount());
+                
                 // Save the new note to the database.
                 adapter.add(note);
                 // Force user to overwrite the default text.

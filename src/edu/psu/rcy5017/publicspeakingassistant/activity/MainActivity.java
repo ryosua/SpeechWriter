@@ -1,6 +1,5 @@
 package edu.psu.rcy5017.publicspeakingassistant.activity;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -22,7 +21,6 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -209,6 +207,10 @@ ActionBar.TabListener {
         try {
             // Create the speech recording record in the database, name it with the date it was created.
             final SpeechRecording speechRecording = new CreateSpeechRecordingTask(speechRecordingdatasource, speechID).execute().get();
+            
+            // The order of the speech recording is not updated so it is added at the top of the list(newest first).
+            // In the list view once one item has been dropped, they all get reordered, new recordings still go to the top.
+            //new UpdateOrderTask<SpeechRecording>(speechRecordingdatasource, speechRecording, [no adapter]);
             
             // Start the voice recording.
             audioCntl.startRecording(speechRecording.getFile());

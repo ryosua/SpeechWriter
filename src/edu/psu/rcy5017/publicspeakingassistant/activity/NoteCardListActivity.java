@@ -3,15 +3,22 @@ package edu.psu.rcy5017.publicspeakingassistant.activity;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import com.ericharlow.DragNDrop.DragNDropAdapter;
+import com.ericharlow.DragNDrop.DragNDropListView;
+
 import edu.psu.rcy5017.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.NoteCardDataSource;
+import edu.psu.rcy5017.publicspeakingassistant.listener.DragListenerImpl;
+import edu.psu.rcy5017.publicspeakingassistant.listener.DropReorderListener;
+import edu.psu.rcy5017.publicspeakingassistant.listener.RemoveListenerImpl;
 import edu.psu.rcy5017.publicspeakingassistant.model.NoteCard;
 import edu.psu.rcy5017.publicspeakingassistant.task.CreateNoteCardTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.DeleteTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.GetAllTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.RenameNoteCardTask;
+import edu.psu.rcy5017.publicspeakingassistant.task.UpdateOrderTask;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,7 +28,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
@@ -29,7 +35,7 @@ public class NoteCardListActivity extends ListActivity {
     
     private static final String TAG = "NoteCardListActivity";
     
-    private ArrayAdapter<NoteCard> adapter;
+    private DragNDropAdapter<NoteCard> adapter;
     private NoteCardDataSource datasource;
     private long speechID;
    
@@ -47,9 +53,15 @@ public class NoteCardListActivity extends ListActivity {
         try {
             final List<NoteCard> values = new GetAllTask<NoteCard>(datasource, speechID).execute().get();
            
-            // Use the SimpleCursorAdapter to show the elements in a ListView.
-            adapter = new ArrayAdapter<NoteCard>(this, android.R.layout.simple_list_item_1, values);
+            adapter = new DragNDropAdapter<NoteCard>(this, new int[]{R.layout.dragitem}, new int[]{R.id.TextView01}, values);
             setListAdapter(adapter);
+            
+            final ListView listView = getListView();
+            if (listView instanceof DragNDropListView) {
+                ((DragNDropListView) listView).setDropListener(new DropReorderListener<NoteCard>(adapter, datasource, listView));
+                ((DragNDropListView) listView).setRemoveListener(new RemoveListenerImpl<NoteCard>(adapter, listView));
+                ((DragNDropListView) listView).setDragListener(new DragListenerImpl());
+            }
             
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -74,6 +86,10 @@ public class NoteCardListActivity extends ListActivity {
                 final NoteCard noteCard  = new CreateNoteCardTask(datasource, speechID).execute().get();
                 // Add the note card to the adapter.
                 adapter.add(noteCard);
+                
+                // Update the order of the note card.
+                new UpdateOrderTask<NoteCard>(datasource, noteCard, adapter.getCount());
+                
                 // Force user to overwrite the default name.
                 renameNoteCard(noteCard, adapter.getCount() - 1);
                 adapter.notifyDataSetChanged();

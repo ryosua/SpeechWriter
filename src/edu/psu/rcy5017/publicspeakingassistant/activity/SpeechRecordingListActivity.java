@@ -3,6 +3,9 @@ package edu.psu.rcy5017.publicspeakingassistant.activity;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import com.ericharlow.DragNDrop.DragNDropAdapter;
+import com.ericharlow.DragNDrop.DragNDropListView;
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import edu.psu.rcy5017.publicspeakingassistant.AudioCntl;
@@ -19,6 +21,9 @@ import edu.psu.rcy5017.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.SpeechRecordingDataSource;
+import edu.psu.rcy5017.publicspeakingassistant.listener.DragListenerImpl;
+import edu.psu.rcy5017.publicspeakingassistant.listener.DropReorderListener;
+import edu.psu.rcy5017.publicspeakingassistant.listener.RemoveListenerImpl;
 import edu.psu.rcy5017.publicspeakingassistant.model.SpeechRecording;
 import edu.psu.rcy5017.publicspeakingassistant.task.DeleteTask;
 import edu.psu.rcy5017.publicspeakingassistant.task.GetAllTask;
@@ -28,7 +33,7 @@ public class SpeechRecordingListActivity extends ListActivity {
     
     private static final String TAG = "SpeechRecordingListActivity";
     
-    private ArrayAdapter<SpeechRecording> adapter;
+    private DragNDropAdapter<SpeechRecording> adapter;
     private SpeechRecordingDataSource datasource;
     private long speechID;
     
@@ -46,10 +51,16 @@ public class SpeechRecordingListActivity extends ListActivity {
         try {
             final List<SpeechRecording> values = new GetAllTask<SpeechRecording>(datasource, speechID).execute().get();
             
-            // Use the SimpleCursorAdapter to show the elements in a ListView.
-            adapter = new ArrayAdapter<SpeechRecording>(this, android.R.layout.simple_list_item_1, values);
+            adapter = new DragNDropAdapter<SpeechRecording>(this, new int[]{R.layout.dragitem}, new int[]{R.id.TextView01}, values);
             setListAdapter(adapter);
             
+            final ListView listView = getListView();
+            if (listView instanceof DragNDropListView) {
+                ((DragNDropListView) listView).setDropListener(new DropReorderListener<SpeechRecording>(adapter, datasource, listView));
+                ((DragNDropListView) listView).setRemoveListener(new RemoveListenerImpl<SpeechRecording>(adapter, listView));
+                ((DragNDropListView) listView).setDragListener(new DragListenerImpl());
+            }
+           
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

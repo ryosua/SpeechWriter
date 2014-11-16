@@ -18,7 +18,6 @@ public class DropReorderListener<E> extends DropListenerImpl<E>  {
         this.datasource = datasource;
     }
     
-    @SuppressWarnings("unchecked")
     @Override
     public void onDrop(int from, int to) {
         super.onDrop(from, to);
