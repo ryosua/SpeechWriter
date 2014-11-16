@@ -65,19 +65,6 @@ public class SpeechDataSource extends DataSource<Speech> {
         return getDatabase().update(
                 DatabaseHelper.SPEECH_TABLE_NAME, args, DatabaseHelper.COLUMN_ID + "=" + speech.getId(), null);
     }
-    
-    /**
-     * Changes the order of the speech in the database
-     * @param speech the speech to change order
-     * @param order the new order of the speech
-     * @return the number of rows affected
-     */
-    public int changeSpeechOrder(Speech speech, int order) {
-        final ContentValues args = new ContentValues();
-        args.put(DatabaseHelper.SPEECH_ORDER, order);
-        return getDatabase().update(
-                DatabaseHelper.SPEECH_TABLE_NAME, args, DatabaseHelper.COLUMN_ID + "=" + speech.getId(), null);
-    }
       
     /**
      * Converts a cursor to a speech.
@@ -111,10 +98,18 @@ public class SpeechDataSource extends DataSource<Speech> {
     }
 
     @Override
-    public void deleteObject(Speech objectToDelete) {
-        long id = objectToDelete.getId();
+    public void deleteObject(Speech speechToDelete) {
+        long id = speechToDelete.getId();
         Log.d(TAG, "Speech deleted with id: " + id);
         getDatabase().delete(DatabaseHelper.SPEECH_TABLE_NAME, DatabaseHelper.COLUMN_ID
                 + " = " + id, null);
+    }
+   
+    @Override
+    public int ubdateOrder(Speech speechToUpdate, int newOrder) {
+        final ContentValues args = new ContentValues();
+        args.put(DatabaseHelper.SPEECH_ORDER, newOrder);
+        return getDatabase().update(
+                DatabaseHelper.SPEECH_TABLE_NAME, args, DatabaseHelper.COLUMN_ID + "=" + speechToUpdate.getId(), null);
     }
 } 

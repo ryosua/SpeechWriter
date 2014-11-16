@@ -56,20 +56,7 @@ public class NoteDataSource extends DataSource<Note> {
         return getDatabase().update(
                 DatabaseHelper.NOTE_TABLE_NAME, args, DatabaseHelper.COLUMN_ID + "=" + note.getId(), null);
     }
-    
-    /**
-     * Changes the order of the note in the database
-     * @param note the note to change order
-     * @param order the new order of the note
-     * @return the number of rows affected
-     */
-    public int changeNoteOrder(Note note, int order) {
-        final ContentValues args = new ContentValues();
-        args.put(DatabaseHelper.NOTE_ORDER, order);
-        return getDatabase().update(
-                DatabaseHelper.NOTE_TABLE_NAME, args, DatabaseHelper.COLUMN_ID + "=" + note.getId(), null);
-    }
-    
+       
     /**
      * Converts a cursor to a note.
      * @param cursor the cursor to convert
@@ -104,11 +91,19 @@ public class NoteDataSource extends DataSource<Note> {
     }
 
     @Override
-    public void deleteObject(Note objectToDelete) {
-        long id = objectToDelete.getId();
+    public void deleteObject(Note noteToDelete) {
+        long id = noteToDelete.getId();
         Log.d(TAG, "Note deleted with id: " + id);
         getDatabase().delete(DatabaseHelper.NOTE_TABLE_NAME, DatabaseHelper.COLUMN_ID
                 + " = " + id, null);
+    }
+
+    @Override
+    public int ubdateOrder(Note noteToUpdate, int newOrder) {
+        final ContentValues args = new ContentValues();
+        args.put(DatabaseHelper.NOTE_ORDER, newOrder);
+        return getDatabase().update(
+                DatabaseHelper.NOTE_TABLE_NAME, args, DatabaseHelper.COLUMN_ID + "=" + noteToUpdate.getId(), null);
     }
 
 }

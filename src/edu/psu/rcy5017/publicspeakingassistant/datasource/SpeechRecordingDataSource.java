@@ -114,11 +114,19 @@ public class SpeechRecordingDataSource extends DataSource<SpeechRecording> {
     }
 
     @Override
-    public void deleteObject(SpeechRecording objectToDelete) {
-        long id = objectToDelete.getId();
+    public void deleteObject(SpeechRecording speechRecordingToDelete) {
+        long id = speechRecordingToDelete.getId();
         Log.d(TAG, "Speech recording deleted with id: " + id);
         getDatabase().delete(DatabaseHelper.SPEECH_RECORDING_TABLE_NAME, DatabaseHelper.COLUMN_ID
                 + " = " + id, null);
+    }
+
+    @Override
+    public int ubdateOrder(SpeechRecording speechRecordingToUpdate, int newOrder) {
+        final ContentValues args = new ContentValues();
+        args.put(DatabaseHelper.SPEECH_RECORDING_ORDER, newOrder);
+        return getDatabase().update(
+                DatabaseHelper.SPEECH_RECORDING_TABLE_NAME, args, DatabaseHelper.COLUMN_ID + "=" + speechRecordingToUpdate.getId(), null);
     }
 
 }

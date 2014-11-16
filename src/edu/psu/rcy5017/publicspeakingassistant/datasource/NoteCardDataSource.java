@@ -91,11 +91,19 @@ public class NoteCardDataSource extends DataSource<NoteCard> {
     }
 
     @Override
-    public void deleteObject(NoteCard objectToDelete) {
-        long id = objectToDelete.getId();
+    public void deleteObject(NoteCard noteCardToDelete) {
+        long id = noteCardToDelete.getId();
         Log.d(TAG, "Note card deleted with id: " + id);
         getDatabase().delete(DatabaseHelper.NOTECARD_TABLE_NAME, DatabaseHelper.COLUMN_ID
                 + " = " + id, null);
+    }
+
+    @Override
+    public int ubdateOrder(NoteCard noteCardToUpdate, int newOrder) {
+        final ContentValues args = new ContentValues();
+        args.put(DatabaseHelper.NOTECARD_ORDER, newOrder);
+        return getDatabase().update(
+                DatabaseHelper.NOTECARD_TABLE_NAME, args, DatabaseHelper.COLUMN_ID + "=" + noteCardToUpdate.getId(), null);
     }
 
 }

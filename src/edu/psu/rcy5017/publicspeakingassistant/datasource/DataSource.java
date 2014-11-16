@@ -41,8 +41,16 @@ public abstract class DataSource<E> {
     
     /**
      * Deletes an object from the table.
-     * @param objectToDelete the object to delete
+     * @param elementToDelete the object to delete
      */
-    public abstract void deleteObject(E objectToDelete);
+    public abstract void deleteObject(E elementToDelete);
+    
+    /**
+     * Changes the order of the element in the database
+     * @param elementToUpdate the element to change order
+     * @param newOrder the new order of the element
+     * @return the number of rows affected
+     */
+    public abstract int ubdateOrder(E elementToUpdate, int newOrder);
  
 }
