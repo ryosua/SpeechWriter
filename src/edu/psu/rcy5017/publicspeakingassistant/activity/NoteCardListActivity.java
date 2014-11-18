@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -71,6 +72,13 @@ public class NoteCardListActivity extends ListActivity {
         
         // Register the ListView  for Context menu  
         registerForContextMenu(getListView());
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
     }
     
     /**
@@ -138,6 +146,10 @@ public class NoteCardListActivity extends ListActivity {
                 new DeleteTask<NoteCard>(datasource, noteCard).execute();
                 adapter.remove(noteCard);
                 adapter.notifyDataSetChanged();
+                return true;
+                
+            case R.id.action_settings:
+                Log.d(TAG, "options selected");
                 return true;
         }
      

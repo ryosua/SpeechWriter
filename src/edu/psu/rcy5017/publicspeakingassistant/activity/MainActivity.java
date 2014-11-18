@@ -32,8 +32,7 @@ import android.widget.TextView;
  * @author Ryan Yosua
  *
  */
-public class MainActivity extends FragmentActivity implements
-ActionBar.TabListener {
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
     private static final String TAG = "MainActivity";
     
     private AudioCntl audioCntl = AudioCntl.INSTANCE;    
@@ -131,6 +130,7 @@ ActionBar.TabListener {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            Log.d(TAG, "options selected");
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -150,11 +150,6 @@ ActionBar.TabListener {
     @Override
     public void onTabUnselected(Tab tab, FragmentTransaction ft) {
         // Do nothing.
-    }
-        
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override

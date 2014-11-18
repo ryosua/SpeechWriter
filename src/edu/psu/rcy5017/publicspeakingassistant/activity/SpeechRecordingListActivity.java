@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -75,6 +76,13 @@ public class SpeechRecordingListActivity extends ListActivity {
     }
     
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+    
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RequestCodes.RENAME_SPEECH_RECORDING_REQUEST_CODE && resultCode == RESULT_OK) {
             final long newSpeechRecordingId = data.getLongExtra("id", DefaultValues.DEFAULT_LONG_VALUE);
@@ -133,6 +141,10 @@ public class SpeechRecordingListActivity extends ListActivity {
                 new DeleteTask<SpeechRecording>(datasource, speechRecording).execute();
                 adapter.remove(speechRecording);
                 adapter.notifyDataSetChanged();
+                return true;
+                
+            case R.id.action_settings:
+                Log.d(TAG, "options selected");
                 return true;
         }
      

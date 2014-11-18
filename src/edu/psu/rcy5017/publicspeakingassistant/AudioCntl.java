@@ -6,7 +6,6 @@ import edu.psu.rcy5017.publicspeakingassistant.constant.Misc;
 
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.os.Environment;
 import android.util.Log;
 
 /**

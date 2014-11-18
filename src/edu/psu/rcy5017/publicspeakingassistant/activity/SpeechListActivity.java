@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -67,6 +68,13 @@ public class SpeechListActivity extends ListActivity {
         
         // Register the ListView  for Context menu  
         registerForContextMenu(getListView());
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
     }
 
     /**
@@ -143,6 +151,10 @@ public class SpeechListActivity extends ListActivity {
                 new DeleteTask<Speech>(datasource, speech).execute();
                 adapter.remove(speech);
                 adapter.notifyDataSetChanged();
+                return true;
+                
+            case R.id.action_settings:
+                Log.d(TAG, "options selected");
                 return true;
         }
      
