@@ -3,6 +3,7 @@
     
     <item android:id="@+id/play_speech_recording" android:title="Play" />
     <item android:id="@+id/rename_speech_recording" android:title="Rename" />
+    <item android:id="@+id/share_speech_recording" android:title="Share" />
     <item android:id="@+id/delete_speech_recording" android:title="Delete" />
     
 </menu>

@@ -2,6 +2,8 @@ package edu.psu.rcy5017.publicspeakingassistant;
 
 import java.io.IOException;
 
+import edu.psu.rcy5017.publicspeakingassistant.constant.Misc;
+
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
@@ -18,14 +20,10 @@ public enum AudioCntl {
     INSTANCE;
     
     private final String TAG = "AudioCntl";
-    private final String fileDirectory;
     private  MediaRecorder recorder;
     private  MediaPlayer player;
     
-    private AudioCntl() {
-        fileDirectory = Environment.getExternalStorageDirectory().getAbsolutePath();
-    }
-        
+       
     /**
      * Starts playing an audio recording.
      * @param fileName the name of the file to play ex: "/testRecording.3gp"
@@ -33,7 +31,7 @@ public enum AudioCntl {
     public void startPlaying(String fileName) {
         player = new MediaPlayer();
         try {
-            player.setDataSource(fileDirectory + fileName);
+            player.setDataSource(Misc.FILE_DIRECTORY + fileName + Misc.AUDIO_EXTENSION);
             player.prepare();
             player.start();
         } catch (IOException e) {
@@ -57,10 +55,10 @@ public enum AudioCntl {
         recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        recorder.setOutputFile(fileDirectory + fileName);
+        recorder.setOutputFile(Misc.FILE_DIRECTORY + fileName + Misc.AUDIO_EXTENSION);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
         
-        Log.d(TAG, fileDirectory + fileName);
+        Log.d(TAG, Misc.FILE_DIRECTORY + fileName + Misc.AUDIO_EXTENSION);
         
         try {
             recorder.prepare();

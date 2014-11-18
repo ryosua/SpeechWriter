@@ -8,7 +8,9 @@ import com.ericharlow.DragNDrop.DragNDropListView;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,6 +21,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import edu.psu.rcy5017.publicspeakingassistant.AudioCntl;
 import edu.psu.rcy5017.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
+import edu.psu.rcy5017.publicspeakingassistant.constant.Misc;
 import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.SpeechRecordingDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.listener.DragListenerImpl;
@@ -120,6 +123,11 @@ public class SpeechRecordingListActivity extends ListActivity {
             case R.id.rename_speech_recording:
                 renameSpeechRecording(speechRecording, info.position);
                 return true;
+                
+            case R.id.share_speech_recording:
+                emailSpeech(speechRecording);
+                Log.d(TAG, "Speech Recording shared");
+                return true;
        
             case R.id.delete_speech_recording:
                 new DeleteTask<SpeechRecording>(datasource, speechRecording).execute();
@@ -146,6 +154,19 @@ public class SpeechRecordingListActivity extends ListActivity {
         intent.putExtra("id", speechRecording.getId());
         intent.putExtra("text", speechRecording.getTitle());
         startActivityForResult(intent, RequestCodes.RENAME_SPEECH_RECORDING_REQUEST_CODE);
+    }
+    
+    private void emailSpeech(SpeechRecording speechRecording) {
+        final String file = Misc.FILE_DIRECTORY + speechRecording.getFile() + Misc.AUDIO_EXTENSION;
+        Log.d(TAG, "File: " + file);
+        final Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        // Set the type to 'email'.
+        shareIntent.setType("vnd.android.cursor.dir/email");
+        // The attachment.
+        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file));
+        // The mail subject.
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, file);
+        startActivity(Intent.createChooser(shareIntent , ""));
     }
 
 }
