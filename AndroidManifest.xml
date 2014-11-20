@@ -31,6 +31,7 @@
         <activity android:name="edu.psu.rcy5017.publicspeakingassistant.activity.NoteListActivity"></activity>
         <activity android:name="edu.psu.rcy5017.publicspeakingassistant.activity.EditTextActivity"></activity>
         <activity android:name="edu.psu.rcy5017.publicspeakingassistant.activity.SpeechRecordingListActivity"></activity>
+        <activity android:name="edu.psu.rcy5017.publicspeakingassistant.activity.OptionsActivity"></activity>
     </application>
 
 </manifest>
