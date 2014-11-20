@@ -1,4 +1,4 @@
-package edu.psu.rcy5017.publicspeakingassistant;
+package edu.psu.rcy5017.publicspeakingassistant.controller;
 
 import java.io.IOException;
 
