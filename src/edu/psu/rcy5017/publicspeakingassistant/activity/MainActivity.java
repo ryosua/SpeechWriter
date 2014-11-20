@@ -5,10 +5,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 
-import edu.psu.rcy5017.publicspeakingassistant.AudioCntl;
 import edu.psu.rcy5017.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.adapter.TabsPagerAdapter;
 import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
+import edu.psu.rcy5017.publicspeakingassistant.controller.AudioCntl;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.NoteCardDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.SpeechRecordingDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.model.NoteCard;
@@ -23,8 +23,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.TextView;
 
 /**
@@ -41,7 +39,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     private ViewPager viewPager;    
     private TextView timerText;
     private SpeechRecordingDataSource speechRecordingdatasource;
-    
     private int seconds;
       
     @Override
@@ -116,26 +113,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         }
     }
        
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            Log.d(TAG, "options selected");
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     @Override
     public void onTabReselected(Tab tab, FragmentTransaction ft) {
         // Do nothing.

@@ -9,6 +9,7 @@ import com.ericharlow.DragNDrop.DragNDropListView;
 import edu.psu.rcy5017.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
+import edu.psu.rcy5017.publicspeakingassistant.controller.OptionsCntl;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.SpeechDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.listener.DragListenerImpl;
 import edu.psu.rcy5017.publicspeakingassistant.listener.DropReorderListener;
@@ -39,6 +40,7 @@ public class SpeechListActivity extends ListActivity {
     
     private DragNDropAdapter<Speech> adapter;
     private SpeechDataSource datasource;
+    private final OptionsCntl optionsCntl = OptionsCntl.INSTANCE;
         
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -152,13 +154,24 @@ public class SpeechListActivity extends ListActivity {
                 adapter.remove(speech);
                 adapter.notifyDataSetChanged();
                 return true;
-                
-            case R.id.action_settings:
-                Log.d(TAG, "options selected");
-                return true;
         }
      
         return false;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Log.d(TAG, "options selected");
+            //openOptionsPage();
+            optionsCntl.openOptionsPage(this);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -222,6 +235,11 @@ public class SpeechListActivity extends ListActivity {
         intent.putExtra("id", speech.getId());
         intent.putExtra("text", speech.getTitle());
         startActivityForResult(intent, RequestCodes.RENAME_SPEECH_REQUEST_CODE);
+    }
+    
+    public void openOptionsPage() {
+        final Intent intent = new Intent(this, OptionsActivity.class);
+        startActivityForResult(intent, RequestCodes.OPEN_OPTIONS_REQUEST);
     }
     
 } 
