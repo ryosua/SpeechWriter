@@ -24,6 +24,7 @@ import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import edu.psu.rcy5017.publicspeakingassistant.constant.Misc;
 import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
 import edu.psu.rcy5017.publicspeakingassistant.controller.AudioCntl;
+import edu.psu.rcy5017.publicspeakingassistant.controller.OptionsCntl;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.SpeechRecordingDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.listener.DragListenerImpl;
 import edu.psu.rcy5017.publicspeakingassistant.listener.DropReorderListener;
@@ -39,6 +40,7 @@ public class SpeechRecordingListActivity extends ListActivity {
     
     private DragNDropAdapter<SpeechRecording> adapter;
     private SpeechRecordingDataSource datasource;
+    private final OptionsCntl optionsCntl = OptionsCntl.INSTANCE;
     private long speechID;
     
     @Override
@@ -142,13 +144,23 @@ public class SpeechRecordingListActivity extends ListActivity {
                 adapter.remove(speechRecording);
                 adapter.notifyDataSetChanged();
                 return true;
-                
-            case R.id.action_settings:
-                Log.d(TAG, "options selected");
-                return true;
         }
      
         return false;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Log.d(TAG, "options selected");
+            optionsCntl.openOptionsPage(this);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
       
     private void playSpeechRecording(SpeechRecording speechRecording) {

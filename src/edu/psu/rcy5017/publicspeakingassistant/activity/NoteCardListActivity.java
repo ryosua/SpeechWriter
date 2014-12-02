@@ -9,6 +9,7 @@ import com.ericharlow.DragNDrop.DragNDropListView;
 import edu.psu.rcy5017.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
 import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
+import edu.psu.rcy5017.publicspeakingassistant.controller.OptionsCntl;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.NoteCardDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.listener.DragListenerImpl;
 import edu.psu.rcy5017.publicspeakingassistant.listener.DropReorderListener;
@@ -38,6 +39,7 @@ public class NoteCardListActivity extends ListActivity {
     
     private DragNDropAdapter<NoteCard> adapter;
     private NoteCardDataSource datasource;
+    private final OptionsCntl optionsCntl = OptionsCntl.INSTANCE;
     private long speechID;
    
     @Override
@@ -154,6 +156,20 @@ public class NoteCardListActivity extends ListActivity {
         }
      
         return false;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Log.d(TAG, "options selected");
+            optionsCntl.openOptionsPage(this);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
     
     @Override
