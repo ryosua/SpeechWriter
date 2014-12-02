@@ -167,7 +167,6 @@ public class SpeechListActivity extends ListActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Log.d(TAG, "options selected");
-            //openOptionsPage();
             optionsCntl.openOptionsPage(this);
             return true;
         }
@@ -235,11 +234,5 @@ public class SpeechListActivity extends ListActivity {
         intent.putExtra("id", speech.getId());
         intent.putExtra("text", speech.getTitle());
         startActivityForResult(intent, RequestCodes.RENAME_SPEECH_REQUEST_CODE);
-    }
-    
-    public void openOptionsPage() {
-        final Intent intent = new Intent(this, OptionsActivity.class);
-        startActivityForResult(intent, RequestCodes.OPEN_OPTIONS_REQUEST);
-    }
-    
+    }  
 } 
