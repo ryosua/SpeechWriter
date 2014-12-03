@@ -7,12 +7,15 @@ import android.os.Environment;
  * @author Ryan Yosua
  *
  */
-public final class Misc {
+public final class MiscConstants {
     
     public static final String FILE_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String AUDIO_EXTENSION = ".3gp";
+    public static final int MIN_FONT_SIZE = 25;
+    public static final int MAX_FONT_SIZE = 75;
+    public static final String PREFERENCES_NAME = "PublicSpeakingPreferences";
     
-    private Misc() {
+    private MiscConstants() {
         // Prevent the instantiation of this class.
     }
 

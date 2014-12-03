@@ -2,7 +2,7 @@ package edu.psu.rcy5017.publicspeakingassistant.controller;
 
 import java.io.IOException;
 
-import edu.psu.rcy5017.publicspeakingassistant.constant.Misc;
+import edu.psu.rcy5017.publicspeakingassistant.constant.MiscConstants;
 
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -30,7 +30,7 @@ public enum AudioCntl {
     public void startPlaying(String fileName) {
         player = new MediaPlayer();
         try {
-            player.setDataSource(Misc.FILE_DIRECTORY + fileName + Misc.AUDIO_EXTENSION);
+            player.setDataSource(MiscConstants.FILE_DIRECTORY + fileName + MiscConstants.AUDIO_EXTENSION);
             player.prepare();
             player.start();
         } catch (IOException e) {
@@ -54,10 +54,10 @@ public enum AudioCntl {
         recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        recorder.setOutputFile(Misc.FILE_DIRECTORY + fileName + Misc.AUDIO_EXTENSION);
+        recorder.setOutputFile(MiscConstants.FILE_DIRECTORY + fileName + MiscConstants.AUDIO_EXTENSION);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
         
-        Log.d(TAG, Misc.FILE_DIRECTORY + fileName + Misc.AUDIO_EXTENSION);
+        Log.d(TAG, MiscConstants.FILE_DIRECTORY + fileName + MiscConstants.AUDIO_EXTENSION);
         
         try {
             recorder.prepare();

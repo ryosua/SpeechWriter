@@ -4,11 +4,15 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import edu.psu.rcy5017.publicspeakingassistant.R;
+import edu.psu.rcy5017.publicspeakingassistant.constant.MiscConstants;
 import edu.psu.rcy5017.publicspeakingassistant.datasource.NoteDataSource;
 import edu.psu.rcy5017.publicspeakingassistant.model.Note;
 import edu.psu.rcy5017.publicspeakingassistant.task.GetAllTask;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +21,8 @@ import android.widget.TextView;
 
 public class NoteCardFragement extends Fragment {
     
-    private final float FONT_SIZE = 40;
+    private static final String TAG = "NoteCardFragement";
+   
     private NoteDataSource datasource;
     private final long noteCardID;
    
@@ -52,9 +57,14 @@ public class NoteCardFragement extends Fragment {
                 final TextView text = new TextView(this.getActivity());
                 text.setText(note.getText());
                 
+                // Load text size from preferences.
+                final SharedPreferences settings = getActivity().getSharedPreferences(MiscConstants.PREFERENCES_NAME, Context.MODE_PRIVATE);
+                final float defaultSize = (float) (MiscConstants.MAX_FONT_SIZE + MiscConstants.MIN_FONT_SIZE) / 2;
+                final int textSize = settings.getInt("textSize", (int) defaultSize);
+                
                 // Change text size.
-                text.setTextSize(FONT_SIZE);
-                 
+                text.setTextSize(textSize);
+                                
                 layout.addView(text);
             }
         }

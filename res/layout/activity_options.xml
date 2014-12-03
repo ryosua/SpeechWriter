@@ -2,6 +2,21 @@
 <AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-    
+
+    <SeekBar
+        android:id="@+id/font_size_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_x="0dp"
+        android:layout_y="1dp" />
+
+    <TextView
+        android:id="@+id/example_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="5dp"
+        android:layout_y="88dp"
+        android:text="Font Size"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </AbsoluteLayout>

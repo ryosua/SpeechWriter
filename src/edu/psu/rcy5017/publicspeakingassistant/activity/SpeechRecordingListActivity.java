@@ -21,7 +21,7 @@ import android.widget.ListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import edu.psu.rcy5017.publicspeakingassistant.R;
 import edu.psu.rcy5017.publicspeakingassistant.constant.DefaultValues;
-import edu.psu.rcy5017.publicspeakingassistant.constant.Misc;
+import edu.psu.rcy5017.publicspeakingassistant.constant.MiscConstants;
 import edu.psu.rcy5017.publicspeakingassistant.constant.RequestCodes;
 import edu.psu.rcy5017.publicspeakingassistant.controller.AudioCntl;
 import edu.psu.rcy5017.publicspeakingassistant.controller.OptionsCntl;
@@ -181,7 +181,7 @@ public class SpeechRecordingListActivity extends ListActivity {
     }
     
     private void emailSpeech(SpeechRecording speechRecording) {
-        final String file = Misc.FILE_DIRECTORY + speechRecording.getFile() + Misc.AUDIO_EXTENSION;
+        final String file = MiscConstants.FILE_DIRECTORY + speechRecording.getFile() + MiscConstants.AUDIO_EXTENSION;
         Log.d(TAG, "File: " + file);
         final Intent shareIntent = new Intent(Intent.ACTION_SEND);
         // Set the type to 'email'.

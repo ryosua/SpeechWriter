@@ -34,9 +34,7 @@ public class EditTextActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_text_activity);
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        
-        Log.d(TAG, "created");
-    
+
         textField = (EditText) findViewById(R.id.edit_text_speech_title);
         
         // Create a speech object from data passed from list activity.
