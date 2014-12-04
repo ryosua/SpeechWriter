@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="edu.psu.rcy5017.publicspeakingassistant"
+    package="edu.psu.rcy5017.speechwriter"
     android:versionCode="1"
     android:versionName="1.0" >
     
@@ -17,7 +17,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="edu.psu.rcy5017.publicspeakingassistant.activity.SplashScreenActivity"
+            android:name="edu.psu.rcy5017.speechwriter.activity.SplashScreenActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,13 +25,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="edu.psu.rcy5017.publicspeakingassistant.activity.MainActivity"></activity>
-        <activity android:name="edu.psu.rcy5017.publicspeakingassistant.activity.SpeechListActivity"></activity>
-        <activity android:name="edu.psu.rcy5017.publicspeakingassistant.activity.NoteCardListActivity"></activity>
-        <activity android:name="edu.psu.rcy5017.publicspeakingassistant.activity.NoteListActivity"></activity>
-        <activity android:name="edu.psu.rcy5017.publicspeakingassistant.activity.EditTextActivity"></activity>
-        <activity android:name="edu.psu.rcy5017.publicspeakingassistant.activity.SpeechRecordingListActivity"></activity>
-        <activity android:name="edu.psu.rcy5017.publicspeakingassistant.activity.OptionsActivity"></activity>
+        <activity android:name="edu.psu.rcy5017.speechwriter.activity.MainActivity"></activity>
+        <activity android:name="edu.psu.rcy5017.speechwriter.activity.SpeechListActivity"></activity>
+        <activity android:name="edu.psu.rcy5017.speechwriter.activity.NoteCardListActivity"></activity>
+        <activity android:name="edu.psu.rcy5017.speechwriter.activity.NoteListActivity"></activity>
+        <activity android:name="edu.psu.rcy5017.speechwriter.activity.EditTextActivity"></activity>
+        <activity android:name="edu.psu.rcy5017.speechwriter.activity.SpeechRecordingListActivity"></activity>
+        <activity android:name="edu.psu.rcy5017.speechwriter.activity.OptionsActivity"></activity>
     </application>
 
 </manifest>
