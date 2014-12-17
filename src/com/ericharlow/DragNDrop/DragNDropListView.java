@@ -75,9 +75,10 @@ public class DragNDropListView extends ListView {
 			mDragMode = true;
 		}
 
-		if (!mDragMode) 
-			return super.onTouchEvent(ev);
-
+		if (!mDragMode) {
+		    return super.onTouchEvent(ev);
+		}
+		
 		switch (action) {
 			case MotionEvent.ACTION_DOWN:
 				mStartPosition = pointToPosition(x,y);
@@ -102,17 +103,20 @@ public class DragNDropListView extends ListView {
 	                mDragMode = false;
 	                mEndPosition = pointToPosition(x,y);
 	                stopDrag(mStartPosition - getFirstVisiblePosition());
-	                if (mDropListener != null && mStartPosition != INVALID_POSITION && mEndPosition != INVALID_POSITION) 
-	                     mDropListener.onDrop(mStartPosition, mEndPosition);
+	                if (mDropListener != null && mStartPosition != INVALID_POSITION && mEndPosition != INVALID_POSITION) {
+	                    mDropListener.onDrop(mStartPosition, mEndPosition);
+	                }
+	                     
 	                return super.onTouchEvent(ev);
 	            }
 			default:
 				mDragMode = false;
 				mEndPosition = pointToPosition(x,y);
 				stopDrag(mStartPosition - getFirstVisiblePosition());
-				if (mDropListener != null && mStartPosition != INVALID_POSITION && mEndPosition != INVALID_POSITION) 
-	        		 mDropListener.onDrop(mStartPosition, mEndPosition);
-			
+				if (mDropListener != null && mStartPosition != INVALID_POSITION && mEndPosition != INVALID_POSITION) {
+				    mDropListener.onDrop(mStartPosition, mEndPosition);
+				}
+	        		 
 				break;
 		}
 		return true;
@@ -128,8 +132,9 @@ public class DragNDropListView extends ListView {
 					.getSystemService(Context.WINDOW_SERVICE);
 			mWindowManager.updateViewLayout(mDragView, layoutParams);
 
-			if (mDragListener != null)
-				mDragListener.onDrag(x, y, null);// change null to "this" when ready to use
+			if (mDragListener != null) {
+			    mDragListener.onDrag(x, y, null);// change null to "this" when ready to use
+			}
 		}
 	}
 
@@ -138,11 +143,14 @@ public class DragNDropListView extends ListView {
 		stopDrag(itemIndex);
 
 		View item = getChildAt(itemIndex);
-		if (item == null) return;
+		if (item == null) {
+		    return;
+		}
 		item.setDrawingCacheEnabled(true);
-		if (mDragListener != null)
-			mDragListener.onStartDrag(item);
-		
+		if (mDragListener != null) {
+		    mDragListener.onStartDrag(item);
+		}
+			
         // Create a copy of the drawing cache so that it does not get recycled
         // by the framework when the list tries to clean up memory
         Bitmap bitmap = Bitmap.createBitmap(item.getDrawingCache());
@@ -174,8 +182,9 @@ public class DragNDropListView extends ListView {
 	// destroy drag view
 	private void stopDrag(int itemIndex) {
 		if (mDragView != null) {
-			if (mDragListener != null)
-				mDragListener.onStopDrag(getChildAt(itemIndex));
+			if (mDragListener != null) {
+			    mDragListener.onStopDrag(getChildAt(itemIndex));
+			}
             mDragView.setVisibility(GONE);
             WindowManager wm = (WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE);
             wm.removeView(mDragView);
