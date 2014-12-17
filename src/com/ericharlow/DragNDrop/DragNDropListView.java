@@ -192,26 +192,4 @@ public class DragNDropListView extends ListView {
             mDragView = null;
         }
 	}
-
-//	private GestureDetector createFlingDetector() {
-//		return new GestureDetector(getContext(), new SimpleOnGestureListener() {
-//            @Override
-//            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-//                    float velocityY) {         	
-//                if (mDragView != null) {              	
-//                	int deltaX = (int)Math.abs(e1.getX()-e2.getX());
-//                	int deltaY = (int)Math.abs(e1.getY() - e2.getY());
-//               
-//                	if (deltaX > mDragView.getWidth()/2 && deltaY < mDragView.getHeight()) {
-//                		mRemoveListener.onRemove(mStartPosition);
-//                	}
-//                	
-//                	stopDrag(mStartPosition - getFirstVisiblePosition());
-//
-//                    return true;
-//                }
-//                return false;
-//            }
-//        });
-//	}
 }
