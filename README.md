@@ -1,7 +1,7 @@
 Speech Writer
 =======================
 
-An Android app for writing speech outlines and presenting speeches. Use this app when giving a speech instead of a notes written on index cards.
+An Android app for writing speech outlines and presenting speeches. Use this app when giving a speech instead of using notes written on index cards.
 
 [Download on Google Play](https://play.google.com/store/apps/details?id=edu.psu.rcy5017.speechwriter)
 
