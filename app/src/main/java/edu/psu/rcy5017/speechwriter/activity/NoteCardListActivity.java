@@ -1,29 +1,15 @@
 package edu.psu.rcy5017.speechwriter.activity;
 
-import android.app.ListActivity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ListView;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import com.ericharlow.DragNDrop.DragNDropAdapter;
 import com.ericharlow.DragNDrop.DragNDropListView;
-
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import edu.psu.rcy5017.speechwriter.R;
 import edu.psu.rcy5017.speechwriter.constant.DefaultValues;
 import edu.psu.rcy5017.speechwriter.constant.RequestCodes;
 import edu.psu.rcy5017.speechwriter.controller.OptionsCntl;
-import edu.psu.rcy5017.speechwriter.controller.SpeecherAdController;
 import edu.psu.rcy5017.speechwriter.datasource.NoteCardDataSource;
 import edu.psu.rcy5017.speechwriter.listener.DragListenerImpl;
 import edu.psu.rcy5017.speechwriter.listener.DropReorderListener;
@@ -34,6 +20,18 @@ import edu.psu.rcy5017.speechwriter.task.DeleteTask;
 import edu.psu.rcy5017.speechwriter.task.GetAllTask;
 import edu.psu.rcy5017.speechwriter.task.RenameNoteCardTask;
 import edu.psu.rcy5017.speechwriter.task.UpdateOrderTask;
+import android.app.ListActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.ListView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class NoteCardListActivity extends ListActivity {
     
@@ -75,10 +73,7 @@ public class NoteCardListActivity extends ListActivity {
         }
         
         // Register the ListView  for Context menu  
-
-        // Show Speecher ad.
-        final SpeecherAdController adController = new SpeecherAdController(this);
-        adController.showSpeecherDialog();
+        registerForContextMenu(getListView());
     }
     
     @Override
@@ -212,10 +207,10 @@ public class NoteCardListActivity extends ListActivity {
 
     private void renameNoteCard(NoteCard noteCard, int position) {
         final Intent intent = new Intent(this, EditTextActivity.class);
-        intent.putExtra("position", position);
+        intent.putExtra("position", position );
         intent.putExtra("id", noteCard.getId());
         intent.putExtra("text", noteCard.getTitle());
         startActivityForResult(intent, RequestCodes.RENAME_NOTECARD_REQUEST_CODE);
     }
-
+     
 }
