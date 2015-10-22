@@ -123,7 +123,13 @@ public class NoteCardListActivity extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         v.showContextMenu();
     }
-    
+
+    /**
+     * For the options menu.
+     * @param menu
+     * @param v
+     * @param menuInfo
+     */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
             ContextMenuInfo menuInfo) {
