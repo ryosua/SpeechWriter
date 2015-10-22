@@ -1,12 +1,16 @@
 package edu.psu.rcy5017.speechwriter.activity;
 
-import edu.psu.rcy5017.speechwriter.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Window;
+
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+
+import edu.psu.rcy5017.speechwriter.R;
+import edu.psu.rcy5017.speechwriter.constant.MixPanelCodes;
 
 public class SplashScreenActivity extends Activity {
     
@@ -22,7 +26,12 @@ public class SplashScreenActivity extends Activity {
         setContentView(R.layout.activity_splash);
         
         Log.d(TAG, "Splash activity started");
-        
+
+        // Record activity in mixpanel.
+        final MixpanelAPI mixpanel = MixpanelAPI.getInstance(this.getApplicationContext(), MixPanelCodes.MIXPANEL_TOKEN);
+        mixpanel.track("Splash Screen Started");
+        mixpanel.flush();
+
         final int SPLASH_TIME_OUT = 1500;
  
         new Handler().postDelayed(new Runnable() {
