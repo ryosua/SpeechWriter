@@ -16,6 +16,8 @@ public class SplashScreenActivity extends Activity {
     
     private static final String TAG = "SplashScreenActivity";
 
+    private MixpanelAPI mixpanel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,9 +30,8 @@ public class SplashScreenActivity extends Activity {
         Log.d(TAG, "Splash activity started");
 
         // Record activity in mixpanel.
-        final MixpanelAPI mixpanel = MixpanelAPI.getInstance(this.getApplicationContext(), MixPanelCodes.MIXPANEL_TOKEN);
+        mixpanel = MixpanelAPI.getInstance(this.getApplicationContext(), MixPanelCodes.MIXPANEL_TOKEN);
         mixpanel.track("Splash Screen Started");
-        mixpanel.flush();
 
         final int SPLASH_TIME_OUT = 1500;
  
@@ -52,6 +53,14 @@ public class SplashScreenActivity extends Activity {
                 finish();
             }
         }, SPLASH_TIME_OUT);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Send mixpanel data when the app is closed.
+        mixpanel.flush();
+        Log.d(TAG, "Flushing data .............");
     }
     
 }
