@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutionException;
 import edu.psu.rcy5017.speechwriter.R;
 import edu.psu.rcy5017.speechwriter.adapter.TabsPagerAdapter;
 import edu.psu.rcy5017.speechwriter.constant.DefaultValues;
+import edu.psu.rcy5017.speechwriter.constant.MixPanelCodes;
 import edu.psu.rcy5017.speechwriter.controller.AudioCntl;
 import edu.psu.rcy5017.speechwriter.datasource.NoteCardDataSource;
 import edu.psu.rcy5017.speechwriter.datasource.SpeechRecordingDataSource;
@@ -24,6 +25,8 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 /**
  * The activity that displays notes and speech time, while the speaker is giving a speech.
@@ -47,6 +50,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         setContentView(R.layout.activity_main);
 
         Log.d(TAG, "Main activity started");
+
+        // Record activity in mixpanel.
+        final MixpanelAPI mixpanel = MixpanelAPI.getInstance(this, MixPanelCodes.MIXPANEL_TOKEN);
+        mixpanel.track("Speech Presented");
 
         // Get speechId from intent.
         final Intent intent = this.getIntent();
