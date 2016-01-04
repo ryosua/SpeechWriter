@@ -28,3 +28,6 @@ proguard/
 
 #API Codes
 MixPanelCodes.java
+
+app/app.iml
+speech_writer.iml
