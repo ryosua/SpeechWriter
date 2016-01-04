@@ -90,7 +90,7 @@ public class SpeechListActivity extends ListActivity {
         case R.id.add_speech:
             
             try {
-                final Speech speech = new CreateSpeechTask(datasource).execute().get();
+                final Speech speech = new CreateSpeechTask(datasource, this).execute().get();
                 // Save the new speech to the view.
                 adapter.add(speech);
    
