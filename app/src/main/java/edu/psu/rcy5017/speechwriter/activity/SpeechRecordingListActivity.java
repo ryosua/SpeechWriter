@@ -5,6 +5,7 @@ import java.util.concurrent.ExecutionException;
 
 import com.ericharlow.DragNDrop.DragNDropAdapter;
 import com.ericharlow.DragNDrop.DragNDropListView;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import edu.psu.rcy5017.speechwriter.R;
 import edu.psu.rcy5017.speechwriter.constant.DefaultValues;
 import edu.psu.rcy5017.speechwriter.constant.MiscConstants;
+import edu.psu.rcy5017.speechwriter.constant.MixPanelCodes;
 import edu.psu.rcy5017.speechwriter.constant.RequestCodes;
 import edu.psu.rcy5017.speechwriter.controller.AudioCntl;
 import edu.psu.rcy5017.speechwriter.controller.OptionsCntl;
@@ -36,7 +38,7 @@ import edu.psu.rcy5017.speechwriter.task.RenameSpeechRecordingTask;
 
 public class SpeechRecordingListActivity extends ListActivity {
     
-    private static final String TAG = "SpeechRecordingListActivity";
+    private static final String TAG = "SpeechRecordingListA...";
     
     private DragNDropAdapter<SpeechRecording> adapter;
     private SpeechRecordingDataSource datasource;
@@ -166,6 +168,10 @@ public class SpeechRecordingListActivity extends ListActivity {
     private void playSpeechRecording(SpeechRecording speechRecording) {
         final AudioCntl audioCntl = AudioCntl.INSTANCE;
         audioCntl.startPlaying(speechRecording.getFile());
+
+        // Record activity in mixpanel.
+        final MixpanelAPI mixpanel = MixpanelAPI.getInstance(this.getApplicationContext(), MixPanelCodes.MIXPANEL_TOKEN);
+        mixpanel.track("Recording Played");
     }
     
     /**
