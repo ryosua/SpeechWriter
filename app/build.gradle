@@ -8,8 +8,8 @@ android {
         applicationId "edu.psu.rcy5017.speechwriter"
         minSdkVersion 14
         targetSdkVersion 20
-        versionCode 4
-        versionName "1.2.1"
+        versionCode 5
+        versionName "1.2.2"
     }
     buildTypes {
         release {
