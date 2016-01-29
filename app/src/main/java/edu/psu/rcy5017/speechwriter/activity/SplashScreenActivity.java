@@ -10,6 +10,9 @@ import android.view.Window;
 
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
+import java.util.Date;
+import java.util.UUID;
+
 import edu.psu.rcy5017.speechwriter.R;
 import edu.psu.rcy5017.speechwriter.constant.MixPanelCodes;
 
@@ -35,15 +38,30 @@ public class SplashScreenActivity extends Activity {
 
         mixpanel = MixpanelAPI.getInstance(this.getApplicationContext(), MixPanelCodes.MIXPANEL_TOKEN);
 
+
         // Record that the app has been installed for the first time.
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         if (settings.getBoolean("first_time", true)) {
             Log.d(TAG, "App is being used for the first time.");
 
+            // Generate and store UUID.
+            final String userID = UUID.randomUUID().toString();
+            settings.edit().putString("user_id", userID).commit();
+            Log.d(TAG, "userID: " + userID );
+
+            // Identify user.
+            mixpanel.getPeople().identify(userID);
+            mixpanel.getPeople().set("Install Date", new Date().toString());
+
             mixpanel.track("App Installed");
 
             settings.edit().putBoolean("first_time", false).commit();
         } else {
+            // Identify user using saved UUID.
+            final String userID = settings.getString("user_id", "-1");
+            mixpanel.getPeople().identify(userID);
+            Log.d(TAG, "userID: " + userID);
+
             Log.d(TAG, "The app has been used before.");
         }
 

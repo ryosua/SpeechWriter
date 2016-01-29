@@ -32,6 +32,9 @@
         <activity android:name="edu.psu.rcy5017.speechwriter.activity.EditTextActivity"></activity>
         <activity android:name="edu.psu.rcy5017.speechwriter.activity.SpeechRecordingListActivity"></activity>
         <activity android:name="edu.psu.rcy5017.speechwriter.activity.OptionsActivity"></activity>
+
+        <activity android:name="com.mixpanel.android.surveys.SurveyActivity"
+            android:theme="@style/com_mixpanel_android_SurveyActivityTheme"/>
     </application>
 
 </manifest>
