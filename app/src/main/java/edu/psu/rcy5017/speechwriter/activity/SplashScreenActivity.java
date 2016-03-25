@@ -67,8 +67,13 @@ public class SplashScreenActivity extends Activity {
 
         mixpanel.track("Splash Screen Started");
 
+        // Get how many times the Speecher ad has been shown.
+        final int numberOfTimesTheAdHasBeenShown = settings.getInt("speecher_ad_shown", 0);
+
+        // Increment the count.
+        settings.edit().putInt("speecher_ad_shown", numberOfTimesTheAdHasBeenShown + 1);
+
         final int SPLASH_TIME_OUT = 1500;
- 
         new Handler().postDelayed(new Runnable() {
  
             /*
@@ -79,10 +84,19 @@ public class SplashScreenActivity extends Activity {
             @Override
             public void run() {
                 // This method will be executed once the timer is over
-                // Start app main activity
-                Intent i = new Intent(SplashScreenActivity.this, SpeechListActivity.class);
-                startActivity(i);
-        
+
+                Intent speechListIntent = new Intent(SplashScreenActivity.this, SpeechListActivity.class);
+                Intent speecherAdIntent = new Intent(SplashScreenActivity.this, SpeecherAdActivity.class);
+
+                // Determine whether or not to show the Speecher ad.
+                final int NUMBER_OF_TIMES_TO_SHOW_AD = 3;
+                boolean showAd = false;
+                if (numberOfTimesTheAdHasBeenShown < NUMBER_OF_TIMES_TO_SHOW_AD) {
+                    startActivity(speecherAdIntent);
+                } else {
+                    startActivity(speechListIntent);
+                }
+
                 // close this activity
                 finish();
             }
