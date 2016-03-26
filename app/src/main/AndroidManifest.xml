@@ -2,39 +2,43 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.psu.rcy5017.speechwriter"
     android:versionCode="1"
-    android:versionName="1.0" >
-    
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    android:versionName="1.0">
 
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="20" />
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
-            android:name="edu.psu.rcy5017.speechwriter.activity.SplashScreenActivity"
-            android:label="@string/app_name" >
+            android:name=".activity.SplashScreenActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="edu.psu.rcy5017.speechwriter.activity.MainActivity"></activity>
-        <activity android:name="edu.psu.rcy5017.speechwriter.activity.SpeechListActivity"></activity>
-        <activity android:name="edu.psu.rcy5017.speechwriter.activity.NoteCardListActivity"></activity>
-        <activity android:name="edu.psu.rcy5017.speechwriter.activity.NoteListActivity"></activity>
-        <activity android:name="edu.psu.rcy5017.speechwriter.activity.EditTextActivity"></activity>
-        <activity android:name="edu.psu.rcy5017.speechwriter.activity.SpeechRecordingListActivity"></activity>
-        <activity android:name="edu.psu.rcy5017.speechwriter.activity.OptionsActivity"></activity>
-
-        <activity android:name="com.mixpanel.android.surveys.SurveyActivity"
-            android:theme="@style/com_mixpanel_android_SurveyActivityTheme"/>
+        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.SpeechListActivity" />
+        <activity android:name=".activity.NoteCardListActivity" />
+        <activity android:name=".activity.NoteListActivity" />
+        <activity android:name=".activity.EditTextActivity" />
+        <activity android:name=".activity.SpeechRecordingListActivity" />
+        <activity android:name=".activity.OptionsActivity" />
+        <activity
+            android:name="com.mixpanel.android.surveys.SurveyActivity"
+            android:theme="@style/com_mixpanel_android_SurveyActivityTheme" />
+        <activity android:name=".activity.SpeecherAdActivity"></activity>
     </application>
 
 </manifest>
