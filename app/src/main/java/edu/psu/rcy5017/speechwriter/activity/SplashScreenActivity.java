@@ -69,9 +69,12 @@ public class SplashScreenActivity extends Activity {
 
         // Get how many times the Speecher ad has been shown.
         final int numberOfTimesTheAdHasBeenShown = settings.getInt("speecher_ad_shown", 0);
+        Log.d(TAG, "Number of times the ad has been shown: " + numberOfTimesTheAdHasBeenShown);
 
         // Increment the count.
-        settings.edit().putInt("speecher_ad_shown", numberOfTimesTheAdHasBeenShown + 1);
+        if (numberOfTimesTheAdHasBeenShown < 3) {
+            settings.edit().putInt("speecher_ad_shown", numberOfTimesTheAdHasBeenShown + 1).commit();
+        }
 
         final int SPLASH_TIME_OUT = 1500;
         new Handler().postDelayed(new Runnable() {

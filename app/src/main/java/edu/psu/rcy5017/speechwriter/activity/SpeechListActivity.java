@@ -1,10 +1,23 @@
 package edu.psu.rcy5017.speechwriter.activity;
 
-import java.util.List;
-import java.util.concurrent.ExecutionException;
+import android.app.ListActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.ListView;
 
 import com.ericharlow.DragNDrop.DragNDropAdapter;
 import com.ericharlow.DragNDrop.DragNDropListView;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import edu.psu.rcy5017.speechwriter.R;
 import edu.psu.rcy5017.speechwriter.constant.DefaultValues;
@@ -20,19 +33,6 @@ import edu.psu.rcy5017.speechwriter.task.DeleteTask;
 import edu.psu.rcy5017.speechwriter.task.GetAllTask;
 import edu.psu.rcy5017.speechwriter.task.RenameSpeechTask;
 import edu.psu.rcy5017.speechwriter.task.UpdateOrderTask;
-
-import android.app.ListActivity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ListView;
 
 public class SpeechListActivity extends ListActivity {
     
@@ -87,28 +87,28 @@ public class SpeechListActivity extends ListActivity {
     
         switch (view.getId()) {
         
-        case R.id.add_speech:
-            
-            try {
-                final Speech speech = new CreateSpeechTask(datasource, this).execute().get();
-                // Save the new speech to the view.
-                adapter.add(speech);
-   
-                // Update the order of the speech.
-                new UpdateOrderTask<Speech>(datasource, speech, adapter.getCount());
-                
-                // Force user to overwrite the default name.
-                renameSpeech(speech, adapter.getCount() - 1);
-                adapter.notifyDataSetChanged();
-                
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
+            case R.id.add_speech:
+
+                try {
+                    final Speech speech = new CreateSpeechTask(datasource, this).execute().get();
+                    // Save the new speech to the view.
+                    adapter.add(speech);
+
+                    // Update the order of the speech.
+                    new UpdateOrderTask<Speech>(datasource, speech, adapter.getCount());
+
+                    // Force user to overwrite the default name.
+                    renameSpeech(speech, adapter.getCount() - 1);
+                    adapter.notifyDataSetChanged();
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+                break;
             }
-            
-            break;    
-        }
     }
        
     @Override
