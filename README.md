@@ -1,5 +1,6 @@
 Speech Writer
 =======================
+[![Code Climate](https://codeclimate.com/github/ryosua/SpeechWriter/badges/gpa.svg)](https://codeclimate.com/github/ryosua/SpeechWriter)
 
 An Android app for writing speech outlines and presenting speeches. Use this app when giving a speech instead of using notes written on index cards.
 
