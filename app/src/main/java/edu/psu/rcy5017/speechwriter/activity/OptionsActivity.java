@@ -2,7 +2,7 @@ package edu.psu.rcy5017.speechwriter.activity;
 
 import edu.psu.rcy5017.speechwriter.R;
 import edu.psu.rcy5017.speechwriter.constant.MiscConstants;
-import edu.psu.rcy5017.speechwriter.constant.MixPanelCodes;
+//import edu.psu.rcy5017.speechwriter.constant.MixPanelCodes;
 import edu.psu.rcy5017.speechwriter.listener.ChangeFontSizeListener;
 import android.app.Activity;
 import android.content.Context;
@@ -45,8 +45,8 @@ public class OptionsActivity extends Activity {
         fontSizeControl.setOnSeekBarChangeListener(listener);
 
         // Record activity in mixpanel.
-        final MixpanelAPI mixpanel = MixpanelAPI.getInstance(this.getApplicationContext(), MixPanelCodes.MIXPANEL_TOKEN);
-        mixpanel.track("Options Screen Started");
+        //final MixpanelAPI mixpanel = MixpanelAPI.getInstance(this.getApplicationContext(), MixPanelCodes.MIXPANEL_TOKEN);
+        //mixpanel.track("Options Screen Started");
     }
     
     @Override

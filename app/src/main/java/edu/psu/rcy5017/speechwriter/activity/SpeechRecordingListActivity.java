@@ -23,7 +23,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import edu.psu.rcy5017.speechwriter.R;
 import edu.psu.rcy5017.speechwriter.constant.DefaultValues;
 import edu.psu.rcy5017.speechwriter.constant.MiscConstants;
-import edu.psu.rcy5017.speechwriter.constant.MixPanelCodes;
+//import edu.psu.rcy5017.speechwriter.constant.MixPanelCodes;
 import edu.psu.rcy5017.speechwriter.constant.RequestCodes;
 import edu.psu.rcy5017.speechwriter.controller.AudioCntl;
 import edu.psu.rcy5017.speechwriter.controller.OptionsCntl;
@@ -170,8 +170,8 @@ public class SpeechRecordingListActivity extends ListActivity {
         audioCntl.startPlaying(speechRecording.getFile());
 
         // Record activity in mixpanel.
-        final MixpanelAPI mixpanel = MixpanelAPI.getInstance(this.getApplicationContext(), MixPanelCodes.MIXPANEL_TOKEN);
-        mixpanel.track("Recording Played");
+        //final MixpanelAPI mixpanel = MixpanelAPI.getInstance(this.getApplicationContext(), MixPanelCodes.MIXPANEL_TOKEN);
+        //mixpanel.track("Recording Played");
     }
     
     /**

@@ -8,7 +8,7 @@ import java.util.concurrent.ExecutionException;
 import edu.psu.rcy5017.speechwriter.R;
 import edu.psu.rcy5017.speechwriter.adapter.TabsPagerAdapter;
 import edu.psu.rcy5017.speechwriter.constant.DefaultValues;
-import edu.psu.rcy5017.speechwriter.constant.MixPanelCodes;
+//import edu.psu.rcy5017.speechwriter.constant.MixPanelCodes;
 import edu.psu.rcy5017.speechwriter.controller.AudioCntl;
 import edu.psu.rcy5017.speechwriter.datasource.NoteCardDataSource;
 import edu.psu.rcy5017.speechwriter.datasource.SpeechRecordingDataSource;
@@ -52,8 +52,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         Log.d(TAG, "Main activity started");
 
         // Record activity in mixpanel.
-        final MixpanelAPI mixpanel = MixpanelAPI.getInstance(this, MixPanelCodes.MIXPANEL_TOKEN);
-        mixpanel.track("Speech Presented");
+        //final MixpanelAPI mixpanel = MixpanelAPI.getInstance(this, MixPanelCodes.MIXPANEL_TOKEN);
+        //mixpanel.track("Speech Presented");
 
         // Get speechId from intent.
         final Intent intent = this.getIntent();

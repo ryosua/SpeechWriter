@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
-import edu.psu.rcy5017.speechwriter.constant.MixPanelCodes;
+//import edu.psu.rcy5017.speechwriter.constant.MixPanelCodes;
 import edu.psu.rcy5017.speechwriter.datasource.SpeechDataSource;
 import edu.psu.rcy5017.speechwriter.model.Speech;
 
@@ -27,8 +27,8 @@ public class CreateSpeechTask extends AsyncTask<Void, Void, Speech> {
         datasource.close();
 
         // Record activity in mixpanel.
-        final MixpanelAPI mixpanel = MixpanelAPI.getInstance(activity.getApplicationContext(), MixPanelCodes.MIXPANEL_TOKEN);
-        mixpanel.track("Speech Created");
+        //final MixpanelAPI mixpanel = MixpanelAPI.getInstance(activity.getApplicationContext(), MixPanelCodes.MIXPANEL_TOKEN);
+        //mixpanel.track("Speech Created");
 
         return speech;
     }

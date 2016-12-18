@@ -11,22 +11,22 @@ import android.widget.Button;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import edu.psu.rcy5017.speechwriter.R;
-import edu.psu.rcy5017.speechwriter.constant.MixPanelCodes;
+//import edu.psu.rcy5017.speechwriter.constant.MixPanelCodes;
 
 public class SpeecherAdActivity extends Activity {
 
     private static final String TAG = "SpeecherAdActivity";
 
-    private MixpanelAPI mixpanel;
+    //private MixpanelAPI mixpanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_speecher_ad);
 
-        mixpanel = MixpanelAPI.getInstance(this.getApplicationContext(), MixPanelCodes.MIXPANEL_TOKEN);
+        //mixpanel = MixpanelAPI.getInstance(this.getApplicationContext(), MixPanelCodes.MIXPANEL_TOKEN);
 
-        mixpanel.track("Speecher Ad Impression");
+        //mixpanel.track("Speecher Ad Impression");
 
         final View.OnClickListener clickListener = new SpeecherAdButtonListener();
 
@@ -48,7 +48,7 @@ public class SpeecherAdActivity extends Activity {
                     Log.d(TAG, "Go to Speecher in the app store.");
                     final String speecherPackagage = "com.yosuatreegames.speecher";
 
-                    mixpanel.track("Speecher Link Followed");
+                    //mixpanel.track("Speecher Link Followed");
 
                     try {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + speecherPackagage)));
@@ -61,7 +61,7 @@ public class SpeecherAdActivity extends Activity {
                 case R.id.use_speech_writer_button:
                     Log.d(TAG, "Just use Speech Writer.");
 
-                    mixpanel.track("Speecher Link Declined");
+                    //mixpanel.track("Speecher Link Declined");
 
                     Intent speechListIntent = new Intent(SpeecherAdActivity.this, SpeechListActivity.class);
                     startActivity(speechListIntent);

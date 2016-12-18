@@ -14,13 +14,13 @@ import java.util.Date;
 import java.util.UUID;
 
 import edu.psu.rcy5017.speechwriter.R;
-import edu.psu.rcy5017.speechwriter.constant.MixPanelCodes;
+//import edu.psu.rcy5017.speechwriter.constant.MixPanelCodes;
 
 public class SplashScreenActivity extends Activity {
     
     private static final String TAG = "SplashScreenActivity";
 
-    private MixpanelAPI mixpanel;
+    //private MixpanelAPI mixpanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class SplashScreenActivity extends Activity {
         // Record an event if this was the first use of the app.
         final String PREFS_NAME = "speech_writer_settings";
 
-        mixpanel = MixpanelAPI.getInstance(this.getApplicationContext(), MixPanelCodes.MIXPANEL_TOKEN);
+        //mixpanel = MixpanelAPI.getInstance(this.getApplicationContext(), MixPanelCodes.MIXPANEL_TOKEN);
 
 
         // Record that the app has been installed for the first time.
@@ -50,22 +50,22 @@ public class SplashScreenActivity extends Activity {
             Log.d(TAG, "userID: " + userID );
 
             // Identify user.
-            mixpanel.getPeople().identify(userID);
-            mixpanel.getPeople().set("Install Date", new Date().toString());
+            //mixpanel.getPeople().identify(userID);
+            //mixpanel.getPeople().set("Install Date", new Date().toString());
 
-            mixpanel.track("App Installed");
+            //mixpanel.track("App Installed");
 
             settings.edit().putBoolean("first_time", false).commit();
         } else {
             // Identify user using saved UUID.
             final String userID = settings.getString("user_id", "-1");
-            mixpanel.getPeople().identify(userID);
+            //mixpanel.getPeople().identify(userID);
             Log.d(TAG, "userID: " + userID);
 
             Log.d(TAG, "The app has been used before.");
         }
 
-        mixpanel.track("Splash Screen Started");
+        //mixpanel.track("Splash Screen Started");
 
         // Get how many times the Speecher ad has been shown.
         final int numberOfTimesTheAdHasBeenShown = settings.getInt("speecher_ad_shown", 0);
@@ -110,7 +110,7 @@ public class SplashScreenActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         // Send mixpanel data when the app is closed.
-        mixpanel.flush();
+        //mixpanel.flush();
         Log.d(TAG, "Flushing data .............");
     }
     
