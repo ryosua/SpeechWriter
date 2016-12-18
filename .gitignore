@@ -31,3 +31,6 @@ MixPanelCodes.java
 
 app/app.iml
 speech_writer.iml
+SpeechWriter.iml
+app/src/androidTest/androidTest.iml
+app/src/main/main.iml
