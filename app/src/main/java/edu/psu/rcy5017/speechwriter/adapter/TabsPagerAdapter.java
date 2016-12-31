@@ -20,7 +20,10 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
  
     @Override
     public Fragment getItem(int index) {
-        return new NoteCardFragement(noteCardList.get(index).getId());
+        final long noteCardID = noteCardList.get(index).getId();
+        final NoteCardFragement noteCardFragement = new NoteCardFragement();
+        noteCardFragement.setNoteCardID(noteCardID);
+        return noteCardFragement;
     }
  
     @Override

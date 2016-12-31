@@ -24,10 +24,10 @@ public class NoteCardFragement extends Fragment {
     private static final String TAG = "NoteCardFragement";
    
     private NoteDataSource datasource;
-    private final long noteCardID;
+    private long noteCardID;
    
-    public NoteCardFragement(long noteCardID) {
-        this.noteCardID = noteCardID;
+    public NoteCardFragement() {
+
     }
 
     @Override
@@ -69,6 +69,10 @@ public class NoteCardFragement extends Fragment {
         }
        
         return rootView;
+    }
+
+    public void setNoteCardID(long noteCardID) {
+        this.noteCardID = noteCardID;
     }
     
 }
